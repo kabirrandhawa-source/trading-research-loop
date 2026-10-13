@@ -58,10 +58,12 @@ def connect(db_path=None):
     version = conn.execute("PRAGMA user_version").fetchone()[0]
     has_table = conn.execute(
         "SELECT 1 FROM sqlite_master WHERE type='table' AND name='hypotheses'").fetchone()
-    if version < SCHEMA_VERSION and has_table:
-        _migrate_v1(conn)
-    conn.executescript(SCHEMA.read_text())
-    conn.execute(f"PRAGMA user_version = {SCHEMA_VERSION}")
+    if version < SCHEMA_VERSION:
+        if has_table:
+            _migrate_v1(conn)
+        conn.executescript(SCHEMA.read_text())
+        conn.execute(f"PRAGMA user_version = {SCHEMA_VERSION}")
+        conn.commit()
     conn.execute("PRAGMA foreign_keys = ON")
     return conn
 
