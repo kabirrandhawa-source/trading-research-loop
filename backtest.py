@@ -221,23 +221,53 @@ def _sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
+def _check_owner(cls, hypothesis_id):
+    if cls.HYPOTHESIS_ID is not None and cls.HYPOTHESIS_ID != hypothesis_id:
+        raise PermissionError(f"{cls.NAME} v{cls.VERSION} belongs to hypothesis {cls.HYPOTHESIS_ID}, "
+                              f"not {hypothesis_id}.")
+
+
 def save_prediction(conn, hypothesis_id, strategy_path, source):
+    """Lock a prediction for this exact strategy version. Each version gets its own."""
+    cls = load_strategy(strategy_path)
+    _check_owner(cls, hypothesis_id)
     dest = RESULTS / f"{Path(strategy_path).stem}-prediction.md"
     if dest.exists():
         raise PermissionError(f"{dest} already exists and cannot be replaced.")
+    if ledger.get_prediction(conn, hypothesis_id, cls.VERSION):
+        raise PermissionError(f"A prediction for version {cls.VERSION} is already locked.")
     shutil.copyfile(source, dest)
     os.chmod(dest, stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH)   # read-only
-    ledger.set_prediction(conn, hypothesis_id, dest, _sha(dest))
+    ledger.set_prediction(conn, hypothesis_id, cls.VERSION, dest, _sha(dest))
     return dest
 
 
-def verify_prediction(conn, hypothesis_id):
-    h = ledger.get(conn, hypothesis_id)
-    if not h["prediction_path"]:
-        raise PermissionError("No saved prediction. Run `backtest.py predict` before any backtest.")
-    if _sha(h["prediction_path"]) != h["prediction_sha256"]:
-        raise PermissionError(f"{h['prediction_path']} was edited after it was saved. Backtest refused.")
-    return Path(h["prediction_path"]).read_text()
+def verify_prediction(conn, hypothesis_id, strategy_version):
+    pred = ledger.get_prediction(conn, hypothesis_id, strategy_version)
+    if not pred:
+        raise PermissionError(f"No saved prediction for version {strategy_version}. "
+                              "Run `backtest.py predict` before any backtest.")
+    if _sha(pred["path"]) != pred["sha256"]:
+        raise PermissionError(f"{pred['path']} was edited after it was saved. Backtest refused.")
+    return Path(pred["path"]).read_text()
+
+
+def publication_split(cls, dev, published_date, **kw):
+    """Did the effect survive its own publication? Compares the dev period before and after
+    the paper first appeared. McLean & Pontiff (2016) find anomaly returns are about 26% lower
+    out-of-sample and 58% lower after publication, so a big drop here is a strong warning."""
+    if not published_date:
+        return None
+    pub = pd.Timestamp(published_date, tz=dev["timestamp"].dt.tz)
+    cut = int((dev["timestamp"] < pub).sum())
+    if cut < PERIODS_PER_YEAR or len(dev) - cut < PERIODS_PER_YEAR:
+        return {"published_date": published_date,
+                "note": "under 1 year of dev data on one side of publication; no comparison"}
+    before = metrics(*run(cls(), dev, end=cut, **kw))
+    after = metrics(*run(cls(), dev, start=cut, **kw))
+    keep = ("total_return_pct", "sharpe_annual", "max_drawdown_pct", "n_trades", "win_rate_pct")
+    return {"published_date": published_date,
+            "before": {k: before[k] for k in keep}, "after": {k: after[k] for k in keep}}
 
 
 # ---------- commands ----------
@@ -253,8 +283,9 @@ def _write(name, result, prediction):
 
 
 def cmd_run(conn, hid, strategy_path, data_path, sealed_pct):
-    prediction = verify_prediction(conn, hid)
     cls = load_strategy(strategy_path)
+    _check_owner(cls, hid)
+    prediction = verify_prediction(conn, hid, cls.VERSION)
     dev, _ = split(load_prices(data_path), sealed_pct)      # sealed part is discarded here
     folds, oos = walk_forward(cls, dev)
     wf_curve = (1 + oos).cumprod()
@@ -270,7 +301,8 @@ def cmd_run(conn, hid, strategy_path, data_path, sealed_pct):
               "dev_period": [str(dev["timestamp"].iloc[0]), str(dev["timestamp"].iloc[-1])],
               "sealed_pct": sealed_pct, "regime": classify_regime(dev),
               "walk_forward_oos": oos_m, "folds": folds, "stress": stress(cls, dev),
-              "deflated_sharpe": dsr}
+              "deflated_sharpe": dsr,
+              "publication_split": publication_split(cls, dev, ledger.get(conn, hid)["published_date"])}
     ledger.update(conn, hid, strategy_file=str(strategy_path), strategy_version=cls.VERSION,
                   date_tested=date.today().isoformat(), regime=result["regime"],
                   backtest_result=json.dumps({"oos": oos_m, "dsr": dsr}))
@@ -278,8 +310,9 @@ def cmd_run(conn, hid, strategy_path, data_path, sealed_pct):
 
 
 def cmd_sealed(conn, hid, strategy_path, data_path, sealed_pct):
-    prediction = verify_prediction(conn, hid)
     cls = load_strategy(strategy_path)
+    _check_owner(cls, hid)
+    prediction = verify_prediction(conn, hid, cls.VERSION)
     df = load_prices(data_path)
     dev, sealed = split(df, sealed_pct)
     if ledger.get(conn, hid)["strategy_version"] != cls.VERSION:

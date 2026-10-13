@@ -64,17 +64,111 @@ def test_sealed_only_once(conn):
         ledger.claim_sealed_test(conn, h)
 
 
-def test_prediction_locked(conn, tmp_path, monkeypatch):
+def write_strategy(dirpath, name, version, hid=None):
+    f = dirpath / f"{name}_v{version}.py"
+    f.write_text("from strategies.base import Strategy\n"
+                 f"class S(Strategy):\n    NAME, VERSION, HYPOTHESIS_ID = {name!r}, {version!r}, {hid!r}\n"
+                 "    stop_loss_pct = None\n    def entry(self, bars): return 1\n")
+    return f
+
+
+def test_prediction_locked_per_version(conn, tmp_path, monkeypatch):
     monkeypatch.setattr(backtest, "RESULTS", tmp_path)
     memo = tmp_path / "memo.md"; memo.write_text("Expect 8%/yr, fail if Sharpe < 0.5")
     h = ledger.add_hypothesis(conn, "x", "a", "SPY")
-    dest = backtest.save_prediction(conn, h, "strategies/x_v1.py", memo)
-    assert "8%" in backtest.verify_prediction(conn, h)
-    with pytest.raises(PermissionError):
-        backtest.save_prediction(conn, h, "strategies/x_v1.py", memo)
+    v1, v2 = write_strategy(tmp_path, "x", "1"), write_strategy(tmp_path, "x", "2")
+    dest = backtest.save_prediction(conn, h, v1, memo)
+    assert "8%" in backtest.verify_prediction(conn, h, "1")
+    with pytest.raises(PermissionError):                    # v1 can't be replaced
+        backtest.save_prediction(conn, h, v1, memo)
+    with pytest.raises(PermissionError, match="No saved prediction"):
+        backtest.verify_prediction(conn, h, "2")             # v2 needs its own
+    memo.write_text("v2: expect 5%")
+    backtest.save_prediction(conn, h, v2, memo)
+    assert "5%" in backtest.verify_prediction(conn, h, "2")
     os.chmod(dest, 0o644); dest.write_text("Expect 20%")
     with pytest.raises(PermissionError, match="edited"):
-        backtest.verify_prediction(conn, h)
+        backtest.verify_prediction(conn, h, "1")
+
+
+def test_strategy_must_match_hypothesis(conn, tmp_path, monkeypatch):
+    monkeypatch.setattr(backtest, "RESULTS", tmp_path)
+    memo = tmp_path / "m.md"; memo.write_text("p")
+    a = ledger.add_hypothesis(conn, "a", "x", "SPY")
+    b = ledger.add_hypothesis(conn, "b", "x", "SPY")
+    with pytest.raises(PermissionError, match="belongs to hypothesis"):
+        backtest.save_prediction(conn, b, write_strategy(tmp_path, "y", "1", hid=a), memo)
+
+
+def test_drop_and_papers(conn):
+    h = ledger.add_hypothesis(conn, "IBS bounce", "price_analyst", "QQQ")
+    ledger.drop(conn, h, "next-open fills kill it", "skeptic")
+    got = ledger.get(conn, h)
+    assert got["status"] == "dropped" and "next-open" in got["lessons"]
+    with pytest.raises(PermissionError):
+        ledger.drop(conn, h, "again", "skeptic")
+    pid = ledger.add_paper(conn, "https://ssrn.com/abstract=1", "Pre-FOMC drift", "testable",
+                           published_date="2011-09-01", claim="SPY rises before FOMC", hypothesis_id=h)
+    assert ledger.search_papers(conn, "FOMC")[0]["id"] == pid
+    with pytest.raises(PermissionError):
+        ledger.add_paper(conn, "https://ssrn.com/abstract=1", "dup", "weak")
+
+
+def test_migrates_v1_ledger(tmp_path):
+    import sqlite3
+    db = tmp_path / "old.db"
+    old = sqlite3.connect(db)
+    old.executescript(V1_SCHEMA)
+    old.execute("INSERT INTO hypotheses (idea, source_agent, market, status, strategy_version, "
+                "prediction_path, prediction_sha256, lessons) VALUES "
+                "('fomc', 'macro', 'SPY', 'failed', '1', '/p.md', 'abc', 'lesson')")
+    old.execute("INSERT INTO trials (hypothesis_id, strategy_version, sharpe_per_period, n_obs) "
+                "VALUES (1, '1', -0.01, 100)")
+    old.commit(); old.close()
+    conn = ledger.connect(db)
+    h = ledger.get(conn, 1)
+    assert h["status"] == "failed" and h["lessons"] == "lesson" and "prediction_path" not in h
+    assert ledger.get_prediction(conn, 1, "1")["sha256"] == "abc"
+    assert ledger.trial_sharpes(conn, 1) == [-0.01]
+    ledger.drop(conn, ledger.add_hypothesis(conn, "new", "a", "SPY"), "r", "s")   # new status works
+    assert ledger.connect(db).execute("PRAGMA user_version").fetchone()[0] == ledger.SCHEMA_VERSION
+
+
+def test_publication_split():
+    df = prices(800)
+    pub = str(df["timestamp"].iloc[400].date())
+    r = backtest.publication_split(AlwaysLong, df, pub)
+    assert set(r) == {"published_date", "before", "after"}
+    assert "note" in backtest.publication_split(AlwaysLong, df, str(df["timestamp"].iloc[50].date()))
+    assert backtest.publication_split(AlwaysLong, df, None) is None
+
+
+def test_calendar_requires_sources(tmp_path):
+    import calendars
+    (tmp_path / "ok.csv").write_text("date,source_url,announced\n2024-01-31,https://fed.gov,2023-06-01\n"
+                                     "2024-03-20,https://fed.gov,2024-02-01\n")
+    (tmp_path / "bad.csv").write_text("date,source_url\n2024-01-31,\n")
+    cal = calendars.load("ok", tmp_path)
+    from datetime import date
+    assert len(calendars.known_as_of(cal, date(2024, 1, 1))) == 1
+    with pytest.raises(ValueError, match="source_url"):
+        calendars.load("bad", tmp_path)
+
+
+V1_SCHEMA = """
+CREATE TABLE hypotheses (id INTEGER PRIMARY KEY AUTOINCREMENT,
+ created_at TEXT NOT NULL DEFAULT (datetime('now')), idea TEXT NOT NULL, source_agent TEXT NOT NULL,
+ market TEXT NOT NULL, date_tested TEXT, strategy_file TEXT, strategy_version TEXT,
+ variations_tried INTEGER NOT NULL DEFAULT 0, regime TEXT, backtest_result TEXT,
+ sealed_test_result TEXT, paper_result TEXT,
+ status TEXT NOT NULL DEFAULT 'untested' CHECK (status IN
+   ('untested','failed','passed_backtest','passed_paper','paused','retired')),
+ lessons TEXT, prediction_path TEXT, prediction_sha256 TEXT, sealed_used_at TEXT);
+CREATE TABLE trials (id INTEGER PRIMARY KEY AUTOINCREMENT,
+ hypothesis_id INTEGER NOT NULL REFERENCES hypotheses(id),
+ run_at TEXT NOT NULL DEFAULT (datetime('now')), strategy_version TEXT NOT NULL,
+ sharpe_per_period REAL NOT NULL, n_obs INTEGER NOT NULL, UNIQUE (hypothesis_id, strategy_version));
+"""
 
 
 def test_split_keeps_sealed_out():
