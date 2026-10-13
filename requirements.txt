@@ -4,3 +4,5 @@ pandas
 numpy
 pytest
 requests
+websockets
+cryptography

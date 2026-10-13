@@ -3,7 +3,8 @@
 Tracks every series in pm/universe.py. Each 1-second tick, for the series that are due:
 the current market's order book (top 10 levels each side), plus spot prices from that asset's
 free sources (Coinbase, Kraken, Binance.US, Bitstamp, and Pyth when PYTH_API_KEY is set in
-config/.env). Outcomes are stored as each window settles. Writes data/pm/live-YYYY-MM.db.
+config/.env). Outcomes are stored as each window settles. Writes data/pm/live-YYYY-MM-DD.db (one file
+per UTC day; pm/archive.py compresses finished days).
 
     python -m pm.record
 """
@@ -32,8 +33,11 @@ def log(msg):
 
 
 class Recorder:
-    def __init__(self, series=None):
+    def __init__(self, series=None, books=None):
         self.series = series or universe.SERIES
+        # Kalshi order books now come from pm/stream.py (live websocket). Polling them is only a
+        # fallback: set PM_POLL_BOOKS=1 if the stream is unavailable.
+        self.books = (os.getenv("PM_POLL_BOOKS", "0") == "1") if books is None else books
         self.kalshi = Kalshi(Http(min_interval=0.05))
         self.http = {k: Http(min_interval=0.0) for k in ("coinbase", "kraken", "binanceus", "bitstamp", "pyth")}
         self.pyth_key = os.getenv("PYTH_API_KEY", "").strip()
@@ -49,12 +53,12 @@ class Recorder:
         self.inflight = []         # (kind, key, future, started)
 
     def db(self):
-        month = time.strftime("%Y-%m", time.gmtime())
-        if month != self.month:
+        name = store.day_name("live")
+        if name != self.month:
             if self.conn:
                 self.conn.commit()
                 self.conn.close()
-            self.conn, self.month = store.connect(f"live-{month}"), month
+            self.conn, self.month = store.connect(name), name
         return self.conn
 
     # ----- markets -----
@@ -131,7 +135,7 @@ class Recorder:
             except Exception as e:
                 log(f"{s} market lookup error: {e}")
                 continue
-            if m:
+            if m and self.books:
                 fut = self.pool.submit(self.timed, lambda t=m["ticker"]: self.kalshi.orderbook(t))
                 self.inflight.append(("book", m["ticker"], fut, now))
         if self.tick_n % 5 == 0:
@@ -171,6 +175,8 @@ class Recorder:
 
     def health(self):
         """Alert when Bitcoin (open 24/7, so it should never be quiet) stops recording."""
+        if not self.books:
+            return                     # the stream has its own health alerts
         gap = time.time() - self.last_book_ok
         if gap > STALL_ALERT_S and not self.stalled:
             self.stalled = True
@@ -187,7 +193,8 @@ class Recorder:
     def run(self):
         signal.signal(signal.SIGTERM, self.stop)
         signal.signal(signal.SIGINT, self.stop)
-        log(f"recorder started: {len(self.series)} series, Pyth {'on' if self.pyth_key else 'off (no PYTH_API_KEY)'}")
+        log(f"recorder started: {len(self.series)} series, Kalshi books {'polled' if self.books else 'off (pm/stream.py records them)'}, "
+            f"Pyth {'on' if self.pyth_key else 'off (no PYTH_API_KEY)'}")
         last_commit = time.time()
         next_tick = time.time()
         while self.running:

@@ -28,7 +28,28 @@ CREATE TABLE IF NOT EXISTS spot_ticks (
     symbol TEXT);                                    -- asset, e.g. BTC; NULL in early rows = BTC
 CREATE INDEX IF NOT EXISTS ticks_ts ON spot_ticks (source, ts);
 CREATE TABLE IF NOT EXISTS progress (key TEXT PRIMARY KEY, value TEXT);
+-- Live stream (pm/stream.py, authenticated Kalshi websocket)
+CREATE TABLE IF NOT EXISTS ws_tob (                 -- every change to the best bid/ask
+    ts REAL, ticker TEXT, yes_bid REAL, yes_bid_size REAL, yes_ask REAL, yes_ask_size REAL, seq INTEGER);
+CREATE INDEX IF NOT EXISTS ws_tob_ts ON ws_tob (ticker, ts);
+CREATE TABLE IF NOT EXISTS ws_book (ts REAL, ticker TEXT, levels TEXT);   -- top 10 each side, once a second
+CREATE INDEX IF NOT EXISTS ws_book_ts ON ws_book (ticker, ts);
+CREATE TABLE IF NOT EXISTS ws_trades (            -- no unique index on trade_id: it doubled the size
+    ts REAL, ts_ms INTEGER, ticker TEXT, yes_price REAL, count REAL, taker_side TEXT, trade_id TEXT);
+CREATE INDEX IF NOT EXISTS ws_trades_ts ON ws_trades (ticker, ts_ms);
+CREATE TABLE IF NOT EXISTS index_values (           -- settlement indexes streamed by Kalshi
+    ts REAL, channel TEXT, index_id TEXT, value REAL, source_ts_ms INTEGER, received_at_ms INTEGER,
+    avg_60s REAL,                                   -- rolling 60-second average (avg_60s_data)
+    settle_avg REAL);                               -- current window's settlement average, when sent
+CREATE INDEX IF NOT EXISTS index_values_ts ON index_values (index_id, ts);
+CREATE TABLE IF NOT EXISTS ws_raw (ts REAL, type TEXT, json TEXT);       -- first messages of unknown types
 """
+
+
+def day_name(prefix, ts=None):
+    """Daily file name (UTC), e.g. stream-2026-10-13. Finished days are compressed by pm/archive.py."""
+    import time
+    return f"{prefix}-{time.strftime('%Y-%m-%d', time.gmtime(ts))}"
 
 
 def connect(name, data_dir=None):
@@ -41,6 +62,8 @@ def connect(name, data_dir=None):
     if "symbol" not in cols:                         # databases created before multi-asset support
         conn.execute("ALTER TABLE spot_ticks ADD COLUMN symbol TEXT")
     conn.execute("CREATE INDEX IF NOT EXISTS ticks_sym_ts ON spot_ticks (symbol, ts)")
+    if "settle_avg" not in {r[1] for r in conn.execute("PRAGMA table_info(index_values)")}:
+        conn.execute("ALTER TABLE index_values ADD COLUMN settle_avg REAL")
     return conn
 
 
