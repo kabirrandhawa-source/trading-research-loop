@@ -1,0 +1,21 @@
+# Secrets and local config — never commit
+config/*
+!config/.env.example
+!config/risk.example.json
+
+# Historical price data
+data/*
+!data/.gitkeep
+
+# SQLite journal/WAL files
+memory/*.db-journal
+memory/*.db-wal
+memory/*.db-shm
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Local account state
+memory/peak_equity.json

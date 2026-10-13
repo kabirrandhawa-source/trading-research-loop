@@ -1,0 +1,5 @@
+alpaca-py
+python-dotenv
+pandas
+numpy
+pytest
