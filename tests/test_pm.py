@@ -62,7 +62,7 @@ def build_history(tmp_path, n_windows=6, lag_s=3, seed=1):
         strike = float(S.loc[o - 60:o].mean())
         settle = float(S.loc[c - 60:c].mean())
         conn.execute("INSERT INTO markets VALUES (?, ?, ?, ?, ?, ?, '{}')",
-                     (f"W{k}", o, c, strike, settle, "yes" if settle >= strike else "no"))
+                     (f"KXBTC15M-W{k}", o, c, strike, settle, "yes" if settle >= strike else "no"))
     conn.commit()
     # market trades = model probability delayed by lag_s seconds
     for w in analyze.windows(conn, "dev", 0.0).itertuples():
@@ -146,3 +146,35 @@ def test_old_live_db_gets_symbol_column(tmp_path):
     conn = store.connect("live-old", tmp_path)
     cols = [r[1] for r in conn.execute("PRAGMA table_info(spot_ticks)")]
     assert cols[-1] == "symbol" and conn.execute("SELECT count(*) FROM spot_ticks").fetchone()[0] == 1
+
+
+def test_windows_only_returns_the_requested_series(tmp_path):
+    conn = build_history(tmp_path, n_windows=4)
+    conn.execute("INSERT INTO markets VALUES ('KXGOLD15M-X', 1, 2, 3.0, 4.0, 'yes', '{}')")
+    assert all(t.startswith("KXBTC15M-") for t in analyze.windows(conn, "dev", 0.0).ticker)
+    assert list(analyze.windows(conn, "dev", 0.0, series="KXGOLD15M").ticker) == ["KXGOLD15M-X"]
+
+
+def synth_series(tmp_path, bias, n=600, seed=3):
+    """n windows of one series; the market quotes p_true + bias, outcomes drawn from p_true."""
+    rng = np.random.default_rng(seed)
+    conn = store.connect(f"cal{bias}", tmp_path)
+    for k in range(n):
+        o, c = 1_800_000_000.0 + 900 * k, 1_800_000_000.0 + 900 * (k + 1)
+        p_true = rng.uniform(0.1, 0.9)
+        y = rng.random() < p_true
+        conn.execute("INSERT INTO markets VALUES (?, ?, ?, 1.0, 1.0, ?, '{}')",
+                     (f"KXETH15M-{k}", o, c, "yes" if y else "no"))
+        mid = min(0.97, max(0.03, p_true + bias))
+        conn.execute("INSERT INTO candles VALUES (?, ?, ?, ?, NULL, 0)", (f"KXETH15M-{k}", o + 120, mid - 0.005, mid + 0.005))
+    conn.commit()
+    return conn
+
+
+def test_screen_is_quiet_on_fair_market_and_flags_mispricing(tmp_path, monkeypatch):
+    from pm import calibrate
+    monkeypatch.setattr(analyze, "SEALED_FRAC", 0.0)
+    fair = calibrate.screen(synth_series(tmp_path, 0.0), ["KXETH15M"])
+    assert fair["leads"] == [] and fair["n_tests"] > 0
+    skewed = calibrate.screen(synth_series(tmp_path, -0.15), ["KXETH15M"])   # YES quoted 15c too cheap
+    assert skewed["leads"] and all(t["side"] == "yes" for t in skewed["leads"])

@@ -1,0 +1,953 @@
+{
+  "part": "dev",
+  "series": [
+    "KXETH15M",
+    "KXSOL15M",
+    "KXXRP15M",
+    "KXDOGE15M",
+    "KXGOLD15M",
+    "KXSILVER15M",
+    "KXWTI15M",
+    "KXEURUSD15M",
+    "KXUSDJPY15M",
+    "KXGBPUSD15M"
+  ],
+  "n_tests": 200,
+  "z_needed": 3.48,
+  "leads": [],
+  "top_10_by_z": [
+    {
+      "series": "KXGOLD15M",
+      "bucket": "0.9-1.0",
+      "side": "yes",
+      "n_windows": 253,
+      "pnl_per_contract": 0.0302,
+      "z": 2.75,
+      "p_one_sided": 0.0029727964389649753,
+      "p_bonferroni": 0.594559287792995,
+      "lead": false
+    },
+    {
+      "series": "KXEURUSD15M",
+      "bucket": "0.9-1.0",
+      "side": "yes",
+      "n_windows": 260,
+      "pnl_per_contract": 0.0162,
+      "z": 1.41,
+      "p_one_sided": 0.07857473529031156,
+      "p_bonferroni": 1.0,
+      "lead": false
+    },
+    {
+      "series": "KXEURUSD15M",
+      "bucket": "0.7-0.8",
+      "side": "yes",
+      "n_windows": 285,
+      "pnl_per_contract": 0.0302,
+      "z": 1.32,
+      "p_one_sided": 0.09397512333615732,
+      "p_bonferroni": 1.0,
+      "lead": false
+    },
+    {
+      "series": "KXETH15M",
+      "bucket": "0.3-0.4",
+      "side": "no",
+      "n_windows": 488,
+      "pnl_per_contract": 0.0256,
+      "z": 1.23,
+      "p_one_sided": 0.10860491558288388,
+      "p_bonferroni": 1.0,
+      "lead": false
+    },
+    {
+      "series": "KXETH15M",
+      "bucket": "0.9-1.0",
+      "side": "yes",
+      "n_windows": 427,
+      "pnl_per_contract": 0.0103,
+      "z": 1.01,
+      "p_one_sided": 0.1558067377688721,
+      "p_bonferroni": 1.0,
+      "lead": false
+    },
+    {
+      "series": "KXXRP15M",
+      "bucket": "0.9-1.0",
+      "side": "yes",
+      "n_windows": 444,
+      "pnl_per_contract": 0.0093,
+      "z": 0.9,
+      "p_one_sided": 0.18350615167820516,
+      "p_bonferroni": 1.0,
+      "lead": false
+    },
+    {
+      "series": "KXEURUSD15M",
+      "bucket": "0.8-0.9",
+      "side": "yes",
+      "n_windows": 273,
+      "pnl_per_contract": 0.0151,
+      "z": 0.8,
+      "p_one_sided": 0.21206352120121164,
+      "p_bonferroni": 1.0,
+      "lead": false
+    },
+    {
+      "series": "KXGOLD15M",
+      "bucket": "0.4-0.5",
+      "side": "no",
+      "n_windows": 368,
+      "pnl_per_contract": 0.0161,
+      "z": 0.63,
+      "p_one_sided": 0.2644829208133146,
+      "p_bonferroni": 1.0,
+      "lead": false
+    },
+    {
+      "series": "KXGOLD15M",
+      "bucket": "0.0-0.1",
+      "side": "no",
+      "n_windows": 268,
+      "pnl_per_contract": 0.0082,
+      "z": 0.6,
+      "p_one_sided": 0.27503319447601393,
+      "p_bonferroni": 1.0,
+      "lead": false
+    },
+    {
+      "series": "KXETH15M",
+      "bucket": "0.2-0.3",
+      "side": "no",
+      "n_windows": 466,
+      "pnl_per_contract": 0.0081,
+      "z": 0.42,
+      "p_one_sided": 0.3384191985607662,
+      "p_bonferroni": 1.0,
+      "lead": false
+    }
+  ],
+  "share_of_tests_profitable": 0.11,
+  "calibration": {
+    "KXETH15M": [
+      {
+        "bucket": "0.0-0.1",
+        "n_windows": 440,
+        "market": 0.063,
+        "actual": 0.057,
+        "gap": -0.006,
+        "gap_se": 0.011
+      },
+      {
+        "bucket": "0.1-0.2",
+        "n_windows": 430,
+        "market": 0.157,
+        "actual": 0.151,
+        "gap": -0.006,
+        "gap_se": 0.017
+      },
+      {
+        "bucket": "0.2-0.3",
+        "n_windows": 466,
+        "market": 0.254,
+        "actual": 0.227,
+        "gap": -0.027,
+        "gap_se": 0.019
+      },
+      {
+        "bucket": "0.3-0.4",
+        "n_windows": 488,
+        "market": 0.35,
+        "actual": 0.303,
+        "gap": -0.047,
+        "gap_se": 0.021
+      },
+      {
+        "bucket": "0.4-0.5",
+        "n_windows": 508,
+        "market": 0.449,
+        "actual": 0.441,
+        "gap": -0.008,
+        "gap_se": 0.022
+      },
+      {
+        "bucket": "0.5-0.6",
+        "n_windows": 506,
+        "market": 0.548,
+        "actual": 0.545,
+        "gap": -0.002,
+        "gap_se": 0.022
+      },
+      {
+        "bucket": "0.6-0.7",
+        "n_windows": 486,
+        "market": 0.648,
+        "actual": 0.634,
+        "gap": -0.015,
+        "gap_se": 0.022
+      },
+      {
+        "bucket": "0.7-0.8",
+        "n_windows": 443,
+        "market": 0.745,
+        "actual": 0.756,
+        "gap": 0.012,
+        "gap_se": 0.02
+      },
+      {
+        "bucket": "0.8-0.9",
+        "n_windows": 416,
+        "market": 0.841,
+        "actual": 0.849,
+        "gap": 0.008,
+        "gap_se": 0.018
+      },
+      {
+        "bucket": "0.9-1.0",
+        "n_windows": 427,
+        "market": 0.937,
+        "actual": 0.953,
+        "gap": 0.016,
+        "gap_se": 0.01
+      }
+    ],
+    "KXSOL15M": [
+      {
+        "bucket": "0.0-0.1",
+        "n_windows": 442,
+        "market": 0.063,
+        "actual": 0.063,
+        "gap": 0.001,
+        "gap_se": 0.012
+      },
+      {
+        "bucket": "0.1-0.2",
+        "n_windows": 436,
+        "market": 0.156,
+        "actual": 0.154,
+        "gap": -0.002,
+        "gap_se": 0.017
+      },
+      {
+        "bucket": "0.2-0.3",
+        "n_windows": 443,
+        "market": 0.255,
+        "actual": 0.278,
+        "gap": 0.023,
+        "gap_se": 0.021
+      },
+      {
+        "bucket": "0.3-0.4",
+        "n_windows": 491,
+        "market": 0.351,
+        "actual": 0.352,
+        "gap": 0.001,
+        "gap_se": 0.022
+      },
+      {
+        "bucket": "0.4-0.5",
+        "n_windows": 498,
+        "market": 0.448,
+        "actual": 0.462,
+        "gap": 0.014,
+        "gap_se": 0.022
+      },
+      {
+        "bucket": "0.5-0.6",
+        "n_windows": 491,
+        "market": 0.548,
+        "actual": 0.564,
+        "gap": 0.017,
+        "gap_se": 0.022
+      },
+      {
+        "bucket": "0.6-0.7",
+        "n_windows": 500,
+        "market": 0.651,
+        "actual": 0.658,
+        "gap": 0.007,
+        "gap_se": 0.021
+      },
+      {
+        "bucket": "0.7-0.8",
+        "n_windows": 450,
+        "market": 0.747,
+        "actual": 0.76,
+        "gap": 0.013,
+        "gap_se": 0.02
+      },
+      {
+        "bucket": "0.8-0.9",
+        "n_windows": 441,
+        "market": 0.843,
+        "actual": 0.855,
+        "gap": 0.012,
+        "gap_se": 0.017
+      },
+      {
+        "bucket": "0.9-1.0",
+        "n_windows": 460,
+        "market": 0.935,
+        "actual": 0.941,
+        "gap": 0.006,
+        "gap_se": 0.011
+      }
+    ],
+    "KXXRP15M": [
+      {
+        "bucket": "0.0-0.1",
+        "n_windows": 452,
+        "market": 0.065,
+        "actual": 0.069,
+        "gap": 0.004,
+        "gap_se": 0.012
+      },
+      {
+        "bucket": "0.1-0.2",
+        "n_windows": 447,
+        "market": 0.158,
+        "actual": 0.174,
+        "gap": 0.017,
+        "gap_se": 0.018
+      },
+      {
+        "bucket": "0.2-0.3",
+        "n_windows": 476,
+        "market": 0.253,
+        "actual": 0.258,
+        "gap": 0.005,
+        "gap_se": 0.02
+      },
+      {
+        "bucket": "0.3-0.4",
+        "n_windows": 491,
+        "market": 0.352,
+        "actual": 0.36,
+        "gap": 0.009,
+        "gap_se": 0.022
+      },
+      {
+        "bucket": "0.4-0.5",
+        "n_windows": 475,
+        "market": 0.448,
+        "actual": 0.465,
+        "gap": 0.017,
+        "gap_se": 0.023
+      },
+      {
+        "bucket": "0.5-0.6",
+        "n_windows": 484,
+        "market": 0.55,
+        "actual": 0.523,
+        "gap": -0.027,
+        "gap_se": 0.023
+      },
+      {
+        "bucket": "0.6-0.7",
+        "n_windows": 460,
+        "market": 0.651,
+        "actual": 0.626,
+        "gap": -0.025,
+        "gap_se": 0.023
+      },
+      {
+        "bucket": "0.7-0.8",
+        "n_windows": 492,
+        "market": 0.748,
+        "actual": 0.732,
+        "gap": -0.016,
+        "gap_se": 0.02
+      },
+      {
+        "bucket": "0.8-0.9",
+        "n_windows": 440,
+        "market": 0.841,
+        "actual": 0.852,
+        "gap": 0.011,
+        "gap_se": 0.017
+      },
+      {
+        "bucket": "0.9-1.0",
+        "n_windows": 444,
+        "market": 0.935,
+        "actual": 0.95,
+        "gap": 0.016,
+        "gap_se": 0.01
+      }
+    ],
+    "KXDOGE15M": [
+      {
+        "bucket": "0.0-0.1",
+        "n_windows": 443,
+        "market": 0.064,
+        "actual": 0.054,
+        "gap": -0.01,
+        "gap_se": 0.011
+      },
+      {
+        "bucket": "0.1-0.2",
+        "n_windows": 434,
+        "market": 0.156,
+        "actual": 0.164,
+        "gap": 0.007,
+        "gap_se": 0.018
+      },
+      {
+        "bucket": "0.2-0.3",
+        "n_windows": 455,
+        "market": 0.252,
+        "actual": 0.248,
+        "gap": -0.003,
+        "gap_se": 0.02
+      },
+      {
+        "bucket": "0.3-0.4",
+        "n_windows": 475,
+        "market": 0.351,
+        "actual": 0.343,
+        "gap": -0.008,
+        "gap_se": 0.022
+      },
+      {
+        "bucket": "0.4-0.5",
+        "n_windows": 487,
+        "market": 0.451,
+        "actual": 0.452,
+        "gap": 0.001,
+        "gap_se": 0.023
+      },
+      {
+        "bucket": "0.5-0.6",
+        "n_windows": 501,
+        "market": 0.549,
+        "actual": 0.525,
+        "gap": -0.024,
+        "gap_se": 0.022
+      },
+      {
+        "bucket": "0.6-0.7",
+        "n_windows": 478,
+        "market": 0.651,
+        "actual": 0.63,
+        "gap": -0.022,
+        "gap_se": 0.022
+      },
+      {
+        "bucket": "0.7-0.8",
+        "n_windows": 472,
+        "market": 0.747,
+        "actual": 0.725,
+        "gap": -0.022,
+        "gap_se": 0.021
+      },
+      {
+        "bucket": "0.8-0.9",
+        "n_windows": 456,
+        "market": 0.843,
+        "actual": 0.846,
+        "gap": 0.004,
+        "gap_se": 0.017
+      },
+      {
+        "bucket": "0.9-1.0",
+        "n_windows": 445,
+        "market": 0.933,
+        "actual": 0.937,
+        "gap": 0.004,
+        "gap_se": 0.012
+      }
+    ],
+    "KXGOLD15M": [
+      {
+        "bucket": "0.0-0.1",
+        "n_windows": 268,
+        "market": 0.066,
+        "actual": 0.052,
+        "gap": -0.014,
+        "gap_se": 0.014
+      },
+      {
+        "bucket": "0.1-0.2",
+        "n_windows": 303,
+        "market": 0.159,
+        "actual": 0.152,
+        "gap": -0.007,
+        "gap_se": 0.021
+      },
+      {
+        "bucket": "0.2-0.3",
+        "n_windows": 323,
+        "market": 0.257,
+        "actual": 0.245,
+        "gap": -0.012,
+        "gap_se": 0.024
+      },
+      {
+        "bucket": "0.3-0.4",
+        "n_windows": 360,
+        "market": 0.353,
+        "actual": 0.331,
+        "gap": -0.023,
+        "gap_se": 0.025
+      },
+      {
+        "bucket": "0.4-0.5",
+        "n_windows": 368,
+        "market": 0.452,
+        "actual": 0.413,
+        "gap": -0.039,
+        "gap_se": 0.026
+      },
+      {
+        "bucket": "0.5-0.6",
+        "n_windows": 363,
+        "market": 0.551,
+        "actual": 0.534,
+        "gap": -0.017,
+        "gap_se": 0.026
+      },
+      {
+        "bucket": "0.6-0.7",
+        "n_windows": 320,
+        "market": 0.647,
+        "actual": 0.634,
+        "gap": -0.012,
+        "gap_se": 0.027
+      },
+      {
+        "bucket": "0.7-0.8",
+        "n_windows": 301,
+        "market": 0.745,
+        "actual": 0.741,
+        "gap": -0.004,
+        "gap_se": 0.025
+      },
+      {
+        "bucket": "0.8-0.9",
+        "n_windows": 259,
+        "market": 0.841,
+        "actual": 0.849,
+        "gap": 0.009,
+        "gap_se": 0.022
+      },
+      {
+        "bucket": "0.9-1.0",
+        "n_windows": 253,
+        "market": 0.932,
+        "actual": 0.968,
+        "gap": 0.037,
+        "gap_se": 0.011
+      }
+    ],
+    "KXSILVER15M": [
+      {
+        "bucket": "0.0-0.1",
+        "n_windows": 271,
+        "market": 0.066,
+        "actual": 0.063,
+        "gap": -0.004,
+        "gap_se": 0.015
+      },
+      {
+        "bucket": "0.1-0.2",
+        "n_windows": 283,
+        "market": 0.154,
+        "actual": 0.152,
+        "gap": -0.002,
+        "gap_se": 0.021
+      },
+      {
+        "bucket": "0.2-0.3",
+        "n_windows": 298,
+        "market": 0.256,
+        "actual": 0.285,
+        "gap": 0.03,
+        "gap_se": 0.026
+      },
+      {
+        "bucket": "0.3-0.4",
+        "n_windows": 352,
+        "market": 0.352,
+        "actual": 0.361,
+        "gap": 0.009,
+        "gap_se": 0.026
+      },
+      {
+        "bucket": "0.4-0.5",
+        "n_windows": 353,
+        "market": 0.451,
+        "actual": 0.467,
+        "gap": 0.016,
+        "gap_se": 0.027
+      },
+      {
+        "bucket": "0.5-0.6",
+        "n_windows": 364,
+        "market": 0.547,
+        "actual": 0.555,
+        "gap": 0.008,
+        "gap_se": 0.026
+      },
+      {
+        "bucket": "0.6-0.7",
+        "n_windows": 330,
+        "market": 0.649,
+        "actual": 0.667,
+        "gap": 0.018,
+        "gap_se": 0.026
+      },
+      {
+        "bucket": "0.7-0.8",
+        "n_windows": 306,
+        "market": 0.745,
+        "actual": 0.758,
+        "gap": 0.013,
+        "gap_se": 0.024
+      },
+      {
+        "bucket": "0.8-0.9",
+        "n_windows": 291,
+        "market": 0.841,
+        "actual": 0.845,
+        "gap": 0.004,
+        "gap_se": 0.021
+      },
+      {
+        "bucket": "0.9-1.0",
+        "n_windows": 273,
+        "market": 0.935,
+        "actual": 0.945,
+        "gap": 0.01,
+        "gap_se": 0.014
+      }
+    ],
+    "KXWTI15M": [
+      {
+        "bucket": "0.0-0.1",
+        "n_windows": 289,
+        "market": 0.068,
+        "actual": 0.062,
+        "gap": -0.005,
+        "gap_se": 0.014
+      },
+      {
+        "bucket": "0.1-0.2",
+        "n_windows": 301,
+        "market": 0.156,
+        "actual": 0.163,
+        "gap": 0.006,
+        "gap_se": 0.021
+      },
+      {
+        "bucket": "0.2-0.3",
+        "n_windows": 346,
+        "market": 0.255,
+        "actual": 0.246,
+        "gap": -0.01,
+        "gap_se": 0.023
+      },
+      {
+        "bucket": "0.3-0.4",
+        "n_windows": 380,
+        "market": 0.355,
+        "actual": 0.334,
+        "gap": -0.021,
+        "gap_se": 0.024
+      },
+      {
+        "bucket": "0.4-0.5",
+        "n_windows": 414,
+        "market": 0.451,
+        "actual": 0.449,
+        "gap": -0.002,
+        "gap_se": 0.024
+      },
+      {
+        "bucket": "0.5-0.6",
+        "n_windows": 417,
+        "market": 0.548,
+        "actual": 0.537,
+        "gap": -0.011,
+        "gap_se": 0.024
+      },
+      {
+        "bucket": "0.6-0.7",
+        "n_windows": 385,
+        "market": 0.649,
+        "actual": 0.621,
+        "gap": -0.028,
+        "gap_se": 0.025
+      },
+      {
+        "bucket": "0.7-0.8",
+        "n_windows": 360,
+        "market": 0.745,
+        "actual": 0.719,
+        "gap": -0.026,
+        "gap_se": 0.024
+      },
+      {
+        "bucket": "0.8-0.9",
+        "n_windows": 304,
+        "market": 0.841,
+        "actual": 0.826,
+        "gap": -0.015,
+        "gap_se": 0.022
+      },
+      {
+        "bucket": "0.9-1.0",
+        "n_windows": 274,
+        "market": 0.932,
+        "actual": 0.927,
+        "gap": -0.005,
+        "gap_se": 0.016
+      }
+    ],
+    "KXEURUSD15M": [
+      {
+        "bucket": "0.0-0.1",
+        "n_windows": 284,
+        "market": 0.067,
+        "actual": 0.07,
+        "gap": 0.003,
+        "gap_se": 0.015
+      },
+      {
+        "bucket": "0.1-0.2",
+        "n_windows": 298,
+        "market": 0.158,
+        "actual": 0.174,
+        "gap": 0.017,
+        "gap_se": 0.022
+      },
+      {
+        "bucket": "0.2-0.3",
+        "n_windows": 335,
+        "market": 0.253,
+        "actual": 0.278,
+        "gap": 0.024,
+        "gap_se": 0.024
+      },
+      {
+        "bucket": "0.3-0.4",
+        "n_windows": 355,
+        "market": 0.352,
+        "actual": 0.369,
+        "gap": 0.017,
+        "gap_se": 0.026
+      },
+      {
+        "bucket": "0.4-0.5",
+        "n_windows": 378,
+        "market": 0.449,
+        "actual": 0.458,
+        "gap": 0.008,
+        "gap_se": 0.026
+      },
+      {
+        "bucket": "0.5-0.6",
+        "n_windows": 390,
+        "market": 0.545,
+        "actual": 0.579,
+        "gap": 0.035,
+        "gap_se": 0.025
+      },
+      {
+        "bucket": "0.6-0.7",
+        "n_windows": 340,
+        "market": 0.648,
+        "actual": 0.668,
+        "gap": 0.02,
+        "gap_se": 0.026
+      },
+      {
+        "bucket": "0.7-0.8",
+        "n_windows": 285,
+        "market": 0.745,
+        "actual": 0.814,
+        "gap": 0.069,
+        "gap_se": 0.023
+      },
+      {
+        "bucket": "0.8-0.9",
+        "n_windows": 273,
+        "market": 0.842,
+        "actual": 0.89,
+        "gap": 0.048,
+        "gap_se": 0.019
+      },
+      {
+        "bucket": "0.9-1.0",
+        "n_windows": 260,
+        "market": 0.93,
+        "actual": 0.965,
+        "gap": 0.035,
+        "gap_se": 0.011
+      }
+    ],
+    "KXUSDJPY15M": [
+      {
+        "bucket": "0.0-0.1",
+        "n_windows": 254,
+        "market": 0.065,
+        "actual": 0.055,
+        "gap": -0.01,
+        "gap_se": 0.014
+      },
+      {
+        "bucket": "0.1-0.2",
+        "n_windows": 290,
+        "market": 0.157,
+        "actual": 0.183,
+        "gap": 0.026,
+        "gap_se": 0.023
+      },
+      {
+        "bucket": "0.2-0.3",
+        "n_windows": 336,
+        "market": 0.255,
+        "actual": 0.28,
+        "gap": 0.025,
+        "gap_se": 0.024
+      },
+      {
+        "bucket": "0.3-0.4",
+        "n_windows": 344,
+        "market": 0.35,
+        "actual": 0.355,
+        "gap": 0.004,
+        "gap_se": 0.026
+      },
+      {
+        "bucket": "0.4-0.5",
+        "n_windows": 392,
+        "market": 0.451,
+        "actual": 0.464,
+        "gap": 0.013,
+        "gap_se": 0.025
+      },
+      {
+        "bucket": "0.5-0.6",
+        "n_windows": 383,
+        "market": 0.546,
+        "actual": 0.561,
+        "gap": 0.016,
+        "gap_se": 0.025
+      },
+      {
+        "bucket": "0.6-0.7",
+        "n_windows": 356,
+        "market": 0.649,
+        "actual": 0.671,
+        "gap": 0.022,
+        "gap_se": 0.025
+      },
+      {
+        "bucket": "0.7-0.8",
+        "n_windows": 315,
+        "market": 0.745,
+        "actual": 0.74,
+        "gap": -0.005,
+        "gap_se": 0.025
+      },
+      {
+        "bucket": "0.8-0.9",
+        "n_windows": 318,
+        "market": 0.842,
+        "actual": 0.84,
+        "gap": -0.002,
+        "gap_se": 0.021
+      },
+      {
+        "bucket": "0.9-1.0",
+        "n_windows": 291,
+        "market": 0.931,
+        "actual": 0.938,
+        "gap": 0.007,
+        "gap_se": 0.014
+      }
+    ],
+    "KXGBPUSD15M": [
+      {
+        "bucket": "0.0-0.1",
+        "n_windows": 269,
+        "market": 0.069,
+        "actual": 0.067,
+        "gap": -0.002,
+        "gap_se": 0.015
+      },
+      {
+        "bucket": "0.1-0.2",
+        "n_windows": 312,
+        "market": 0.155,
+        "actual": 0.179,
+        "gap": 0.024,
+        "gap_se": 0.022
+      },
+      {
+        "bucket": "0.2-0.3",
+        "n_windows": 357,
+        "market": 0.255,
+        "actual": 0.266,
+        "gap": 0.012,
+        "gap_se": 0.023
+      },
+      {
+        "bucket": "0.3-0.4",
+        "n_windows": 363,
+        "market": 0.351,
+        "actual": 0.342,
+        "gap": -0.01,
+        "gap_se": 0.025
+      },
+      {
+        "bucket": "0.4-0.5",
+        "n_windows": 395,
+        "market": 0.451,
+        "actual": 0.43,
+        "gap": -0.021,
+        "gap_se": 0.025
+      },
+      {
+        "bucket": "0.5-0.6",
+        "n_windows": 399,
+        "market": 0.543,
+        "actual": 0.529,
+        "gap": -0.014,
+        "gap_se": 0.025
+      },
+      {
+        "bucket": "0.6-0.7",
+        "n_windows": 350,
+        "market": 0.647,
+        "actual": 0.649,
+        "gap": 0.002,
+        "gap_se": 0.026
+      },
+      {
+        "bucket": "0.7-0.8",
+        "n_windows": 299,
+        "market": 0.746,
+        "actual": 0.726,
+        "gap": -0.02,
+        "gap_se": 0.026
+      },
+      {
+        "bucket": "0.8-0.9",
+        "n_windows": 285,
+        "market": 0.843,
+        "actual": 0.86,
+        "gap": 0.016,
+        "gap_se": 0.021
+      },
+      {
+        "bucket": "0.9-1.0",
+        "n_windows": 250,
+        "market": 0.93,
+        "actual": 0.94,
+        "gap": 0.01,
+        "gap_se": 0.015
+      }
+    ]
+  }
+}

@@ -34,10 +34,13 @@ SIGMA_LOOKBACK = 1800
 
 # ---------- data ----------
 
-def windows(conn, part="dev", sealed_frac=SEALED_FRAC):
-    """Settled windows with outcomes, split by time into dev / sealed."""
+def windows(conn, part="dev", sealed_frac=None, series="KXBTC15M"):
+    """One series' settled windows with outcomes, split by time into dev / sealed.
+    sealed_frac defaults to SEALED_FRAC, looked up at call time."""
+    sealed_frac = SEALED_FRAC if sealed_frac is None else sealed_frac
     w = pd.read_sql("SELECT ticker, open_ts, close_ts, floor_strike, result FROM markets "
-                    "WHERE result IN ('yes','no') AND floor_strike IS NOT NULL ORDER BY close_ts", conn)
+                    "WHERE result IN ('yes','no') AND floor_strike IS NOT NULL AND ticker LIKE ? "
+                    "ORDER BY close_ts", conn, params=(f"{series}-%",))
     cut = int(len(w) * (1 - sealed_frac))
     return (w.iloc[:cut] if part == "dev" else w.iloc[cut:]).reset_index(drop=True)
 
