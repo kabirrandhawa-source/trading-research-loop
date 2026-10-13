@@ -24,7 +24,8 @@ CREATE TABLE IF NOT EXISTS book (
     levels TEXT, fetch_ms REAL);
 CREATE INDEX IF NOT EXISTS book_ts ON book (ticker, ts);
 CREATE TABLE IF NOT EXISTS spot_ticks (
-    ts REAL, source TEXT, price REAL, bid REAL, ask REAL, ts_exchange REAL, fetch_ms REAL);
+    ts REAL, source TEXT, price REAL, bid REAL, ask REAL, ts_exchange REAL, fetch_ms REAL,
+    symbol TEXT);                                    -- asset, e.g. BTC; NULL in early rows = BTC
 CREATE INDEX IF NOT EXISTS ticks_ts ON spot_ticks (source, ts);
 CREATE TABLE IF NOT EXISTS progress (key TEXT PRIMARY KEY, value TEXT);
 """
@@ -36,6 +37,10 @@ def connect(name, data_dir=None):
     conn = sqlite3.connect(d / f"{name}.db", timeout=30)
     conn.execute("PRAGMA journal_mode=WAL")
     conn.executescript(SCHEMA)
+    cols = {r[1] for r in conn.execute("PRAGMA table_info(spot_ticks)")}
+    if "symbol" not in cols:                         # databases created before multi-asset support
+        conn.execute("ALTER TABLE spot_ticks ADD COLUMN symbol TEXT")
+    conn.execute("CREATE INDEX IF NOT EXISTS ticks_sym_ts ON spot_ticks (symbol, ts)")
     return conn
 
 

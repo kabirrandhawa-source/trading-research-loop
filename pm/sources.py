@@ -53,11 +53,11 @@ class Kalshi:
     def __init__(self, http=None):
         self.http = http or Http(min_interval=0.15)
 
-    def markets(self, status, limit=1000, max_pages=None):
-        """Yield KXBTC15M markets with this status ('open', 'settled', ...), newest first."""
+    def markets(self, status, limit=1000, max_pages=None, series=SERIES):
+        """Yield a series' markets with this status ('open', 'settled', ...), newest first."""
         cursor, pages = None, 0
         while True:
-            params = {"series_ticker": SERIES, "status": status, "limit": limit}
+            params = {"series_ticker": series, "status": status, "limit": limit}
             if cursor:
                 params["cursor"] = cursor
             d = self.http.get(f"{KALSHI}/markets", **params)
@@ -65,6 +65,10 @@ class Kalshi:
             cursor, pages = d.get("cursor"), pages + 1
             if not cursor or not d.get("markets") or (max_pages and pages >= max_pages):
                 return
+
+    def markets_for(self, series, status, limit=5):
+        """First page of a series' markets with this status."""
+        return list(self.markets(status, limit=limit, max_pages=1, series=series))
 
     def market(self, ticker):
         return self.http.get(f"{KALSHI}/markets/{ticker}")["market"]
@@ -76,7 +80,7 @@ class Kalshi:
         return conv("yes_dollars"), conv("no_dollars")
 
     def candles(self, ticker, start_ts, end_ts):
-        d = self.http.get(f"{KALSHI}/series/{SERIES}/markets/{ticker}/candlesticks",
+        d = self.http.get(f"{KALSHI}/series/{ticker.split('-')[0]}/markets/{ticker}/candlesticks",
                           start_ts=int(start_ts), end_ts=int(end_ts), period_interval=1)
         return d.get("candlesticks", [])
 
@@ -137,3 +141,59 @@ def kraken_trades(since_ns, http=None):
     rows = [(int(t[6]) if len(t) > 6 else None, float(t[2]), float(t[0]), float(t[1]))
             for t in next(iter(res.values()))]
     return rows, last
+
+
+# ---------- batched multi-asset quotes (used by the recorder) ----------
+
+def coinbase_quote(http, product):
+    d = http.get(f"https://api.exchange.coinbase.com/products/{product}/ticker")
+    return {"price": float(d["price"]), "bid": float(d["bid"]), "ask": float(d["ask"]),
+            "ts_exchange": parse_ts(d["time"])}
+
+
+def kraken_quotes(http, pairs):
+    """{requested_pair: quote}. Kraken renames some pairs (XBTUSD -> XXBTZUSD), so match by order
+    of the 'altname' lookup instead of trusting the response keys."""
+    d = http.get("https://api.kraken.com/0/public/Ticker", pair=",".join(pairs))
+    if d.get("error"):
+        raise RuntimeError(f"Kraken error: {d['error']}")
+    res = d["result"]
+    norm = lambda s: s.replace("XBT", "BTC").replace("XDG", "DOGE").replace("X", "").replace("Z", "")
+    out = {}
+    for p in pairs:
+        key = next((k for k in res if k == p or norm(k) == norm(p)), None)
+        if key:
+            t = res[key]
+            out[p] = {"price": float(t["c"][0]), "bid": float(t["b"][0]), "ask": float(t["a"][0]),
+                      "ts_exchange": None}
+    return out
+
+
+def binanceus_quotes(http, symbols):
+    """Best bid/ask from Binance.US (Binance.com blocks US users)."""
+    import json as _json
+    d = http.get("https://api.binance.us/api/v3/ticker/bookTicker", symbols=_json.dumps(symbols, separators=(",", ":")))
+    return {x["symbol"]: {"price": (float(x["bidPrice"]) + float(x["askPrice"])) / 2, "bid": float(x["bidPrice"]),
+                          "ask": float(x["askPrice"]), "ts_exchange": None} for x in d}
+
+
+def bitstamp_quote(http, pair):
+    d = http.get(f"https://www.bitstamp.net/api/v2/ticker/{pair}/")
+    return {"price": float(d["last"]), "bid": float(d["bid"]), "ask": float(d["ask"]),
+            "ts_exchange": float(d["timestamp"])}
+
+
+def pyth_quotes(http, api_key, ids):
+    """{feed_id: quote} from Pyth Hermes. Requires an API key since Pyth's 2026 Core upgrade."""
+    params = [("ids[]", i) for i in ids] + [("parsed", "true")]
+    r = http.s.get("https://hermes.pyth.network/v2/updates/price/latest", params=params,
+                   headers={"Authorization": f"Bearer {api_key}"}, timeout=http.timeout)
+    r.raise_for_status()
+    out = {}
+    for p in r.json().get("parsed", []):
+        pr = p["price"]
+        scale = 10 ** int(pr["expo"])
+        price, conf = int(pr["price"]) * scale, int(pr["conf"]) * scale
+        out[p["id"]] = {"price": price, "bid": price - conf, "ask": price + conf,
+                        "ts_exchange": float(pr["publish_time"])}
+    return out

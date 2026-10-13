@@ -108,3 +108,41 @@ def test_prediction_lock_and_single_sealed_run(tmp_path, monkeypatch):
         analyze.lock_prediction(lconn, h, "taker-v1", memo)
     with pytest.raises(PermissionError, match="No locked prediction"):
         analyze.verify_prediction(lconn, h, "taker-v2")
+
+
+def test_staggered_schedule_runs_every_series_at_its_rate():
+    from pm import universe
+    counts = {s: 0 for s in universe.SERIES}
+    per_tick = []
+    for t in range(60):
+        due = [s for i, (s, c) in enumerate(universe.SERIES.items()) if universe.due(c, t, i)]
+        per_tick.append(len(due))
+        for s in due:
+            counts[s] += 1
+    for s, c in universe.SERIES.items():
+        assert counts[s] == 60 // c["every_s"]
+    assert max(per_tick) <= 6                       # no tick fires everything at once
+
+
+def test_kraken_pair_names_are_matched(monkeypatch):
+    from pm import sources
+    class H:
+        def get(self, url, **p):
+            return {"error": [], "result": {
+                "XXBTZUSD": {"c": ["100.0", "1"], "b": ["99.0", "1", "1"], "a": ["101.0", "1", "1"]},
+                "XDGUSD": {"c": ["0.08", "1"], "b": ["0.07", "1", "1"], "a": ["0.09", "1", "1"]},
+                "XXRPZUSD": {"c": ["1.3", "1"], "b": ["1.2", "1", "1"], "a": ["1.4", "1", "1"]}}}
+    q = sources.kraken_quotes(H(), ["XBTUSD", "XDGUSD", "XRPUSD"])
+    assert q["XBTUSD"]["price"] == 100.0 and q["XDGUSD"]["price"] == 0.08 and q["XRPUSD"]["price"] == 1.3
+
+
+def test_old_live_db_gets_symbol_column(tmp_path):
+    import sqlite3
+    old = sqlite3.connect(tmp_path / "live-old.db")
+    old.execute("CREATE TABLE spot_ticks (ts REAL, source TEXT, price REAL, bid REAL, ask REAL, "
+                "ts_exchange REAL, fetch_ms REAL)")
+    old.execute("INSERT INTO spot_ticks VALUES (1, 'coinbase', 100, 99, 101, NULL, 20)")
+    old.commit(); old.close()
+    conn = store.connect("live-old", tmp_path)
+    cols = [r[1] for r in conn.execute("PRAGMA table_info(spot_ticks)")]
+    assert cols[-1] == "symbol" and conn.execute("SELECT count(*) FROM spot_ticks").fetchone()[0] == 1

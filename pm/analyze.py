@@ -48,7 +48,18 @@ def spot_for(conn, start, end):
     return spot_series(rows, start, end) if len(rows) > 100 else None
 
 
+_MODEL_CACHE = {}
+
+
 def window_model(conn, w):
+    """Cached per (database, window): the same model series is used by every analysis."""
+    key = (conn.execute("PRAGMA database_list").fetchone()[2], w.ticker)
+    if key not in _MODEL_CACHE:
+        _MODEL_CACHE[key] = _window_model(conn, w)
+    return _MODEL_CACHE[key]
+
+
+def _window_model(conn, w):
     """Per-second model probability for one window, with the Kraken-vs-index basis removed.
     The strike is the BRTI 60s average before open; Kraken's average over the same 60s gives the
     basis, which is known at open (no look-ahead)."""
