@@ -73,13 +73,14 @@ def _reduces(positions, symbol, side, qty):
 
 
 def submit(strategy, version, symbol, side, qty, market_conditions, reasoning,
-           client=None, price_fn=latest_price, peak_path=PEAK_PATH, journal_dir=journal.JOURNAL_DIR):
+           client=None, price_fn=latest_price, peak_path=PEAK_PATH, journal_dir=journal.JOURNAL_DIR,
+           extra=None):
     """Check, journal, and (if allowed) place a market order on the paper account."""
     if side not in ("buy", "sell") or not qty or qty <= 0:
         raise ValueError("side must be 'buy' or 'sell' and qty must be positive")
     client = client or paper_client()
     entry = {"strategy": strategy, "version": version, "symbol": symbol, "side": side, "qty": qty,
-             "market_conditions": market_conditions, "reasoning": reasoning}
+             "market_conditions": market_conditions, "reasoning": reasoning, **(extra or {})}
     try:
         account = account_snapshot(client, peak_path)
         price = price_fn(symbol)
