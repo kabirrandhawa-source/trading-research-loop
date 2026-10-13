@@ -59,10 +59,10 @@ def promoted(conn):
     return out
 
 
-def bars_held(strategy, symbol, journal_dir=journal.JOURNAL_DIR):
+def bars_held(strategy, symbol, journal_dir=None):
     """Trading days since this strategy's last submitted opening order on this symbol."""
     opened = None
-    for f in sorted(Path(journal_dir).glob("*.jsonl")):
+    for f in sorted(Path(journal_dir or journal.JOURNAL_DIR).glob("*.jsonl")):
         for line in f.read_text().splitlines():
             e = json.loads(line)
             if e.get("strategy") == strategy and e.get("symbol") == symbol \

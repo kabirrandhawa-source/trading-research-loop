@@ -48,10 +48,10 @@ def latest_price(symbol, client=None):
     return float(client.get_stock_latest_trade(StockLatestTradeRequest(symbol_or_symbols=symbol))[symbol].price)
 
 
-def account_snapshot(client, peak_path=PEAK_PATH):
+def account_snapshot(client, peak_path=None):
     acct = client.get_account()
     equity, last_equity = float(acct.equity), float(acct.last_equity)
-    peak_path = Path(peak_path)
+    peak_path = Path(peak_path or PEAK_PATH)
     peak = json.loads(peak_path.read_text())["peak"] if peak_path.exists() else equity
     if equity > peak:
         peak = equity
@@ -73,7 +73,7 @@ def _reduces(positions, symbol, side, qty):
 
 
 def submit(strategy, version, symbol, side, qty, market_conditions, reasoning,
-           client=None, price_fn=latest_price, peak_path=PEAK_PATH, journal_dir=journal.JOURNAL_DIR,
+           client=None, price_fn=latest_price, peak_path=None, journal_dir=None,
            extra=None):
     """Check, journal, and (if allowed) place a market order on the paper account."""
     if side not in ("buy", "sell") or not qty or qty <= 0:

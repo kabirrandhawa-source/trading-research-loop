@@ -16,8 +16,8 @@ import pandas as pd
 CAL_DIR = Path(__file__).parent / "calendars"
 
 
-def load(name, cal_dir=CAL_DIR):
-    df = pd.read_csv(Path(cal_dir) / f"{name}.csv", dtype=str)
+def load(name, cal_dir=None):
+    df = pd.read_csv(Path(cal_dir or CAL_DIR) / f"{name}.csv", dtype=str)
     missing = {"date", "source_url"} - set(df.columns)
     if missing:
         raise ValueError(f"calendars/{name}.csv missing columns {missing}")
