@@ -1,5 +1,6 @@
 """Public market-data clients: Kalshi (prediction market) and Bitcoin spot exchanges.
 Read-only. No account, keys, or orders anywhere in this module."""
+import os
 import threading
 import time
 from datetime import datetime, timezone
@@ -184,9 +185,11 @@ def bitstamp_quote(http, pair):
 
 
 def pyth_quotes(http, api_key, ids):
-    """{feed_id: quote} from Pyth Hermes. Requires an API key since Pyth's 2026 Core upgrade."""
+    """{feed_id: quote} from Pyth Hermes. Requires a Pyth API key since the 2026 Core upgrade (free
+    trial, then paid; sign up at pythdata.app). Sent as 'Authorization: Bearer <key>'."""
     params = [("ids[]", i) for i in ids] + [("parsed", "true")]
-    r = http.s.get("https://hermes.pyth.network/v2/updates/price/latest", params=params,
+    base = os.getenv("PYTH_HERMES_URL", "https://pyth.dourolabs.app/hermes").rstrip("/")
+    r = http.s.get(f"{base}/v2/updates/price/latest", params=params,
                    headers={"Authorization": f"Bearer {api_key}"}, timeout=http.timeout)
     r.raise_for_status()
     out = {}

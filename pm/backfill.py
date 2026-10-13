@@ -12,9 +12,9 @@ from pm import store
 from pm.sources import Http, Kalshi, kraken_trades, parse_ts
 
 
-def backfill_markets(conn, kalshi, since_ts):
+def backfill_markets(conn, kalshi, since_ts, series=None):
     n = 0
-    for m in kalshi.markets("settled"):
+    for m in kalshi.markets("settled", **({"series": series} if series else {})):
         close = parse_ts(m["close_time"])
         if close < since_ts:
             break
@@ -27,10 +27,11 @@ def backfill_markets(conn, kalshi, since_ts):
     return n
 
 
-def backfill_candles(conn, kalshi, since_ts):
+def backfill_candles(conn, kalshi, since_ts, series=None):
     todo = conn.execute(
-        "SELECT ticker, open_ts, close_ts FROM markets m WHERE close_ts >= ? AND NOT EXISTS "
-        "(SELECT 1 FROM candles c WHERE c.ticker = m.ticker) ORDER BY close_ts", (since_ts,)).fetchall()
+        "SELECT ticker, open_ts, close_ts FROM markets m WHERE close_ts >= ? AND ticker LIKE ? AND NOT EXISTS "
+        "(SELECT 1 FROM candles c WHERE c.ticker = m.ticker) ORDER BY close_ts",
+        (since_ts, f"{series}-%" if series else "%")).fetchall()
     for i, (ticker, open_ts, close_ts) in enumerate(todo):
         rows = []
         for c in kalshi.candles(ticker, open_ts - 60, close_ts + 60):
@@ -86,11 +87,18 @@ def main():
     p.add_argument("--days", type=float, default=14)
     p.add_argument("--trades", action="store_true", help="also fetch every Kalshi trade (slow)")
     p.add_argument("--trade-days", type=float, default=None, help="days of Kalshi trades (default --days)")
+    p.add_argument("--series", nargs="*", help="other series: outcomes + 1-minute odds only (e.g. KXGOLD15M); "
+                   "their settled strike/expiration values give the settlement price every 15 minutes")
     a = p.parse_args()
 
     conn = store.connect("history")
     kalshi = Kalshi()
     since = time.time() - a.days * 86400
+    if a.series:
+        for s in a.series:
+            print(f"{s}: {backfill_markets(conn, kalshi, since, s)} settled windows, "
+                  f"{backfill_candles(conn, kalshi, since, s)} with 1-minute odds", flush=True)
+        return
     print(f"markets: {backfill_markets(conn, kalshi, since)} settled windows stored")
     print(f"candles: {backfill_candles(conn, kalshi, since)} windows fetched")
     print(f"kraken: {backfill_kraken(conn, since - 3600)} pages")
