@@ -46,6 +46,7 @@ class Recorder:
         self.next_lookup = {}      # series -> time to look for an open market again
         self.pending_settle = {}   # ticker -> close_ts
         self.last_book_ok = time.time()
+        self.last_health = time.time()
         self.stalled = False
         self.running = True
         self.month, self.conn = None, None
@@ -177,7 +178,11 @@ class Recorder:
         """Alert when Bitcoin (open 24/7, so it should never be quiet) stops recording."""
         if not self.books:
             return                     # the stream has its own health alerts
-        gap = time.time() - self.last_book_ok
+        now = time.time()
+        if now - self.last_health > 30:     # the loop itself was paused: the Mac slept, not a failure
+            self.last_book_ok = now
+        self.last_health = now
+        gap = now - self.last_book_ok
         if gap > STALL_ALERT_S and not self.stalled:
             self.stalled = True
             alerts.send("Kalshi recorder stalled", f"No Bitcoin order book saved for {gap:.0f}s. "

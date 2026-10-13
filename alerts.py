@@ -20,6 +20,8 @@ ROOT = Path(__file__).parent
 load_dotenv(ROOT / "config" / ".env")
 
 PRIORITIES = {"low": "2", "default": "3", "high": "4", "urgent": "5"}
+REPEAT_WINDOW_S = 1800          # the same title goes out at most once per 30 minutes (urgent excepted)
+STATE_PATH = ROOT / "memory" / "alert_state.json"
 
 _OSA = """on run argv
 display notification (item 2 of argv) with title (item 1 of argv)
@@ -47,8 +49,36 @@ def _ntfy(title, message, priority, tags):
         return "ok" if resp.status == 200 else f"http {resp.status}"
 
 
-def send(title, message, priority="default", tags=(), journal_dir=None):
-    """Send an alert on every configured channel. Returns {channel: result}."""
+def _recently_sent(title, now, state_path=None):
+    """True if this title was sent within REPEAT_WINDOW_S; records the send otherwise."""
+    import json
+    path = Path(state_path or STATE_PATH)
+    try:
+        state = json.loads(path.read_text()) if path.exists() else {}
+    except Exception:
+        state = {}
+    if now - state.get(title, 0) < REPEAT_WINDOW_S:
+        return True
+    state = {k: v for k, v in state.items() if now - v < 86400}
+    state[title] = now
+    try:
+        path.write_text(json.dumps(state))
+    except Exception:
+        pass
+    return False
+
+
+def send(title, message, priority="default", tags=(), journal_dir=None, state_path=None):
+    """Send an alert on every configured channel. Returns {channel: result}.
+    Repeats of the same title within 30 minutes are journaled but not sent, unless urgent."""
+    import time
+    if priority != "urgent" and _recently_sent(title, time.time(), state_path):
+        entry = {"event": "alert_suppressed", "title": title, "priority": priority}
+        try:
+            journal.log(entry, journal_dir)
+        except Exception:
+            pass
+        return {"suppressed": "repeat within 30 minutes"}
     results = {}
     for name, fn in (("mac", lambda: _mac(title, message)),
                      ("ntfy", lambda: _ntfy(title, message, priority, tags))):
@@ -58,7 +88,7 @@ def send(title, message, priority="default", tags=(), journal_dir=None):
             results[name] = f"error: {type(e).__name__}: {e}"[:200]
     entry = {"event": "alert", "title": title, "priority": priority, "channels": results}
     try:
-        journal.log(entry, journal_dir) if journal_dir else journal.log(entry)
+        journal.log(entry, journal_dir)
     except Exception:
         pass
     return results

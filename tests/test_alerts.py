@@ -12,7 +12,7 @@ def test_send_never_raises_and_journals(tmp_path, monkeypatch):
     def boom(*a, **k): raise RuntimeError("no network")
     monkeypatch.setattr(alerts, "_mac", boom)
     monkeypatch.setattr(alerts, "_ntfy", boom)
-    res = alerts.send("t", "m", journal_dir=tmp_path)
+    res = alerts.send("t", "m", journal_dir=tmp_path, state_path=tmp_path / "s.json")
     assert res["mac"].startswith("error") and res["ntfy"].startswith("error")
     logged = json.loads(next(tmp_path.glob("*.jsonl")).read_text())
     assert logged["event"] == "alert" and logged["title"] == "t"
@@ -41,7 +41,7 @@ def test_ntfy_posts_to_topic(monkeypatch):
 @pytest.fixture
 def captured(monkeypatch):
     got = []
-    monkeypatch.setattr(run_daily.alerts, "send", lambda t, m, p="default", tags=(): got.append((t, p)))
+    monkeypatch.setattr(run_daily.alerts, "send", lambda t, m, p="default", tags=(), **k: got.append((t, p)))
     return got
 
 
@@ -86,3 +86,16 @@ def test_second_run_exits_while_first_holds_lock(captured, monkeypatch, tmp_path
         assert run_daily.main() == 0
     finally:
         held.close()
+
+
+def test_repeats_are_suppressed_but_urgent_always_sent(tmp_path, monkeypatch):
+    sent = []
+    monkeypatch.setattr(alerts, "_mac", lambda t, m: sent.append(t) or "ok")
+    monkeypatch.setattr(alerts, "_ntfy", lambda *a: "skipped")
+    st = tmp_path / "state.json"
+    alerts.send("Recorder stalled", "x", "high", journal_dir=tmp_path, state_path=st)
+    r = alerts.send("Recorder stalled", "x", "high", journal_dir=tmp_path, state_path=st)
+    alerts.send("Daily run FAILED", "y", "urgent", journal_dir=tmp_path, state_path=st)
+    alerts.send("Daily run FAILED", "y", "urgent", journal_dir=tmp_path, state_path=st)
+    assert sent == ["Recorder stalled", "Daily run FAILED", "Daily run FAILED"]
+    assert "suppressed" in r

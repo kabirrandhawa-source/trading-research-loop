@@ -224,10 +224,15 @@ class Stream:
 
     async def housekeeping(self, ws):
         """Once a second: book snapshots, commits, new markets, silence detection."""
-        last_lookup = 0.0
+        last_lookup, last_beat = 0.0, time.time()
         while True:
             await asyncio.sleep(1.0)
             now = time.time()
+            if now - last_beat > 30:                     # the Mac slept: reconnect quietly, no alert
+                log(f"resumed after {now - last_beat:.0f}s pause (sleep?)")
+                self.down_since = None
+                raise ConnectionError("resuming after sleep")
+            last_beat = now
             self.snapshot_books(now)
             self.db().commit()
             if int(now) % 60 == 0:
@@ -292,6 +297,8 @@ class Stream:
         self.down_since, self.alerted_down = None, False
 
     def on_down(self, why):
+        if "resuming after sleep" in why:
+            return
         self.down_since = self.down_since or time.time()
         if not self.alerted_down and time.time() - self.down_since > DOWN_ALERT_S:
             self.alerted_down = True

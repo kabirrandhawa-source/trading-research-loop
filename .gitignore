@@ -24,3 +24,4 @@ memory/*.backup-*.db
 # Local run state and logs
 memory/run_daily.lock
 logs/
+memory/alert_state.json
