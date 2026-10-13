@@ -20,3 +20,7 @@ __pycache__/
 # Local account state
 memory/peak_equity.json
 memory/*.backup-*.db
+
+# Local run state and logs
+memory/run_daily.lock
+logs/

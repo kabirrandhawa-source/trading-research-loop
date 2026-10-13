@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.kabirrandhawa.trading-loop.pm-recorder</string>
+
+    <!-- Read-only recorder: Kalshi 15-min Bitcoin order books + BTC spot, every second. No account, no orders. -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/kabir/trading-research-loop/.venv/bin/python</string>
+        <string>-W</string>
+        <string>ignore</string>
+        <string>-m</string>
+        <string>pm.record</string>
+    </array>
+    <key>WorkingDirectory</key>
+    <string>/Users/kabir/trading-research-loop</string>
+
+    <!-- Always running; restarted if it exits, at most once every 30 seconds. -->
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>ThrottleInterval</key>
+    <integer>30</integer>
+
+    <key>StandardOutPath</key>
+    <string>/Users/kabir/trading-research-loop/logs/pm_record.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/kabir/trading-research-loop/logs/pm_record.log</string>
+    <key>ProcessType</key>
+    <string>Background</string>
+</dict>
+</plist>

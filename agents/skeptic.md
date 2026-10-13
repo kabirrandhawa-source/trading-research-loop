@@ -1,5 +1,7 @@
 # Skeptic
 
+Read research/AREAS.md first: it lists the human's standing research directions.
+
 Run this only after the other research agents have finished. The no-cross-talk rule applies to the
 agents that propose ideas, so the Skeptic is the one agent that reads their memos.
 

@@ -10,15 +10,20 @@
     python run_daily.py --dry-run  # refresh data, log what it would do, place nothing
 """
 import argparse
+import fcntl
 import json
+import sys
+import traceback
 from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+import alerts
 import backtest
 import broker
 import journal
 import ledger
+import risk
 
 ROOT = Path(__file__).parent
 DATA = ROOT / "data"
@@ -106,19 +111,32 @@ def conditions(bars):
             "regime_63d": backtest.classify_regime(bars.tail(63)), "bar_date": str(bars["timestamp"].iloc[-1])}
 
 
-def main():
-    p = argparse.ArgumentParser()
-    p.add_argument("--dry-run", action="store_true")
-    p.add_argument("--today", default=datetime.now(ZoneInfo("America/New_York")).date().isoformat())
-    a = p.parse_args()
+LOCK_PATH = ROOT / "memory" / "run_daily.lock"
 
+
+def order_alert(rec):
+    """Alert for one broker.submit result."""
+    what = f"{rec['side'].upper()} {rec['qty']:g} {rec['symbol']} ({rec['strategy']} v{rec['version']})"
+    if rec["decision"] == "submitted":
+        alerts.send(f"Paper order: {what}", f"{rec.get('reasoning', '')}\nOrder id {rec.get('order_id')}",
+                    "default", ["chart_with_upwards_trend"])
+    elif rec["decision"] == "blocked":
+        alerts.send(f"BLOCKED by kill switch: {what}", rec.get("risk_check", ""), "high", ["no_entry"])
+    else:
+        alerts.send(f"Broker error: {what}", rec.get("error", ""), "urgent", ["rotating_light"])
+
+
+def run(a):
+    """One daily pass. Returns a summary dict."""
+    summary = {"date": a.today, "strategies": 0, "orders": [], "skipped": [], "no_action": 0}
     refresh_data(universe())
     conn = ledger.connect()
     strategies = promoted(conn)
+    summary["strategies"] = len(strategies)
     if not strategies:
         journal.log({"event": "daily_run", "note": "no strategies promoted to paper yet"})
         print("No strategies promoted to paper yet.")
-        return
+        return summary
 
     client = broker.paper_client()
     positions = {p.symbol: p for p in client.get_all_positions()}
@@ -127,17 +145,21 @@ def main():
         cls = backtest.load_strategy(ROOT / h["strategy_file"])
         strat = cls()
         if cls.VERSION != h["strategy_version"]:
-            journal.log({"event": "skipped", "strategy": cls.NAME, "symbol": sym,
-                         "reason": f"file is v{cls.VERSION}, ledger approved v{h['strategy_version']}"})
+            reason = f"file is v{cls.VERSION}, ledger approved v{h['strategy_version']}"
+            journal.log({"event": "skipped", "strategy": cls.NAME, "symbol": sym, "reason": reason})
+            summary["skipped"].append(f"{sym}: {reason}")
+            alerts.send(f"Strategy skipped: {cls.NAME} on {sym}", reason, "high", ["warning"])
             continue
         bars = backtest.load_prices(DATA / f"{sym}.csv")
         if sym in pending:
             journal.log({"event": "skipped", "strategy": cls.NAME, "symbol": sym,
                          "reason": "an order for this symbol is still open (holiday or unfilled)"})
+            summary["skipped"].append(f"{sym}: order still open")
             continue
         if not is_fresh(bars, a.today):
             journal.log({"event": "skipped", "strategy": cls.NAME, "symbol": sym,
                          "reason": f"no bar for {a.today} (market closed?); last bar {bars['timestamp'].iloc[-1]}"})
+            summary["skipped"].append(f"{sym}: no bar for {a.today}")
             continue
         pos = positions.get(sym)
         qty = float(pos.qty) if pos else 0.0
@@ -147,6 +169,7 @@ def main():
         if action is None:
             journal.log({"event": "no_action", "strategy": cls.NAME, "version": cls.VERSION,
                          "symbol": sym, "market_conditions": cond, "reasoning": why})
+            summary["no_action"] += 1
             continue
         if action == "open":
             n = strat.size(float(client.get_account().equity), cond["close"])
@@ -161,7 +184,51 @@ def main():
         rec = broker.submit(cls.NAME, cls.VERSION, sym, order_side, n, cond, why,
                             client=client, extra={"action": action, "hypothesis_id": h["id"]})
         print(sym, action, order_side, n, rec["decision"], rec.get("risk_check"))
+        summary["orders"].append(rec["decision"])
+        order_alert(rec)
+    return summary
+
+
+def heartbeat(summary):
+    """End-of-run message, so silence never has to be interpreted."""
+    orders = summary["orders"]
+    parts = [f"{summary['strategies']} strategies promoted"]
+    if summary["strategies"]:
+        parts += [f"{orders.count('submitted')} orders sent", f"{orders.count('blocked')} blocked",
+                  f"{summary['no_action']} no signal", f"{len(summary['skipped'])} skipped"]
+    if risk.HALT_PATH.exists():
+        parts.append("HALT file is ON: new positions are blocked")
+    msg = ", ".join(parts)
+    if summary["skipped"]:
+        msg += "\nSkipped: " + "; ".join(summary["skipped"])
+    alerts.send(f"Daily run OK {summary['date']}", msg, "low", ["white_check_mark"])
+
+
+def main():
+    p = argparse.ArgumentParser()
+    p.add_argument("--dry-run", action="store_true")
+    p.add_argument("--today", default=datetime.now(ZoneInfo("America/New_York")).date().isoformat())
+    a = p.parse_args()
+
+    LOCK_PATH.parent.mkdir(exist_ok=True)
+    lock = open(LOCK_PATH, "w")
+    try:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        journal.log({"event": "daily_run", "note": "another run is in progress; exiting"})
+        print("Another run_daily.py is already running.")
+        return 0
+
+    try:
+        heartbeat(run(a))
+        return 0
+    except Exception as e:
+        tb = traceback.format_exc()
+        journal.log({"event": "daily_run_failed", "error": f"{type(e).__name__}: {e}", "traceback": tb})
+        alerts.send("Daily run FAILED", f"{type(e).__name__}: {e}"[:400], "urgent", ["rotating_light"])
+        print(tb, file=sys.stderr)
+        return 1
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

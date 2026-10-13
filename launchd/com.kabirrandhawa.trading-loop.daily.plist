@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.kabirrandhawa.trading-loop.daily</string>
+
+    <!-- Plain Python, no AI: refresh prices, trade promoted strategies through the kill switch, alert. -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/kabir/trading-research-loop/.venv/bin/python</string>
+        <string>-W</string>
+        <string>ignore</string>
+        <string>/Users/kabir/trading-research-loop/run_daily.py</string>
+    </array>
+    <key>WorkingDirectory</key>
+    <string>/Users/kabir/trading-research-loop</string>
+
+    <!-- Weekdays 17:00 local time (this Mac is on US Eastern). If the Mac is asleep then,
+         launchd runs the job once when it wakes; run_daily.py skips trading if the day's bar is stale. -->
+    <key>StartCalendarInterval</key>
+    <array>
+        <dict><key>Weekday</key><integer>1</integer><key>Hour</key><integer>17</integer><key>Minute</key><integer>0</integer></dict>
+        <dict><key>Weekday</key><integer>2</integer><key>Hour</key><integer>17</integer><key>Minute</key><integer>0</integer></dict>
+        <dict><key>Weekday</key><integer>3</integer><key>Hour</key><integer>17</integer><key>Minute</key><integer>0</integer></dict>
+        <dict><key>Weekday</key><integer>4</integer><key>Hour</key><integer>17</integer><key>Minute</key><integer>0</integer></dict>
+        <dict><key>Weekday</key><integer>5</integer><key>Hour</key><integer>17</integer><key>Minute</key><integer>0</integer></dict>
+    </array>
+
+    <key>StandardOutPath</key>
+    <string>/Users/kabir/trading-research-loop/logs/run_daily.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/kabir/trading-research-loop/logs/run_daily.log</string>
+    <key>ProcessType</key>
+    <string>Background</string>
+</dict>
+</plist>
