@@ -1,0 +1,155 @@
+{
+  "part": "dev",
+  "version": "taker-v1",
+  "fills": {
+    "same": {
+      "edge": 0.03,
+      "fill": "same",
+      "trades": 872,
+      "windows_seen": 929,
+      "win_rate": 0.6525,
+      "avg_price": 0.6492,
+      "avg_fee_per_contract": 0.0138,
+      "pnl_per_contract": -0.01044,
+      "total_pnl_per_contract": -9.1,
+      "sharpe_per_trade": -0.0239,
+      "t_stat": -0.71
+    },
+    "next": {
+      "edge": 0.03,
+      "fill": "next",
+      "trades": 867,
+      "windows_seen": 929,
+      "win_rate": 0.6551,
+      "avg_price": 0.6584,
+      "avg_fee_per_contract": 0.0129,
+      "pnl_per_contract": -0.01623,
+      "total_pnl_per_contract": -14.073,
+      "sharpe_per_trade": -0.0381,
+      "t_stat": -1.12
+    }
+  },
+  "lag": {
+    "windows": 280,
+    "corr_by_lag_s": {
+      "-5": 0.0497,
+      "-4": 0.0694,
+      "-3": 0.0989,
+      "-2": 0.1335,
+      "-1": 0.2858,
+      "0": 0.4061,
+      "1": 0.0267,
+      "2": 0.0154,
+      "3": 0.0052,
+      "4": 0.0,
+      "5": -0.0018,
+      "6": -0.003,
+      "7": 0.007,
+      "8": 0.0049,
+      "9": 0.0028,
+      "10": 0.0002,
+      "11": 0.0001,
+      "12": 0.0037,
+      "13": 0.0005,
+      "14": 0.0046,
+      "15": 0.0035,
+      "16": 0.0059,
+      "17": -0.0004,
+      "18": 0.0108,
+      "19": -0.0024,
+      "20": 0.0044,
+      "21": 0.0011,
+      "22": 0.0007,
+      "23": 0.0016,
+      "24": -0.0045,
+      "25": -0.001,
+      "26": 0.0029,
+      "27": 0.0052,
+      "28": -0.0017,
+      "29": -0.0001,
+      "30": 0.0063
+    },
+    "peak_lag_s": 0,
+    "reading": "market moves at the same time as spot (no exploitable lag at 1s resolution)"
+  },
+  "calibration": {
+    "rows": 11748,
+    "windows": 929,
+    "brier_market": 0.14762,
+    "brier_model": 0.15251,
+    "brier_blend": 0.14884,
+    "reading": "lower Brier is better; if the blend beats the market, the model adds information the market hasn't priced",
+    "by_market_price": [
+      {
+        "mid": "(0.0, 0.1]",
+        "n": 1689,
+        "market": 0.037,
+        "actual": 0.034,
+        "model": 0.016
+      },
+      {
+        "mid": "(0.1, 0.2]",
+        "n": 1019,
+        "market": 0.149,
+        "actual": 0.127,
+        "model": 0.094
+      },
+      {
+        "mid": "(0.2, 0.3]",
+        "n": 994,
+        "market": 0.25,
+        "actual": 0.23,
+        "model": 0.197
+      },
+      {
+        "mid": "(0.3, 0.4]",
+        "n": 1036,
+        "market": 0.349,
+        "actual": 0.33,
+        "model": 0.313
+      },
+      {
+        "mid": "(0.4, 0.5]",
+        "n": 1023,
+        "market": 0.451,
+        "actual": 0.394,
+        "model": 0.438
+      },
+      {
+        "mid": "(0.5, 0.6]",
+        "n": 1063,
+        "market": 0.55,
+        "actual": 0.512,
+        "model": 0.558
+      },
+      {
+        "mid": "(0.6, 0.7]",
+        "n": 1038,
+        "market": 0.65,
+        "actual": 0.605,
+        "model": 0.679
+      },
+      {
+        "mid": "(0.7, 0.8]",
+        "n": 1085,
+        "market": 0.749,
+        "actual": 0.726,
+        "model": 0.796
+      },
+      {
+        "mid": "(0.8, 0.9]",
+        "n": 997,
+        "market": 0.849,
+        "actual": 0.862,
+        "model": 0.893
+      },
+      {
+        "mid": "(0.9, 1.0]",
+        "n": 1804,
+        "market": 0.963,
+        "actual": 0.961,
+        "model": 0.982
+      }
+    ]
+  }
+}
