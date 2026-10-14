@@ -26,3 +26,4 @@ memory/run_daily.lock
 logs/
 memory/alert_state.json
 .venv-tsfm/
+.claude/settings.local.json
