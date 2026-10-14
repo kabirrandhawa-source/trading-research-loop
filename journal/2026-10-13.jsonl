@@ -56,3 +56,7 @@
 {"timestamp": "2026-10-13T14:38:58.054042+00:00", "event": "alert", "title": "Kalshi recorder recovered", "priority": "default", "channels": {"mac": "ok", "ntfy": "ok"}}
 {"timestamp": "2026-10-13T16:11:51.043260+00:00", "event": "alert", "title": "Kalshi recorder stalled", "priority": "high", "channels": {"mac": "ok", "ntfy": "ok"}}
 {"timestamp": "2026-10-13T16:11:51.339046+00:00", "event": "alert", "title": "Kalshi recorder recovered", "priority": "default", "channels": {"mac": "ok", "ntfy": "ok"}}
+{"timestamp": "2026-10-13T21:00:11.787417+00:00", "event": "daily_run", "note": "no strategies promoted to paper yet"}
+{"timestamp": "2026-10-13T21:00:12.200744+00:00", "event": "alert", "title": "Daily run OK 2026-10-13", "priority": "low", "channels": {"mac": "ok", "ntfy": "ok"}}
+{"timestamp": "2026-10-13T21:00:17.429661+00:00", "event": "alert", "title": "Kalshi stream down", "priority": "high", "channels": {"mac": "ok", "ntfy": "ok"}}
+{"timestamp": "2026-10-13T21:00:38.318935+00:00", "event": "alert", "title": "Kalshi stream recovered", "priority": "default", "channels": {"mac": "ok", "ntfy": "ok"}}

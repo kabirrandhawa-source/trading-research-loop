@@ -1,0 +1,37 @@
+{
+  "signal": {
+    "forecasts_scored": 22770,
+    "days": 1518,
+    "cross_sectional_ic_mean": 0.0002,
+    "cross_sectional_ic_t": 0.02,
+    "time_series_ic_by_etf": {
+      "DIA": -0.0901,
+      "GLD": -0.065,
+      "IEF": -0.0527,
+      "IWM": -0.1216,
+      "QQQ": -0.0142,
+      "SPY": -0.0775,
+      "TLT": 0.0233,
+      "XLE": -0.096,
+      "XLF": -0.1443,
+      "XLI": -0.1764,
+      "XLK": 0.0064,
+      "XLP": -0.0038,
+      "XLU": -0.1142,
+      "XLV": -0.0201,
+      "XLY": -0.0963
+    },
+    "time_series_ic_mean": -0.0695,
+    "hit_rate": 0.5073,
+    "always_up_hit_rate": 0.5301,
+    "hit_rate_edge_z": -6.89,
+    "share_of_forecasts_up": 0.6625,
+    "echo_corr_with_yesterdays_move": -0.0133,
+    "band_80pct_coverage": 0.8039
+  },
+  "spy_buy_and_hold_walk_forward": {
+    "total_return_pct": 9.572,
+    "max_drawdown_pct": -3.422,
+    "sharpe_annual": 0.754
+  }
+}
