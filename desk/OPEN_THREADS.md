@@ -5,13 +5,12 @@ current: add a line when something is started or promised, remove it when it's d
 newest first within each section. Results live in the ledger and journal, not here.
 
 ## Waiting on Kabir
-- 2026-10-14: Build the Kalshi market-making simulator (post bids on both YES and NO so the pair costs
-  under $1; Kalshi charges no maker fee on its 15-minute crypto series as far as checked)? Proposed: build
-  it and lock its prediction now, run it around Oct 27 on recorded stream data. This is ledger hypothesis 4,
-  lead (a). Prompted by a social post about a Polymarket maker bot (Polymarket is restricted in MA).
-  Main risk to test: one-sided fills (adverse selection) and queue position.
+- Nothing right now.
 
 ## Scheduled / in progress
+- 2026-10-14: Market-making simulator built (pm/maker.py, hypothesis 8, prediction locked: expects a loss
+  from one-sided fills). Run around 2026-10-27 on development windows only:
+  `.venv/bin/python -m pm.maker run --hypothesis 8 --version maker-v1`. Needs ~300+ windows; had 30 dev on Oct 14.
 - 2026-10-27 10:00 ET: 2-week check-in task fires. Then lock predictions and test, on post-Oct-13 Kalshi
   windows only: (a) resting limit orders / market making, (b) buying 90c+ favorites (hypothesis 5 watch list),
   (c) BTC "Up" overpriced at mid prices (hypothesis 4 lead b). Aim for ~3x the development sample.
