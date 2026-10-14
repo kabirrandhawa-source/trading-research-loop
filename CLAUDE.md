@@ -8,6 +8,8 @@ the human decide about real money. Most ideas fail; failures are recorded, not h
   keys or the contents of config/.env or config/*.pem.
 - Never place orders directly. Trading happens only in run_daily.py, run by launchd at 17:00 ET.
 - Never run a `sealed` test (backtest.py, pm/analyze.py) without the human's explicit yes in chat.
+- `paper/benchmarks.json` lists human-approved benchmarks the daily job trades (now: SPY at 9.5%). Never add,
+  change or remove one without the human's explicit yes. Benchmarks are yardsticks, never research results.
   Never set status passed_paper or promote a strategy to paper trading; that's the human's call.
 - Never read sealed data. ETF, stock and crypto prices on/after backtest.SEALED_START (2024-01-30) are sealed
   (crypto funding history only starts in 2023, so most of it is sealed: say so before using it);

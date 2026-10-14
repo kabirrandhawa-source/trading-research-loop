@@ -37,7 +37,8 @@ def test_short_stop():
     assert "stop" in run_daily.decide(S(), bars([100, 106]), -10, 100, "2026-10-01")[2]
 
 
-def test_only_promoted_and_one_per_symbol(tmp_path):
+def test_only_promoted_and_one_per_symbol(tmp_path, monkeypatch):
+    monkeypatch.setattr(run_daily, "BENCHMARKS", tmp_path / "none.json")
     conn = ledger.connect(tmp_path / "l.db")
     a = ledger.add_hypothesis(conn, "a", "x", "SPY")
     b = ledger.add_hypothesis(conn, "b", "x", "spy")
@@ -65,3 +66,24 @@ def test_is_fresh_uses_new_york_date():
     b = pd.DataFrame({"timestamp": pd.to_datetime(["2026-10-09 04:00:00+00:00"])})
     assert run_daily.is_fresh(b, "2026-10-09")
     assert not run_daily.is_fresh(b, "2026-10-12")
+
+
+def test_benchmarks_are_traded_but_clash_with_a_strategy_on_the_same_symbol(tmp_path):
+    bm = tmp_path / "b.json"
+    bm.write_text(json.dumps([{"name": "SPY bench", "strategy_file": "strategies/benchmark_spy_v1.py",
+                               "strategy_version": "1", "symbol": "SPY"}]))
+    conn = ledger.connect(tmp_path / "l.db")
+    got = run_daily.promoted(conn, bm)
+    assert [(h["benchmark"], s) for h, s in got] == [("SPY bench", "SPY")]
+    h = ledger.add_hypothesis(conn, "x", "a", "SPY")
+    ledger.update(conn, h, status="passed_backtest", strategy_file="strategies/s_v1.py")
+    ledger.record_sealed_result(conn, h, {"ok": 1})
+    with pytest.raises(RuntimeError, match="both trade SPY"):
+        run_daily.promoted(conn, bm)
+
+
+def test_benchmark_strategy_always_holds():
+    from strategies.benchmark_spy_v1 import BenchmarkSPY
+    s = BenchmarkSPY()
+    assert s.entry(bars([100])) == 1 and s.exit(bars([100]), {"side": 1}) is False
+    assert s.size(100_000, 500) == 19                       # 9.5% of $100k at $500 = 19 shares

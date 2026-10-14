@@ -1,0 +1,10 @@
+[
+  {
+    "name": "SPY buy-and-hold benchmark",
+    "strategy_file": "strategies/benchmark_spy_v1.py",
+    "strategy_version": "1",
+    "symbol": "SPY",
+    "approved_by": "Kabir, in chat, 2026-10-14",
+    "why": "Exercise the full paper-trading path daily and set the bar future strategies must beat on paper."
+  }
+]

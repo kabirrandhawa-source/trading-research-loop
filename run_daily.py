@@ -45,16 +45,31 @@ def refresh_data(symbols, client=None):
         df.drop(columns="symbol").to_csv(DATA / f"{sym}.csv", index=False)
 
 
-def promoted(conn):
+BENCHMARKS = ROOT / "paper" / "benchmarks.json"
+
+
+def benchmarks(path=None):
+    """Human-approved benchmark strategies (not research results), shaped like ledger rows."""
+    path = Path(path or BENCHMARKS)
+    if not path.exists():
+        return []
+    return [{"id": None, "market": b["symbol"], "strategy_file": b["strategy_file"],
+             "strategy_version": b["strategy_version"], "benchmark": b["name"]}
+            for b in json.loads(path.read_text())]
+
+
+def promoted(conn, benchmarks_path=None):
+    """Strategies the daily job trades: hypotheses that passed the development backtest AND the
+    sealed test (promotion is the human's decision), plus the approved benchmarks."""
     rows = conn.execute(
         "SELECT * FROM hypotheses WHERE status = 'passed_backtest' "
         "AND sealed_test_result IS NOT NULL AND strategy_file IS NOT NULL").fetchall()
     out, seen = [], {}
-    for h in map(dict, rows):
+    for h in list(map(dict, rows)) + benchmarks(benchmarks_path):
         sym = h["market"].strip().upper()
         if sym in seen:   # Alpaca nets positions per symbol, so two strategies can't share one
-            raise RuntimeError(f"Hypotheses {seen[sym]} and {h['id']} both trade {sym}. Pause one.")
-        seen[sym] = h["id"]
+            raise RuntimeError(f"{seen[sym]} and {h.get('benchmark') or h['id']} both trade {sym}. Pause one.")
+        seen[sym] = h.get("benchmark") or h["id"]
         out.append((h, sym))
     return out
 
