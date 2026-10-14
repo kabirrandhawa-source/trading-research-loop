@@ -38,3 +38,14 @@ taker-v1 is locked in backtests/pm_taker-v1-prediction.md.
 
 Until data exists for other venues, ideas there should be researched and recorded (papers, venue rules,
 fee schedules, measured delays) but marked not testable rather than backtested on daily bars.
+
+## 3. Stocks and crypto signals (added 2026-10-14, new free data)
+- **S&P 500 stocks, 2016 onward, point-in-time**: `stocks.universe.members_on(day)` gives the ~500 members on
+  any date (companies that later died included); `stocks.universe.prices(tickers)` gives their adjusted daily
+  prices, cut at the day each left the index. Cross-sectional ideas (rank all members each month) are now
+  testable: momentum, short-term reversal, low volatility, sector-relative strength, index additions/deletions.
+  Fundamentals (SEC EDGAR, filing-dated) come later.
+- **Crypto**: Coinbase daily prices for BTC, ETH, SOL, XRP, DOGE, and perpetual-futures funding rates
+  (Coinbase International since 2023, Kraken for the last 12 months). Funding-rate and basis signals are among
+  the better-documented crypto effects; most funding history is in the sealed period, so test designs must
+  say how they handle that.

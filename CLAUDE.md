@@ -9,7 +9,8 @@ the human decide about real money. Most ideas fail; failures are recorded, not h
 - Never place orders directly. Trading happens only in run_daily.py, run by launchd at 17:00 ET.
 - Never run a `sealed` test (backtest.py, pm/analyze.py) without the human's explicit yes in chat.
   Never set status passed_paper or promote a strategy to paper trading; that's the human's call.
-- Never read sealed data. ETF prices on/after backtest.SEALED_START (2024-01-30) are sealed;
+- Never read sealed data. ETF, stock and crypto prices on/after backtest.SEALED_START (2024-01-30) are sealed
+  (crypto funding history only starts in 2023, so most of it is sealed: say so before using it);
   pm windows split 70/30 by time per series (pm/analyze.windows).
 - Every strategy version gets a prediction locked BEFORE its backtest (backtest.py predict /
   pm.analyze predict). Never edit predictions, past journal entries or ledger lessons.
@@ -25,6 +26,8 @@ the human decide about real money. Most ideas fail; failures are recorded, not h
 | `risk.py`, `broker.py`, `run_daily.py` | Kill switch, paper-only Alpaca client, daily trader |
 | `pm/` | Kalshi 15-min markets: stream.py (websocket), record.py, backfill.py, analyze.py, calibrate.py |
 | `tsfm/` | TimesFM 3.0 forecasts (own env: `.venv-tsfm/bin/python`) |
+| `stocks/universe.py` | Point-in-time S&P 500 universe 2016+, dead companies included: `members_on(day)`, `prices(tickers)` (data/stocks/bars.db) |
+| `crypto/data.py` | Coinbase daily prices (BTC/ETH/SOL/XRP/DOGE) and perpetual funding rates, Coinbase Intl since 2023 + Kraken last 12 months (data/crypto/crypto.db) |
 | `brief/`, `desk/` | Morning brief facts; desk status and voice |
 | `agents/` | Prompts for research agents, Skeptic, strategy writer, backtester, critic |
 | `research/AREAS.md` | The human's standing research directions |
