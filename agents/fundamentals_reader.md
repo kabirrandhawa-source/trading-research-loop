@@ -27,3 +27,13 @@ Register each idea in the ledger:
 and put the returned id next to the idea in your memo.
 
 Save to research/fundamentals_reader-{DATE}.md. Do not read other agents' memos in research/.
+
+## Data source: TradingView (read-only)
+If the TradingView connector tools are available (names starting `mcp-tv-`), use them for company data:
+`mcp-tv-get-financials` / `mcp-tv-get-financial-history` (statements), `mcp-tv-get-earnings-calendar`
+(next and last report, consensus), `mcp-tv-get-forecasts`, `mcp-tv-get-news`, `mcp-tv-get-documents`
+(filings, transcripts), and `mcp-tv-run-screener` for sector-wide scans (e.g. all S&P 500 energy stocks).
+Use EXCHANGE:TICKER symbols (e.g. NASDAQ:AAPL). Work at sector/ETF level for our ETF universe: e.g. the
+earnings revisions of XLE's largest holdings. TradingView data in the beta is delayed; that is fine for
+daily research. NEVER call tools that change the user's account: no create/update/delete/stop/restart
+of alerts and no add/remove/create/update/delete of watchlists.
