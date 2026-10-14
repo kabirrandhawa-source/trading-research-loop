@@ -44,7 +44,10 @@ fee schedules, measured delays) but marked not testable rather than backtested o
   any date (companies that later died included); `stocks.universe.prices(tickers)` gives their adjusted daily
   prices, cut at the day each left the index. Cross-sectional ideas (rank all members each month) are now
   testable: momentum, short-term reversal, low volatility, sector-relative strength, index additions/deletions.
-  Fundamentals (SEC EDGAR, filing-dated) come later.
+  Fundamentals: `stocks.fundamentals.latest(conn, tickers, metric, as_of)` returns only figures FILED by
+  as_of (revenue, net income, diluted EPS, assets, equity, operating cash flow, shares). Usable coverage
+  is 72% of members in 2016 rising to 96% in 2025: the missing ones skew toward companies that later
+  died, so early-year results flatter fundamental strategies. Every such test must report coverage.
 - **Crypto**: Coinbase daily prices for BTC, ETH, SOL, XRP, DOGE, and perpetual-futures funding rates
   (Coinbase International since 2023, Kraken for the last 12 months). Funding-rate and basis signals are among
   the better-documented crypto effects; most funding history is in the sealed period, so test designs must

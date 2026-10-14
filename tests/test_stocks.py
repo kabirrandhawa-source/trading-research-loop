@@ -46,3 +46,22 @@ def test_prices_stop_when_a_stock_leaves_the_index(setup):
     assert p.day.max() < "2018-01-02"        # the 2019 bar from the ticker's later reuse never appears
     p = u.prices(["OLD"], conn=conn, m=m)
     assert len(p) > 0 and p.day.max() < "2018-01-02"
+
+
+def test_fundamentals_are_only_visible_after_they_were_filed(tmp_path):
+    from stocks import fundamentals as f
+    c = f.connect(tmp_path / "f.db")
+    rows = [("AAA", 1, "eps_diluted", "EarningsPerShareDiluted", "2020-01-01", "2020-03-31", 1.0, "2020-05-01", "10-Q", 2020, "Q1", "a1"),
+            ("AAA", 1, "eps_diluted", "EarningsPerShareDiluted", "2020-04-01", "2020-06-30", 2.0, "2020-08-01", "10-Q", 2020, "Q2", "a2")]
+    c.executemany("INSERT INTO facts VALUES (?,?,?,?,?,?,?,?,?,?,?,?)", rows)
+    assert f.latest(c, ["AAA"], "eps_diluted", "2020-07-15").loc["AAA", "val"] == 1.0   # Q2 not filed yet
+    assert f.latest(c, ["AAA"], "eps_diluted", "2020-08-01").loc["AAA", "val"] == 2.0
+    assert len(f.latest(c, ["AAA"], "eps_diluted", "2020-04-30")) == 0
+
+
+def test_extract_reads_alternate_eps_tag():
+    from stocks import fundamentals as f
+    facts = {"facts": {"us-gaap": {"EarningsPerShareBasicAndDiluted": {"units": {"USD/shares": [
+        {"start": "2020-01-01", "end": "2020-03-31", "val": 0.5, "filed": "2020-05-01", "form": "10-Q", "fy": 2020, "fp": "Q1", "accn": "x"}]}}}}}
+    out = f.extract("XOM", 34088, facts)
+    assert [(r[2], r[6], r[7]) for r in out] == [("eps_diluted", 0.5, "2020-05-01")]
