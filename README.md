@@ -59,3 +59,9 @@ Read-only: no Kalshi account, keys or orders anywhere in this code.
 - `pm/analyze.py`: `lag` (does the market trail spot?), `calibration` (market vs model vs outcomes),
   `predict` / `sim` / `sealed` with the same locked-prediction and sealed-holdout rules as the ETF side.
   Windows are split by time: first 70% development, last 30% sealed.
+
+## Morning brief (`brief/`)
+Weekdays at 8:15 ET a Claude scheduled task runs `brief/gather.py` (ETF moves, top movers over $5,
+most active, Alpaca/Benzinga headlines, crypto 24h, the paper account, loop health), adds today's
+economic calendar and top stories by web search, writes `journal/brief-YYYY-MM-DD.md`, and sends a
+short alert. Read-only. Run the fact-gathering part by hand: `.venv/bin/python -m brief.gather`.
