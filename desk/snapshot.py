@@ -3,7 +3,7 @@
     .venv/bin/python -m desk.snapshot      # writes data/desk/snapshot.json and prints its path
 
 Every row has the same columns: section, key (unique), label, status, value, detail.
-Sections: kpi, health, meta, hypothesis, alert.
+Sections: kpi, health, meta, equity, position, trade, hypothesis, alert.
 """
 import json
 import sqlite3
@@ -29,6 +29,63 @@ def lessons():
         last = (text or "").strip().splitlines()[-1:] or [""]
         out[hid] = last[0].split("] ", 1)[-1][:220]
     return out
+
+
+START_EQUITY = 100_000.0
+
+
+def account_rows():
+    """Equity history, open positions and P&L figures from the Alpaca paper account."""
+    import broker
+    from alpaca.trading.requests import GetPortfolioHistoryRequest
+    c = broker.paper_client()
+    rows = []
+    h = c.get_portfolio_history(GetPortfolioHistoryRequest(period="3M", timeframe="1D"))
+    for t, eq in zip(h.timestamp, h.equity):
+        if eq and eq > 0:
+            day = datetime.fromtimestamp(t, timezone.utc).strftime("%Y-%m-%d")
+            rows.append(row("equity", day, day, None, round(float(eq), 2), None))
+    a = c.get_account()
+    eq, last = float(a.equity), float(a.last_equity)
+    rows += [row("kpi", "pl_total", "P&L since start", "up" if eq >= START_EQUITY else "down",
+                 round(eq - START_EQUITY, 2), f"{(eq / START_EQUITY - 1):+.2%} on ${START_EQUITY:,.0f}"),
+             row("kpi", "pl_today", "P&L today", "up" if eq >= last else "down", round(eq - last, 2),
+                 f"{(eq / last - 1) if last else 0:+.2%} since yesterday's close"),
+             row("kpi", "cash", "Cash", None, round(float(a.cash), 2), "Uninvested paper cash")]
+    pos = c.get_all_positions()
+    rows.append(row("kpi", "positions", "Open positions", None, len(pos), ", ".join(p.symbol for p in pos) or "None"))
+    for p in pos:
+        pl, plpc = float(p.unrealized_pl), float(p.unrealized_plpc)
+        rows.append(row("position", p.symbol, p.symbol, "up" if pl >= 0 else "down", round(pl, 2),
+                        f"{float(p.qty):g} sh @ ${float(p.avg_entry_price):,.2f} · now ${float(p.market_value):,.2f} · {plpc:+.2%}"))
+    return rows
+
+
+def trade_rows(limit=40):
+    """Every order the desk sent or the kill switch blocked, newest first, from journal/*.jsonl."""
+    out = []
+    for f in sorted((ROOT / "journal").glob("*.jsonl")):
+        for line in f.read_text().splitlines():
+            e = json.loads(line)
+            if e.get("decision") in ("submitted", "blocked", "broker_error") and e.get("symbol"):
+                out.append(e)
+    rows = [row("kpi", "orders", "Orders sent", None, sum(e["decision"] == "submitted" for e in out), "All time, paper"),
+            row("kpi", "blocked", "Blocked by kill switch", "attention" if any(e["decision"] == "blocked" for e in out) else "ok",
+                sum(e["decision"] == "blocked" for e in out), "Orders the risk check stopped")]
+    for i, e in enumerate(reversed(out[-limit:])):
+        value = (e.get("order") or {}).get("value")
+        rows.append(row("trade", i, f"{e['side'].upper()} {e['qty']:g} {e['symbol']}", e["decision"],
+                        round(value, 2) if value else None,
+                        f"{e['timestamp'][:16].replace('T', ' ')} UTC · {e.get('strategy')} · {e.get('risk_check') or e.get('error') or ''}"))
+    return rows
+
+
+def safe(fn):
+    try:
+        return fn()
+    except Exception as e:
+        return [row("health", f"error-{fn.__name__}", f"Snapshot part failed: {fn.__name__}", "bad", None,
+                    f"{type(e).__name__}: {str(e)[:150]}")]
 
 
 def build(s=None):
@@ -80,6 +137,7 @@ def build(s=None):
                         "ok" if latest.get("daily_summary") else "attention", None, latest.get("daily_summary") or "None yet"))
 
     rows.append(row("meta", "asof", "Snapshot taken", detail=s.get("as_of")))
+    rows += safe(account_rows) + safe(trade_rows)
 
     les = lessons()
     for h in led.get("hypotheses", []) if "error" not in led else []:

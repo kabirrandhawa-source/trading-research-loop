@@ -1,0 +1,462 @@
+<style>
+  .fd { display: grid; gap: var(--cds-gap-lg); font-family: var(--font-anthropic-sans); font-variant-numeric: tabular-nums; }
+  .fd-head h1 { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); margin: 0; text-wrap: balance; }
+  .fd-take { margin: var(--cds-gap-xs) 0 0; color: var(--color-fg); font-size: var(--cds-font-size-body); max-width: 65ch; }
+  .fd-asof { margin: var(--cds-gap-xs) 0 0; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+  .fd-kpis { display: grid; gap: var(--cds-gap-md); grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr)); }
+  .fd-kpi { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-md) var(--cds-pad-lg); display: grid; gap: var(--cds-gap-xs); min-width: 0; }
+  .fd-kpi .lbl { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+  .fd-kpi .num { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); line-height: 1.1; }
+  .fd-kpi .sub { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+  .fd-kpi.attention .num { color: var(--color-warn); }
+  .fd-grid { display: grid; gap: var(--cds-gap-md); grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); align-items: start; }
+  .fd-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); min-width: 0; display: grid; gap: var(--cds-gap-sm); }
+  .fd-card h2 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: 0; }
+  .fd-note { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); margin: 0; }
+  .fd-scroll { overflow-x: auto; max-height: 26rem; overflow-y: auto; }
+  .fd table { width: 100%; border-collapse: collapse; font-size: var(--cds-font-size-caption); }
+  .fd th { text-align: left; color: var(--color-fg-muted); font-weight: var(--cds-font-weight-medium); padding: var(--cds-pad-xs) var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); position: sticky; top: 0; background: var(--color-panel); white-space: nowrap; }
+  .fd td { padding: var(--cds-pad-xs) var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); vertical-align: top; }
+  .fd td.num, .fd th.num { text-align: right; white-space: nowrap; }
+  .fd tr.grp td { color: var(--color-fg-muted); font-weight: var(--cds-font-weight-medium); padding-top: var(--cds-pad-sm); border-bottom: none; }
+  .fd .up { color: var(--color-ok); }
+  .fd .down { color: var(--color-bad); }
+  .fd .pill { display: inline-block; padding: 0 var(--cds-pad-sm); border-radius: 999px; border: 1px solid currentColor; font-size: var(--cds-font-size-caption); white-space: nowrap; line-height: 1.6; }
+  .fd .s-ok, .fd .s-passed_backtest, .fd .s-passed_paper, .fd .s-low, .fd .s-default { color: var(--color-ok); }
+  .fd .s-attention, .fd .s-untested, .fd .s-paused, .fd .s-high { color: var(--color-warn); }
+  .fd .s-bad, .fd .s-failed, .fd .s-urgent, .fd .s-blocked, .fd .s-broker_error, .fd .s-down { color: var(--color-bad); }
+  .fd .s-submitted, .fd .s-up { color: var(--color-ok); }
+  .fd .s-dropped, .fd .s-retired, .fd .s-none { color: var(--color-fg-muted); }
+  .fd .idea { min-width: 14rem; }
+  .fd .lesson { color: var(--color-fg-muted); margin-top: 2px; }
+  .fd .hi { font-weight: var(--cds-font-weight-medium); }
+  .fd .empty { color: var(--color-fg-muted); }
+  .fd .fail { display: flex; align-items: center; justify-content: center; gap: var(--cds-gap-xs); color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); min-height: 4rem; }
+  .fd .fail::before { content: ""; width: .375rem; height: .375rem; border-radius: 50%; background: var(--color-bad); }
+
+  /* Nucleus hero: a deliberate dark "control room" look, the same in light and dark themes */
+  .nx { position: relative; overflow: hidden; border-radius: var(--cds-radius); background: #04070d;
+        background-image: radial-gradient(120% 90% at 50% 45%, #0b1626 0%, #04070d 62%); color: #e8f1ff;
+        border: 1px solid #12233a; display: grid; grid-template-columns: minmax(0, 1fr) minmax(16rem, 1.4fr) minmax(0, 1fr);
+        align-items: center; gap: var(--cds-gap-md); padding: var(--cds-pad-lg); min-height: 26rem; }
+  .nx-stage { position: relative; min-width: 0; aspect-ratio: 1 / 1; max-height: 30rem; width: 100%; justify-self: center; }
+  .nx-stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .nx-center { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; pointer-events: none; gap: 2px; }
+  .nx-label { font-size: var(--cds-font-size-caption); letter-spacing: .14em; text-transform: uppercase; color: #8fb3d9; }
+  .nx-equity { font-family: var(--font-anthropic-sans); font-weight: 300; font-size: clamp(1.6rem, 4.4vw, 2.6rem); letter-spacing: -.01em;
+               font-variant-numeric: tabular-nums; text-shadow: 0 0 18px var(--nx-glow, #3ad6ff); }
+  .nx-pl { font-size: var(--cds-font-size-body); font-variant-numeric: tabular-nums; }
+  .nx-up { color: #2bffb5; } .nx-down { color: #ff5c7a; } .nx-flat { color: #7fe3ff; }
+  .nx-col { display: grid; gap: var(--cds-gap-sm); min-width: 0; }
+  .nx-chip { border: 1px solid #1b3352; background: rgba(14, 28, 48, .72); border-radius: var(--cds-radius); padding: var(--cds-pad-sm) var(--cds-pad-md);
+             display: grid; gap: 2px; min-width: 0; box-shadow: inset 0 0 18px rgba(58, 214, 255, .05); }
+  .nx-chip .k { font-size: var(--cds-font-size-caption); color: #8fb3d9; letter-spacing: .06em; text-transform: uppercase; }
+  .nx-chip .v { font-size: var(--cds-font-size-heading); font-variant-numeric: tabular-nums; color: #e8f1ff; }
+  .nx-chip .d { font-size: var(--cds-font-size-caption); color: #6f8db0; overflow-wrap: anywhere; }
+  .nx-chip.attention .v { color: #ffcf5c; }
+  .nx-take { grid-column: 1 / -1; text-align: center; color: #b8cde6; font-size: var(--cds-font-size-body); margin: 0; }
+  .nx-take.dash-skeleton { min-height: 1.2em; }
+  .nx .fd-asof { grid-column: 1 / -1; text-align: center; color: #5f7a99; margin: 0; }
+  @media (max-width: 760px) {
+    .nx { grid-template-columns: 1fr 1fr; }
+    .nx-stage { grid-column: 1 / -1; order: -1; max-height: 22rem; }
+  }
+  .fd-eq { width: 100%; min-height: 14rem; position: relative; }
+  .fd-eq svg { display: block; }
+  .fd-tip { position: absolute; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border);
+            border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm);
+            font-size: var(--cds-font-size-caption); white-space: nowrap; }
+  .fd-tip .t { color: var(--cds-text-secondary); }
+
+  [data-dash-source-state=empty] { color: transparent; }
+  [data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
+</style>
+
+<div class="fd" id="desk">
+  <section class="nx" id="nucleus" aria-label="Paper account core">
+    <div class="nx-col" id="nx-left">
+      <div class="nx-chip" id="chip-pl-today"><span class="k">P&amp;L today</span><span class="v dash-skeleton" data-source="desk" data-field="value" data-where="key=kpi-pl_today">—</span><span class="d" data-source="desk" data-field="detail" data-where="key=kpi-pl_today">—</span></div>
+      <div class="nx-chip" id="chip-positions"><span class="k">Open positions</span><span class="v dash-skeleton" data-source="desk" data-field="value" data-where="key=kpi-positions">—</span><span class="d" data-source="desk" data-field="detail" data-where="key=kpi-positions">—</span></div>
+      <div class="nx-chip" id="chip-orders"><span class="k">Orders sent</span><span class="v dash-skeleton" data-source="desk" data-field="value" data-where="key=kpi-orders">—</span><span class="d" data-source="desk" data-field="detail" data-where="key=kpi-orders">—</span></div>
+      <div class="nx-chip" id="kpi-waiting"><span class="k">Decisions waiting</span><span class="v dash-skeleton" data-source="desk" data-field="value" data-where="key=kpi-waiting">—</span><span class="d" data-source="desk" data-field="detail" data-where="key=kpi-waiting">—</span></div>
+    </div>
+    <div class="nx-stage" id="nx-stage">
+      <canvas id="nx-canvas" aria-hidden="true"></canvas>
+      <div class="nx-center">
+        <span class="nx-label">Paper account</span>
+        <span class="nx-equity dash-skeleton" data-source="desk" data-field="value" data-where="key=kpi-equity">—</span>
+        <span class="nx-pl" id="nx-pl" data-source="desk" data-field="value" data-where="key=kpi-pl_total">—</span>
+      </div>
+    </div>
+    <div class="nx-col" id="nx-right">
+      <div class="nx-chip" id="chip-tested"><span class="k">Ideas tested</span><span class="v dash-skeleton" data-source="desk" data-field="value" data-where="key=kpi-tested">—</span></div>
+      <div class="nx-chip" id="chip-edges"><span class="k">Edges found</span><span class="v dash-skeleton" data-source="desk" data-field="value" data-where="key=kpi-edges">—</span></div>
+      <div class="nx-chip" id="chip-blocked"><span class="k">Kill-switch blocks</span><span class="v dash-skeleton" data-source="desk" data-field="value" data-where="key=kpi-blocked">—</span></div>
+      <div class="nx-chip" id="chip-cash"><span class="k">Cash</span><span class="v dash-skeleton" data-source="desk" data-field="value" data-where="key=kpi-cash">—</span></div>
+    </div>
+    <p class="nx-take dash-skeleton" id="takeaway">—</p>
+    <p class="fd-asof">Desk snapshot taken <span id="asof" data-source="desk" data-field="detail" data-where="key=meta-asof">—</span></p>
+  </section>
+
+  <div class="fd-grid">
+    <section class="fd-card" id="equity">
+      <h2>Account value</h2>
+      <p class="fd-note">Paper account equity at each day's close since trading began. Fills in one point per trading day.</p>
+      <div class="fd-eq" id="eq-chart" data-source="desk"></div>
+    </section>
+    <section class="fd-card" id="positions">
+      <h2>Open positions</h2>
+      <p class="fd-note">Unrealized profit or loss on what the paper account holds now.</p>
+      <div class="fd-scroll"><table data-source="desk" data-row-key="key">
+        <thead><tr><th data-field="label">Symbol</th><th class="num" data-field="value">P&amp;L</th><th data-field="detail">Holding</th></tr></thead>
+        <tbody id="pos-body"></tbody>
+      </table></div>
+    </section>
+  </div>
+
+  <section class="fd-card" id="trades">
+    <h2>Trade feed</h2>
+    <p class="fd-note">Every order the desk sent or the kill switch stopped, newest first. Paper money only.</p>
+    <div class="fd-scroll"><table data-source="desk" data-row-key="key">
+      <thead><tr><th data-field="label">Order</th><th data-field="status">Result</th><th class="num" data-field="value">Value</th><th data-field="detail">When, strategy, check</th></tr></thead>
+      <tbody id="trade-body"></tbody>
+    </table></div>
+  </section>
+
+  <div class="fd-grid">
+    <section class="fd-card" id="health">
+      <h2>Desk health</h2>
+      <p class="fd-note">Background jobs, the Kalshi stream, disk and the GitHub backup, from the latest snapshot.</p>
+      <div class="fd-scroll"><table data-source="desk" data-row-key="key">
+        <thead><tr><th data-field="label">Check</th><th data-field="status">Status</th><th class="num" data-field="value">Value</th><th data-field="detail">Detail</th></tr></thead>
+        <tbody id="health-body"></tbody>
+      </table></div>
+    </section>
+
+    <section class="fd-card" id="calendar">
+      <h2>Today's US calendar</h2>
+      <p class="fd-note">Medium and high importance releases, times in Eastern. Bold is high importance. From TradingView.</p>
+      <div class="fd-scroll"><table data-source="econ" data-row-key="id">
+        <thead><tr><th data-field="time">Time (ET)</th><th data-field="event">Release</th><th class="num" data-field="forecast">Forecast</th><th class="num" data-field="previous">Previous</th><th class="num" data-field="actual">Actual</th></tr></thead>
+        <tbody id="econ-body"></tbody>
+      </table></div>
+    </section>
+  </div>
+
+  <section class="fd-card" id="watchlist">
+    <h2>Trading Loop watchlist</h2>
+    <p class="fd-note">Last price and change on the day for the ETFs and coins the desk trades. TradingView data is delayed during its beta.</p>
+    <div class="fd-scroll"><table data-source="watchlist" data-row-key="symbol">
+      <thead><tr><th data-field="symbol">Symbol</th><th data-field="description">Name</th><th class="num" data-field="close">Last</th><th class="num" data-field="change">Day</th></tr></thead>
+      <tbody id="watch-body"></tbody>
+    </table></div>
+  </section>
+
+  <section class="fd-card" id="scoreboard">
+    <h2>Hypothesis scoreboard</h2>
+    <p class="fd-note">Every idea the desk has tested, newest first, with its latest lesson. Failures stay on the record so nobody repeats them.</p>
+    <div class="fd-scroll"><table data-source="desk" data-row-key="key">
+      <thead><tr><th data-field="key">#</th><th data-field="status">Result</th><th data-field="label">Idea and latest lesson</th><th class="num" data-field="value">Versions</th></tr></thead>
+      <tbody id="hyp-body"></tbody>
+    </table></div>
+  </section>
+
+  <section class="fd-card" id="alerts">
+    <h2>Alerts, last 24 hours</h2>
+    <p class="fd-note">What the desk sent to your phone and Mac, newest first.</p>
+    <div class="fd-scroll"><table data-source="desk" data-row-key="key">
+      <thead><tr><th data-field="detail">Time</th><th data-field="status">Priority</th><th data-field="label">Alert</th></tr></thead>
+      <tbody id="alert-body"></tbody>
+    </table></div>
+  </section>
+</div>
+
+<script>
+dash.loader('watchlist', {
+  description: 'TradingView symbol data (an object keyed by symbol) as one row per symbol, in watchlist order.',
+  fn: ({ answer, args }) => {
+    const a = typeof answer === 'string' ? JSON.parse(answer) : answer;
+    if (!a || a.success === false) throw new Error((a && (a.error || a.message)) || 'TradingView returned no symbol data');
+    const data = a.data || {};
+    const rows = (args.symbols || Object.keys(data)).filter((s) => data[s]).map((s) => ({
+      symbol: s,
+      name: String(data[s].name ?? ''),
+      description: String(data[s].description ?? ''),
+      close: data[s].close == null ? null : Number(data[s].close),
+      change: data[s].change == null ? null : Number(data[s].change),
+    }));
+    return { columns: ['symbol', 'name', 'description', 'close', 'change'], rows };
+  },
+});
+
+dash.loader('econ', {
+  description: 'TradingView economic calendar events as one row per release.',
+  fn: ({ answer }) => {
+    const a = typeof answer === 'string' ? JSON.parse(answer) : answer;
+    if (!a || (a.status && a.status !== 'ok')) throw new Error((a && (a.error || a.message)) || 'Calendar returned status ' + (a && a.status));
+    const rows = (a.result || []).map((e) => ({
+      id: String(e.id), time: e.date, event: String(e.title ?? e.indicator ?? ''), period: String(e.period ?? ''),
+      forecast: e.forecast, previous: e.previous, actual: e.actual, unit: String(e.unit ?? ''), importance: Number(e.importance),
+    }));
+    return { columns: ['id', 'time', 'event', 'period', 'forecast', 'previous', 'actual', 'unit', 'importance'], rows };
+  },
+});
+
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const etTime = (iso) => new Date(iso).toLocaleTimeString('en-US', { timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit' });
+  const money = (v) => v == null ? '—' : '$' + d3.format(',.2f')(v);
+  const price = (v) => v == null ? '—' : (Math.abs(v) >= 1 ? d3.format(',.2f')(v) : d3.format(',.4f')(v));
+  const pct = (v) => v == null ? '—' : (v > 0 ? '+' : '') + d3.format('.2f')(v) + '%';
+  const val = (v, unit) => v == null ? '—' : d3.format(',')(+v) + (unit === '%' ? '%' : '');
+  const STATUS_WORDS = { ok: 'OK', attention: 'Attention', bad: 'Problem', passed_backtest: 'Passed backtest', passed_paper: 'Passed paper',
+    failed: 'Failed', dropped: 'Dropped', untested: 'Untested', paused: 'Paused', retired: 'Retired', low: 'Low', default: 'Normal', high: 'High', urgent: 'Urgent', submitted: 'Sent', blocked: 'Blocked', broker_error: 'Broker error', up: 'Up', down: 'Down' };
+  const pill = (s) => { const el = document.createElement('span'); el.className = 'pill s-' + (s || 'none'); el.textContent = STATUS_WORDS[s] || s || '—'; return el; };
+  const cell = (tr, text, cls) => { const td = tr.insertCell(); if (cls) td.className = cls; if (text instanceof Node) td.append(text); else td.textContent = text ?? '—'; return td; };
+  const failed = (tbody, cols, msg) => { tbody.replaceChildren(); const td = tbody.insertRow().insertCell(); td.colSpan = cols; const d = document.createElement('div'); d.className = 'fail'; d.textContent = msg; td.append(d); };
+  const waiting = (tbody, cols) => { tbody.replaceChildren(); const td = tbody.insertRow().insertCell(); td.colSpan = cols; td.className = 'dash-skeleton'; };
+
+  dash.onData(() => {
+    const desk = dash.data('desk');
+    const rows = desk.status === 'ok' ? desk.data : [];
+    const by = (k) => rows.find((r) => r.key === k);
+    const sect = (s) => rows.filter((r) => r.section === s);
+
+    // Headline figures
+    const setNum = (key, fmt) => {
+      const el = document.querySelector(`[data-where="key=${key}"][data-field="value"]`);
+      const r = by(key);
+      el.classList.toggle('dash-skeleton', desk.status === 'loading');
+      el.textContent = r && r.value != null ? fmt(r.value) : '—';
+    };
+    setNum('kpi-tested', d3.format(','));
+    setNum('kpi-edges', d3.format(','));
+    setNum('kpi-waiting', d3.format(','));
+    setNum('kpi-equity', money);
+    document.querySelectorAll('[data-source="desk"][data-field="detail"][data-where]').forEach((el) => {
+      const r = by(el.dataset.where.slice(4));
+      el.textContent = r && r.detail ? r.detail : '—';
+    });
+    $('kpi-waiting').classList.toggle('attention', (by('kpi-waiting')?.value || 0) > 0);
+
+    // Takeaway
+    const take = $('takeaway');
+    take.classList.toggle('dash-skeleton', desk.status === 'loading');
+    if (desk.status === 'ok') {
+      const edges = by('kpi-edges')?.value || 0, wait = by('kpi-waiting')?.value || 0;
+      const problems = sect('health').filter((r) => r.status === 'bad').map((r) => r.label.toLowerCase());
+      take.textContent = (edges ? `${edges} idea${edges > 1 ? 's have' : ' has'} passed testing. ` : 'No edge yet: every idea so far has failed honestly. ')
+        + (wait ? `${wait} decision${wait > 1 ? 's are' : ' is'} waiting for you. ` : 'Nothing needs your decision. ')
+        + (problems.length ? `Check: ${problems.join(', ')}.` : 'All systems running.');
+    } else take.textContent = '—';
+
+    // Desk health
+    const hb = $('health-body');
+    if (desk.status === 'ok') {
+      hb.replaceChildren();
+      sect('health').forEach((r) => {
+        const tr = hb.insertRow(); tr.dataset.key = r.key;
+        cell(tr, r.label); cell(tr, pill(r.status));
+        cell(tr, r.value == null ? '—' : d3.format(',')(r.value), 'num'); cell(tr, r.detail);
+      });
+    } else if (desk.status === 'loading') waiting(hb, 4); else failed(hb, 4, 'Failed to load');
+
+    // Scoreboard
+    const sb = $('hyp-body');
+    if (desk.status === 'ok') {
+      sb.replaceChildren();
+      sect('hypothesis').slice().reverse().forEach((r) => {
+        const tr = sb.insertRow(); tr.dataset.key = r.key;
+        cell(tr, r.key.replace('hypothesis-', ''));
+        cell(tr, pill(r.status));
+        const td = cell(tr, r.label, 'idea');
+        if (r.detail) { const l = document.createElement('div'); l.className = 'lesson'; l.textContent = r.detail; td.append(l); }
+        cell(tr, r.value == null ? '—' : String(r.value), 'num');
+      });
+      if (!sect('hypothesis').length) failed(sb, 4, 'No ideas recorded yet');
+    } else if (desk.status === 'loading') waiting(sb, 4); else failed(sb, 4, 'Failed to load');
+
+    // Alerts
+    const ab = $('alert-body');
+    if (desk.status === 'ok') {
+      ab.replaceChildren();
+      const al = sect('alert');
+      al.forEach((r) => { const tr = ab.insertRow(); tr.dataset.key = r.key; cell(tr, r.detail); cell(tr, pill(r.status)); cell(tr, r.label); });
+      if (!al.length) { const td = ab.insertRow().insertCell(); td.colSpan = 3; td.className = 'empty'; td.textContent = 'No alerts in the last 24 hours.'; }
+    } else if (desk.status === 'loading') waiting(ab, 3); else failed(ab, 3, 'Failed to load');
+
+    // Watchlist (live)
+    const w = dash.data('watchlist'), wb = $('watch-body');
+    const groups = { 'AMEX:SPY': 'Broad market', 'NASDAQ:TLT': 'Bonds & gold', 'AMEX:XLK': 'Sectors', 'COINBASE:BTCUSD': 'Crypto' };
+    if (w.status === 'ok') {
+      wb.replaceChildren();
+      w.data.forEach((r) => {
+        if (groups[r.symbol]) { const g = wb.insertRow(); g.className = 'grp'; const td = g.insertCell(); td.colSpan = 4; td.textContent = groups[r.symbol]; }
+        const tr = wb.insertRow(); tr.dataset.key = r.symbol;
+        cell(tr, r.symbol); cell(tr, r.description);
+        cell(tr, price(r.close), 'num');
+        cell(tr, pct(r.change), 'num ' + (r.change > 0 ? 'up' : r.change < 0 ? 'down' : ''));
+      });
+    } else if (w.status === 'loading') waiting(wb, 4); else failed(wb, 4, w.status === 'connect' ? 'Connect TradingView to load' : 'Failed to load');
+
+    // Economic calendar (live)
+    const e = dash.data('econ'), eb = $('econ-body');
+    if (e.status === 'ok') {
+      eb.replaceChildren();
+      const ev = e.data.slice().sort((a, b) => new Date(a.time) - new Date(b.time));
+      ev.forEach((r) => {
+        const tr = eb.insertRow(); tr.dataset.key = r.id;
+        if (r.importance >= 1) tr.className = 'hi';
+        cell(tr, etTime(r.time)); cell(tr, r.period ? `${r.event} (${r.period})` : r.event);
+        cell(tr, val(r.forecast, r.unit), 'num'); cell(tr, val(r.previous, r.unit), 'num'); cell(tr, val(r.actual, r.unit), 'num');
+      });
+      if (!ev.length) { const td = eb.insertRow().insertCell(); td.colSpan = 5; td.className = 'empty'; td.textContent = 'No medium or high importance US releases today.'; }
+    } else if (e.status === 'loading') waiting(eb, 5); else failed(eb, 5, e.status === 'connect' ? 'Connect TradingView to load' : 'Failed to load');
+  });
+})();
+</script>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const money = (v) => (v < 0 ? '−$' : '$') + d3.format(',.2f')(Math.abs(v));
+  const signed = (v) => (v > 0 ? '+' : v < 0 ? '−' : '') + '$' + d3.format(',.2f')(Math.abs(v));
+  const cell = (tr, text, cls) => { const td = tr.insertCell(); if (cls) td.className = cls; if (text instanceof Node) td.append(text); else td.textContent = text ?? '—'; return td; };
+  const pillOf = (s, words) => { const el = document.createElement('span'); el.className = 'pill s-' + s; el.textContent = words[s] || s; return el; };
+  const WORDS = { submitted: 'Sent', blocked: 'Blocked', broker_error: 'Broker error' };
+
+  // ---- the nucleus ----
+  const stage = $('nx-stage'), cv = $('nx-canvas'), ctx = cv.getContext('2d');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const MOODS = { up: [43, 255, 181], down: [255, 92, 122], flat: [58, 214, 255] };
+  const st = { mood: 'flat', energy: 1, w: 0, h: 0, dpr: 1, dust: [], raf: 0 };
+  const rgba = (c, a) => `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+
+  function size() {
+    const w = stage.clientWidth, h = stage.clientHeight || w;
+    st.dpr = Math.min(window.devicePixelRatio || 1, 2); st.w = w; st.h = h;
+    cv.width = Math.round(w * st.dpr); cv.height = Math.round(h * st.dpr);
+    ctx.setTransform(st.dpr, 0, 0, st.dpr, 0, 0);
+    if (!st.dust.length) for (let i = 0; i < 90; i++) st.dust.push({ x: Math.random(), y: Math.random(), r: Math.random() * 1.3 + .2, s: Math.random() * .25 + .05, p: Math.random() * 6.28 });
+  }
+
+  const ORBITS = [{ tilt: .42, ry: .34, speed: .55, phase: 0 }, { tilt: -.62, ry: .30, speed: -.4, phase: 2 }, { tilt: 1.35, ry: .26, speed: .32, phase: 4 }];
+
+  function draw(t) {
+    const { w, h } = st; if (!w) return;
+    const cx = w / 2, cy = h / 2, R = Math.min(w, h) * .17, col = MOODS[st.mood];
+    ctx.clearRect(0, 0, w, h);
+    for (const d of st.dust) {                                   // drifting particle field
+      const y = (d.y - t * d.s * .01) % 1, a = .25 + .25 * Math.sin(t * .8 + d.p);
+      ctx.fillStyle = rgba([150, 190, 255], a); ctx.beginPath(); ctx.arc(d.x * w, (y < 0 ? y + 1 : y) * h, d.r, 0, 6.283); ctx.fill();
+    }
+    const beat = 1 + .045 * Math.sin(t * (1.6 + st.energy * .25));    // breathing core
+    for (let i = 4; i >= 1; i--) {
+      const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * beat * (1 + i * .55));
+      g.addColorStop(0, rgba(col, .16 / i)); g.addColorStop(1, rgba(col, 0));
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, R * beat * (1 + i * .55), 0, 6.283); ctx.fill();
+    }
+    const core = ctx.createRadialGradient(cx - R * .3, cy - R * .35, R * .1, cx, cy, R * beat);
+    core.addColorStop(0, 'rgba(255,255,255,.95)'); core.addColorStop(.35, rgba(col, .9)); core.addColorStop(1, rgba(col, .05));
+    ctx.fillStyle = core; ctx.beginPath(); ctx.arc(cx, cy, R * beat, 0, 6.283); ctx.fill();
+    const n = Math.min(6, 1 + Math.round(st.energy));
+    for (const o of ORBITS) {                                    // tilted orbits with electrons
+      const rx = R * 2.6, ry = R * 2.6 * o.ry, ct = Math.cos(o.tilt), sn = Math.sin(o.tilt);
+      ctx.strokeStyle = rgba(col, .22); ctx.lineWidth = 1; ctx.beginPath();
+      ctx.ellipse(cx, cy, rx, ry, o.tilt, 0, 6.283); ctx.stroke();
+      for (let k = 0; k < n; k++) {
+        for (let trail = 6; trail >= 0; trail--) {
+          const a = (t - trail * .035) * o.speed * (1 + st.energy * .08) + o.phase + k * 6.283 / n;
+          const ex = Math.cos(a) * rx, ey = Math.sin(a) * ry;
+          const x = cx + ex * ct - ey * sn, y = cy + ex * sn + ey * ct;
+          ctx.fillStyle = trail ? rgba(col, .18 * (1 - trail / 7)) : 'rgba(235,250,255,.95)';
+          ctx.beginPath(); ctx.arc(x, y, trail ? 2.2 : 2.8, 0, 6.283); ctx.fill();
+        }
+      }
+    }
+  }
+
+  function loop(ms) { draw(ms / 1000); st.raf = document.hidden ? 0 : requestAnimationFrame(loop); }
+  function start() { size(); if (reduce) draw(1.2); else if (!st.raf) st.raf = requestAnimationFrame(loop); }
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && !reduce && !st.raf) st.raf = requestAnimationFrame(loop); });
+  new ResizeObserver(() => { size(); if (reduce) draw(1.2); }).observe(stage);
+  start();
+
+  // ---- data ----
+  dash.onData(() => {
+    const desk = dash.data('desk');
+    const rows = desk.status === 'ok' ? desk.data : [];
+    const by = (k) => rows.find((r) => r.key === k);
+    const sect = (s) => rows.filter((r) => r.section === s);
+
+    const pl = by('kpi-pl_total');
+    st.mood = !pl || Math.abs(pl.value) < 0.005 ? 'flat' : pl.value > 0 ? 'up' : 'down';
+    st.energy = (by('kpi-positions')?.value || 0) + Math.min(4, (by('kpi-orders')?.value || 0) / 3);
+    const c = MOODS[st.mood]; $('nucleus').style.setProperty('--nx-glow', `rgb(${c})`);
+    if (reduce) draw(1.2);
+
+    const plEl = $('nx-pl');
+    plEl.className = 'nx-pl nx-' + st.mood;
+    plEl.textContent = pl ? signed(pl.value) : '—';
+    const fill = (key, fmt) => {
+      const el = document.querySelector(`.nx-chip [data-where="key=${key}"][data-field="value"]`);
+      if (!el) return; const r = by(key);
+      el.classList.toggle('dash-skeleton', desk.status === 'loading');
+      el.textContent = r && r.value != null ? fmt(r.value) : '—';
+    };
+    fill('kpi-pl_today', signed); fill('kpi-positions', d3.format(',')); fill('kpi-orders', d3.format(','));
+    fill('kpi-blocked', d3.format(',')); fill('kpi-cash', money);
+    $('chip-blocked').classList.toggle('attention', (by('kpi-blocked')?.value || 0) > 0);
+
+    // Positions
+    const pb = $('pos-body'); pb.replaceChildren();
+    if (desk.status === 'ok') {
+      const ps = sect('position');
+      ps.forEach((r) => { const tr = pb.insertRow(); tr.dataset.key = r.key; cell(tr, r.label);
+        cell(tr, signed(r.value), 'num ' + (r.value > 0 ? 'up' : r.value < 0 ? 'down' : '')); cell(tr, r.detail); });
+      if (!ps.length) { const td = pb.insertRow().insertCell(); td.colSpan = 3; td.className = 'empty'; td.textContent = 'No open positions yet. Orders fill at the next market open.'; }
+    }
+
+    // Trade feed
+    const tb = $('trade-body'); tb.replaceChildren();
+    if (desk.status === 'ok') {
+      const ts = sect('trade');
+      ts.forEach((r) => { const tr = tb.insertRow(); tr.dataset.key = r.key; cell(tr, r.label); cell(tr, pillOf(r.status, WORDS));
+        cell(tr, r.value == null ? '—' : money(r.value), 'num'); cell(tr, r.detail); });
+      if (!ts.length) { const td = tb.insertRow().insertCell(); td.colSpan = 4; td.className = 'empty'; td.textContent = 'No orders yet.'; }
+    }
+
+    // Equity curve
+    const box = $('eq-chart'); box.replaceChildren();
+    const pts = sect('equity').map((r) => ({ d: new Date(r.label + 'T00:00:00Z'), v: r.value })).sort((a, b) => a.d - b.d);
+    if (desk.status !== 'ok') return;
+    if (pts.length < 2) { const p = document.createElement('p'); p.className = 'fd-note'; p.textContent = 'The curve appears after two trading days of history.'; box.append(p); return; }
+    const W = box.clientWidth || 320, H = 220, m = { t: 12, r: 64, b: 24, l: 8 };
+    const x = d3.scaleUtc(d3.extent(pts, (p) => p.d), [m.l, W - m.r]);
+    const lo = d3.min(pts, (p) => p.v), hi = d3.max(pts, (p) => p.v), pad = Math.max(50, (hi - lo) * .15);
+    const y = d3.scaleLinear([lo - pad, hi + pad], [H - m.b, m.t]).nice();
+    const svg = d3.select(box).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+    const grad = svg.append('defs').append('linearGradient').attr('id', 'eqfade').attr('x1', 0).attr('x2', 0).attr('y1', 0).attr('y2', 1);
+    [[0, .26], [.25, .16], [.5, .08], [.75, .03], [1, 0]].forEach(([o, a]) => grad.append('stop').attr('offset', o).attr('style', `stop-color:${dash.colors[0]};stop-opacity:${a}`));
+    y.ticks(4).forEach((v) => {
+      svg.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y(v)).attr('y2', y(v)).attr('stroke', 'var(--cds-chart-grid)');
+      svg.append('text').attr('x', W - m.r + 6).attr('y', y(v)).attr('dy', '.32em').attr('fill', 'var(--color-fg-muted)').attr('font-size', 11).text('$' + d3.format(',.0f')(v));
+    });
+    svg.append('path').attr('d', d3.area().x((p) => x(p.d)).y0(H - m.b).y1((p) => y(p.v))(pts)).attr('fill', 'url(#eqfade)');
+    svg.append('path').attr('d', d3.line().x((p) => x(p.d)).y((p) => y(p.v))(pts)).attr('fill', 'none').attr('stroke', dash.colors[0]).attr('stroke-width', 2).attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round');
+    const last = pts[pts.length - 1];
+    svg.append('circle').attr('cx', x(last.d)).attr('cy', y(last.v)).attr('r', 3.5).attr('fill', dash.colors[0]);
+    [pts[0], last].forEach((p, i) => svg.append('text').attr('x', x(p.d)).attr('y', H - 6).attr('text-anchor', i ? 'end' : 'start')
+      .attr('fill', 'var(--color-fg-muted)').attr('font-size', 11).text(d3.utcFormat('%b %-d')(p.d)));
+    const tip = document.createElement('div'); tip.className = 'fd-tip'; tip.hidden = true; box.append(tip);
+    svg.on('pointermove', (ev) => {
+      const [mx] = d3.pointer(ev); const i = d3.bisector((p) => p.d).center(pts, x.invert(mx)); const p = pts[i];
+      tip.hidden = false; tip.replaceChildren();
+      const a = document.createElement('div'); a.className = 't'; a.textContent = d3.utcFormat('%b %-d, %Y')(p.d);
+      const b = document.createElement('div'); b.textContent = money(p.v); tip.append(a, b);
+      const left = Math.min(Math.max(0, x(p.d) / W * box.clientWidth - 40), box.clientWidth - 110);
+      tip.style.left = left + 'px'; tip.style.top = '4px';
+    }).on('pointerleave', () => { tip.hidden = true; });
+  });
+})();
+</script>
