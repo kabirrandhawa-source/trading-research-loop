@@ -26,7 +26,7 @@ UPDATABLE = {
     "strategy_version", "date_tested", "backtest_result",
     "source_url", "published_date",
 }
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 
 _V1_COLUMNS = ("id, created_at, idea, source_agent, market, date_tested, strategy_file, "
                "strategy_version, variations_tried, regime, backtest_result, sealed_test_result, "
@@ -52,6 +52,23 @@ def _migrate_v1(conn):
     conn.execute("PRAGMA foreign_keys = ON")
 
 
+def _rebuild_hypotheses(conn, to_version):
+    """Recreate the hypotheses table from schema.sql (SQLite can't alter a CHECK constraint),
+    copying every column the old table had. Used for v2 -> v3 (adds status 'forward_test')."""
+    cols = [r[1] for r in conn.execute("PRAGMA table_info(hypotheses)")]
+    conn.execute("PRAGMA foreign_keys = OFF")
+    conn.executescript(f"""
+        BEGIN;
+        ALTER TABLE hypotheses RENAME TO hypotheses_old;
+        {SCHEMA.read_text()}
+        INSERT INTO hypotheses ({', '.join(cols)}) SELECT {', '.join(cols)} FROM hypotheses_old;
+        DROP TABLE hypotheses_old;
+        PRAGMA user_version = {to_version};
+        COMMIT;
+    """)
+    conn.execute("PRAGMA foreign_keys = ON")
+
+
 def connect(db_path=None):
     conn = sqlite3.connect(db_path or DB_PATH)
     conn.row_factory = sqlite3.Row
@@ -59,8 +76,10 @@ def connect(db_path=None):
     has_table = conn.execute(
         "SELECT 1 FROM sqlite_master WHERE type='table' AND name='hypotheses'").fetchone()
     if version < SCHEMA_VERSION:
-        if has_table:
+        if has_table and version < 2:
             _migrate_v1(conn)
+        elif has_table:
+            _rebuild_hypotheses(conn, SCHEMA_VERSION)
         conn.executescript(SCHEMA.read_text())
         conn.execute(f"PRAGMA user_version = {SCHEMA_VERSION}")
         conn.commit()

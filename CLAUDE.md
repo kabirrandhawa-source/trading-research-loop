@@ -10,6 +10,9 @@ the human decide about real money. Most ideas fail; failures are recorded, not h
 - Never run a `sealed` test (backtest.py, pm/analyze.py) without the human's explicit yes in chat.
 - `paper/benchmarks.json` lists human-approved benchmarks the daily job trades (now: SPY at 9.5%). Never add,
   change or remove one without the human's explicit yes. Benchmarks are yardsticks, never research results.
+- The Claude discretionary sleeve (hypothesis 7, status forward_test) is a live paper experiment: $10,000,
+  14 ETFs ex-SPY, long only. Only its own 16:25 task writes its decisions (validated by sleeve.decide) and only
+  the 17:00 job executes them. No other session edits paper/claude_sleeve/ or changes its rules.
   Never set status passed_paper or promote a strategy to paper trading; that's the human's call.
 - Never read sealed data. ETF, stock and crypto prices on/after backtest.SEALED_START (2024-01-30) are sealed
   (crypto funding history only starts in 2023, so most of it is sealed: say so before using it);
@@ -32,6 +35,7 @@ the human decide about real money. Most ideas fail; failures are recorded, not h
 | `stocks/fundamentals.py` | SEC EDGAR fundamentals keyed to FILING date: `latest(conn, tickers, metric, as_of)`, `covered(...)`. Usable coverage 72% of members (2016) to 96% (2025); dead or re-registered companies are missing, so report coverage in every test |
 | `crypto/data.py` | Coinbase daily prices (BTC/ETH/SOL/XRP/DOGE) and perpetual funding rates, Coinbase Intl since 2023 + Kraken last 12 months (data/crypto/crypto.db) |
 | `brief/`, `desk/` | Morning brief facts; desk status and voice |
+| `sleeve/`, `paper/claude_sleeve/` | Claude discretionary sleeve: context, decide (validator), execute (17:00 job), evaluate (score vs SPY) |
 | `agents/` | Prompts for research agents, Skeptic, strategy writer, backtester, critic |
 | `research/AREAS.md` | The human's standing research directions |
 | `journal/` | Decisions (`*.jsonl`), daily summaries, weekly reviews, morning briefs |

@@ -1,4 +1,4 @@
--- Hypothesis ledger (Step 7), schema version 2. Failed ideas are kept forever; never DELETE rows.
+-- Hypothesis ledger (Step 7), schema version 3. Failed ideas are kept forever; never DELETE rows.
 CREATE TABLE IF NOT EXISTS hypotheses (
     id                 INTEGER PRIMARY KEY AUTOINCREMENT,
     created_at         TEXT NOT NULL DEFAULT (datetime('now')),
@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS hypotheses (
     paper_result       TEXT,                   -- JSON summary / critic notes
     status             TEXT NOT NULL DEFAULT 'untested' CHECK (status IN
                            ('untested','dropped','failed','passed_backtest','passed_paper',
-                            'paused','retired')),  -- dropped = rejected before any test
+                            'paused','retired','forward_test')),  -- dropped = rejected before any test; forward_test = live paper experiment
     lessons            TEXT,
     source_url         TEXT,                   -- paper the idea came from, if any
     published_date     TEXT,                   -- paper's first public date (YYYY-MM-DD)

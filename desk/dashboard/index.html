@@ -101,7 +101,7 @@
       <div class="nx-chip" id="chip-tested"><span class="k">Ideas tested</span><span class="v dash-skeleton" data-source="desk" data-field="value" data-where="key=kpi-tested">—</span></div>
       <div class="nx-chip" id="chip-edges"><span class="k">Edges found</span><span class="v dash-skeleton" data-source="desk" data-field="value" data-where="key=kpi-edges">—</span></div>
       <div class="nx-chip" id="chip-blocked"><span class="k">Kill-switch blocks</span><span class="v dash-skeleton" data-source="desk" data-field="value" data-where="key=kpi-blocked">—</span></div>
-      <div class="nx-chip" id="chip-cash"><span class="k">Cash</span><span class="v dash-skeleton" data-source="desk" data-field="value" data-where="key=kpi-cash">—</span></div>
+      <div class="nx-chip" id="chip-sleeve"><span class="k">Claude sleeve</span><span class="v dash-skeleton" data-source="desk" data-field="value" data-where="key=kpi-sleeve">—</span><span class="d" data-source="desk" data-field="detail" data-where="key=kpi-sleeve">—</span></div>
     </div>
     <p class="nx-take dash-skeleton" id="takeaway">—</p>
     <p class="fd-asof">Desk snapshot taken <span id="asof" data-source="desk" data-field="detail" data-where="key=meta-asof">—</span></p>
@@ -488,7 +488,7 @@ dash.loader('econ', {
       el.textContent = r && r.value != null ? fmt(r.value) : '—';
     };
     fill('kpi-pl_today', signed); fill('kpi-positions', d3.format(',')); fill('kpi-orders', d3.format(','));
-    fill('kpi-blocked', d3.format(',')); fill('kpi-cash', money);
+    fill('kpi-blocked', d3.format(',')); fill('kpi-sleeve', money);
     $('chip-blocked').classList.toggle('attention', (by('kpi-blocked')?.value || 0) > 0);
 
     // Positions

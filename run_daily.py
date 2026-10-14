@@ -201,7 +201,37 @@ def run(a):
         print(sym, action, order_side, n, rec["decision"], rec.get("risk_check"))
         summary["orders"].append(rec["decision"])
         order_alert(rec)
+    summary["sleeve"] = run_sleeve(client, a, [s for _, s in strategies], summary)
     return summary
+
+
+def run_sleeve(client, a, taken_symbols, summary):
+    """The Claude discretionary sleeve (hypothesis 7): code executes Claude's validated decision."""
+    from sleeve import book as sleeve_book
+    from sleeve import execute as sleeve_exec
+    try:
+        cfg = sleeve_book.config()
+    except FileNotFoundError:
+        return None
+    try:
+        prices, fresh = {}, True
+        for s in cfg["universe"] + [cfg["benchmark"]]:
+            bars = backtest.load_prices(DATA / f"{s}.csv")
+            prices[s] = float(bars["close"].iloc[-1])
+            fresh = fresh and is_fresh(bars, a.today)
+        if not fresh:
+            journal.log({"event": "sleeve", "note": f"no bar for {a.today}; sleeve not traded today"})
+            return {"status": "stale prices"}
+        if a.dry_run:
+            return {"status": "dry run"}
+        res = sleeve_exec.run(client, a.today, prices, prices[cfg["benchmark"]], conflicts=taken_symbols)
+        for _, _, _, decision in res.get("orders", []):
+            summary["orders"].append(decision)
+        return res
+    except Exception as e:
+        journal.log({"event": "sleeve_failed", "error": f"{type(e).__name__}: {e}"})
+        alerts.send("Claude sleeve failed", f"{type(e).__name__}: {e}"[:300], "high", ["warning"])
+        return {"status": "failed"}
 
 
 def heartbeat(summary):
@@ -211,6 +241,9 @@ def heartbeat(summary):
     if summary["strategies"]:
         parts += [f"{orders.count('submitted')} orders sent", f"{orders.count('blocked')} blocked",
                   f"{summary['no_action']} no signal", f"{len(summary['skipped'])} skipped"]
+    sl = summary.get("sleeve")
+    if sl:
+        parts.append(f"Claude sleeve: {sl.get('status')}" + (f", value ${sl['value']:,.2f}" if sl.get("value") else ""))
     if risk.HALT_PATH.exists():
         parts.append("HALT file is ON: new positions are blocked")
     msg = ", ".join(parts)

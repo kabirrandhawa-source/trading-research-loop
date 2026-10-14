@@ -218,3 +218,17 @@ def test_full_run_writes_results(conn, tmp_path, monkeypatch):
     backtest.cmd_sealed(conn, h, strat, data, 25)
     with pytest.raises(PermissionError):
         backtest.cmd_sealed(conn, h, strat, data, 25)
+
+
+def test_v2_ledger_upgrades_to_forward_test_status(tmp_path):
+    import sqlite3
+    db = tmp_path / "v2.db"
+    conn = ledger.connect(db)
+    h = ledger.add_hypothesis(conn, "keep me", "a", "SPY")
+    ledger.add_lesson(conn, h, "a lesson", "critic")
+    conn.execute("PRAGMA user_version = 2"); conn.commit(); conn.close()
+    conn = ledger.connect(db)                     # triggers the rebuild
+    assert conn.execute("PRAGMA user_version").fetchone()[0] == ledger.SCHEMA_VERSION
+    assert "a lesson" in ledger.get(conn, h)["lessons"]
+    ledger.update(conn, h, status="forward_test")
+    assert ledger.get(conn, h)["status"] == "forward_test"

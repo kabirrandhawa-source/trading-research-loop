@@ -80,6 +80,19 @@ def trade_rows(limit=40):
     return rows
 
 
+def sleeve_rows():
+    """The Claude discretionary sleeve's value against SPY since it started (hypothesis 7)."""
+    from sleeve import book as sb
+    from sleeve import evaluate
+    b = sb.load()
+    h = b.get("history", [])
+    val = h[-1]["value"] if h else sb.config()["budget"]
+    sc = evaluate.score(b)
+    detail = (f"{sc['sleeve_return_pct']:+.2f}% vs SPY {sc['spy_return_pct']:+.2f}% since {sc['from']}"
+              if "excess_pct" in sc else f"Started; {len(b['holdings'])} holdings, {len(b['pending'])} orders waiting")
+    return [row("kpi", "sleeve", "Claude sleeve", "up" if sc.get("excess_pct", 0) >= 0 else "down", round(val, 2), detail)]
+
+
 def safe(fn):
     try:
         return fn()
@@ -93,12 +106,13 @@ def build(s=None):
     rows = []
     led = s.get("ledger", {})
     by = led.get("by_status", {}) if "error" not in led else {}
-    tested = sum(v for k, v in by.items() if k != "untested")
+    tested = sum(v for k, v in by.items() if k not in ("untested", "forward_test"))
     edges = by.get("passed_backtest", 0) + by.get("passed_paper", 0)
     waiting = led.get("waiting_for_your_sealed_test_decision", []) if "error" not in led else []
     pa = s.get("paper_account", {})
     rows += [
         row("kpi", "tested", "Ideas tested", value=tested, detail="Failed, dropped, or passed"),
+        row("kpi", "forward", "Live experiments", value=by.get("forward_test", 0), detail="Forward tests running on paper"),
         row("kpi", "edges", "Edges found", value=edges, detail="Passed a backtest or paper trading"),
         row("kpi", "waiting", "Decisions waiting", "attention" if waiting else "ok", len(waiting),
             ", ".join(f"#{i}" for i in waiting) or "None"),
@@ -137,7 +151,7 @@ def build(s=None):
                         "ok" if latest.get("daily_summary") else "attention", None, latest.get("daily_summary") or "None yet"))
 
     rows.append(row("meta", "asof", "Snapshot taken", detail=s.get("as_of")))
-    rows += safe(account_rows) + safe(trade_rows)
+    rows += safe(account_rows) + safe(trade_rows) + safe(sleeve_rows)
 
     les = lessons()
     for h in led.get("hypotheses", []) if "error" not in led else []:
