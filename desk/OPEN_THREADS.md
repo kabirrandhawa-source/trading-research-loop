@@ -11,6 +11,8 @@ newest first within each section. Results live in the ledger and journal, not he
 - 2026-10-14: Market-making simulator built (pm/maker.py, hypothesis 8, prediction locked: expects a loss
   from one-sided fills). Run around 2026-10-27 on development windows only:
   `.venv/bin/python -m pm.maker run --hypothesis 8 --version maker-v1`. Needs ~300+ windows; had 30 dev on Oct 14.
+  Note (Friday, Oct 14): the locked prediction file lost its dollar amounts to a shell typo ("$0" became
+  "/bin/zsh"). Pass rule is intact; expected-$ figures 2-4 are unreadable. Hash-locked, so NOT edited.
 - 2026-10-27 10:00 ET: 2-week check-in task fires. Then lock predictions and test, on post-Oct-13 Kalshi
   windows only: (a) resting limit orders / market making, (b) buying 90c+ favorites (hypothesis 5 watch list),
   (c) BTC "Up" overpriced at mid prices (hypothesis 4 lead b). Aim for ~3x the development sample.
