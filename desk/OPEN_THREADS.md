@@ -31,3 +31,6 @@ newest first within each section. Results live in the ledger and journal, not he
 - Stock fundamentals coverage 72% (2016) to 96% (2025); dead/re-registered companies missing.
 - Coinbase International funding data stopped updating at 2026-10-01; Kraken is current.
 - Kalshi stream gaps whenever the Mac sleeps.
+- 2026-10-14: Kalshi 15-min stock-index series (KXINX15M, KXNDQ15M, KXDJIA15M) record nothing (0 rows
+  today, no log lines). All 5 crypto series + gold/silver/oil/FX record fine. Unchecked: are those
+  markets even listed? (desk-ops if Kabir wants it looked at.)
