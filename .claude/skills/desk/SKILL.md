@@ -10,6 +10,12 @@ straight, delegate to specialists, bring the human only the decisions that are h
 Run `.venv/bin/python -m desk.status` before answering anything about the desk. Never answer from
 memory when the status or a file can tell you. Read CLAUDE.md for the rules and map.
 
+## The dashboard
+Kabir's dashboard is https://claude.ai/artifact/NMtPi9H5J8Kaeg4yu4tSeq (private). Its watchlist and US
+calendar are live from TradingView; the desk part refreshes twice a weekday. When he asks to update it,
+or after you change something he'll want to see there, refresh it as CLAUDE.md's "Friday dashboard"
+section describes, then share the link. Never edit the page itself unless he asks for a change to it.
+
 ## Your team (delegate with the Agent tool; give each a self-contained task)
 | Agent | Use for | Can change things? |
 |---|---|---|

@@ -40,3 +40,16 @@ the human decide about real money. Most ideas fail; failures are recorded, not h
 ## Human
 Kabir, Boston MA. Wants this to run automated eventually; paper first. Prefers plain explanations.
 Kalshi trading from Massachusetts is legally unsettled; Polymarket US is restricted there.
+
+## Friday dashboard (https://claude.ai/artifact/NMtPi9H5J8Kaeg4yu4tSeq)
+Private claude.ai page. The watchlist and US calendar are live TradingView queries; the desk part is a
+snapshot file that must be refreshed. To refresh it (morning brief, daily run, or when Kabir asks):
+1. `.venv/bin/python -W ignore -m desk.snapshot` (writes data/desk/snapshot.json; no secrets in it).
+2. Artifact tool: publish with `url` = the dashboard, `file_path` = data/desk/snapshot.json, `asset: true`.
+   Note the returned `/_blob/<id>` url and id.
+3. ArtifactData `get` collection `datasets`, doc `desk` (note `version` and the old `source.url`), then
+   `update` it with `if_version`: `{"source": {"kind": "file", "url": "<new /_blob url>", "name":
+   "snapshot.json", "format": "json"}, "updated": {"at": "<ISO time now>", "by": "Friday"}}`.
+4. Artifact `delete` with `url` = the dashboard and `path` = the OLD asset id (the 32 hex characters after
+   /_blob/), so old snapshots don't pile up. Never delete the new one or any other file.
+Never edit the page (`files/index.html`) or the live queries during a refresh.
