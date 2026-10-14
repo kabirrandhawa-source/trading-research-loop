@@ -1,0 +1,16 @@
+{
+ "date": "2026-10-14",
+ "targets": {
+  "QQQ": 40.0,
+  "DIA": 30.0,
+  "XLV": 20.0,
+  "XLE": 10.0
+ },
+ "reasoning": "First decision for a sleeve that is all cash. Because the test is against buy-and-hold SPY, staying fully invested with a broad large-cap core (QQQ plus DIA, which together track SPY closely) is the safest base; sitting in cash in a rising market is the easiest way to lose. Around that core I tilt modestly toward the two sectors with the strongest 60-day trends, health care and energy, which also add some protection after this week's tech selloff. I plan to hold this mix and only change it for a real reason.",
+ "per_symbol": {
+  "QQQ": "Growth core; down 3.8% this week but still above its 50-day average, so buying the dip rather than chasing.",
+  "DIA": "Steady blue-chip core with low volatility (8.8%) to keep the sleeve close to SPY's behavior.",
+  "XLV": "Strongest defensive trend: +9% over 60 days, above both averages, rose 2.5% on a down day.",
+  "XLE": "Strong momentum (+16% over 60 days) and a hedge if the tech selloff continues; kept small because energy is volatile."
+ }
+}
