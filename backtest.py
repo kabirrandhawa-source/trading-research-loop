@@ -27,7 +27,8 @@ from strategies.base import Strategy
 
 ROOT = Path(__file__).parent
 RESULTS = ROOT / "backtests"
-SEALED_PCT = 25.0
+SEALED_PCT = 25.0        # legacy; the split is now by date (SEALED_START)
+SEALED_START = "2024-01-30"   # first sealed day. Fixed, so daily data updates never move the boundary
 COST_BPS = 5.0           # one-way cost per trade, basis points (commission + slippage)
 PERIODS_PER_YEAR = 252
 EULER_GAMMA = 0.5772156649
@@ -55,10 +56,16 @@ def load_prices(path):
     return df
 
 
-def split(df, sealed_pct=SEALED_PCT):
-    """Return (development, sealed). Only the dev part may be used before the final test."""
-    cut = int(len(df) * (1 - sealed_pct / 100))
-    return df.iloc[:cut].reset_index(drop=True), df.iloc[cut:].reset_index(drop=True)
+def split(df, sealed_pct=None, sealed_start=None):
+    """Return (development, sealed): everything before SEALED_START is development.
+    The boundary is a fixed date, not a fraction of rows: a fraction would creep forward as the
+    daily job appends prices, turning sealed days into development days. sealed_pct is ignored
+    (kept so old command lines still work)."""
+    start = pd.Timestamp(sealed_start or SEALED_START)
+    tz = df["timestamp"].dt.tz
+    start = start.tz_localize(tz) if tz is not None and start.tzinfo is None else start
+    dev = df["timestamp"] < start
+    return df[dev].reset_index(drop=True), df[~dev].reset_index(drop=True)
 
 
 # ---------- engine ----------

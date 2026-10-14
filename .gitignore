@@ -25,3 +25,4 @@ memory/*.backup-*.db
 memory/run_daily.lock
 logs/
 memory/alert_state.json
+.venv-tsfm/

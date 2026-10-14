@@ -171,10 +171,13 @@ CREATE TABLE trials (id INTEGER PRIMARY KEY AUTOINCREMENT,
 """
 
 
-def test_split_keeps_sealed_out():
-    dev, sealed = backtest.split(prices(100), 25)
-    assert len(dev) == 75 and len(sealed) == 25
-    assert dev["timestamp"].max() < sealed["timestamp"].min()
+def test_split_is_a_fixed_date_that_new_rows_cannot_move():
+    df = prices(100)                                  # business days from 2015-01-01
+    dev, sealed = backtest.split(df, sealed_start="2015-03-02")
+    assert dev["timestamp"].max() < pd.Timestamp("2015-03-02") <= sealed["timestamp"].min()
+    longer = prices(160)                              # same start, 60 more days appended
+    dev2, _ = backtest.split(longer, sealed_start="2015-03-02")
+    assert len(dev2) == len(dev)                      # the boundary did not move
 
 
 def test_no_lookahead():
@@ -198,6 +201,7 @@ def test_deflated_sharpe_rises_bar_with_trials():
 
 def test_full_run_writes_results(conn, tmp_path, monkeypatch):
     monkeypatch.setattr(backtest, "RESULTS", tmp_path)
+    monkeypatch.setattr(backtest, "SEALED_START", "2017-05-01")   # inside the synthetic 2015-2018 data
     data = tmp_path / "SPY.csv"; prices(800).to_csv(data, index=False)
     strat = tmp_path / "always_long_v1.py"
     strat.write_text("from strategies.base import Strategy\n"
