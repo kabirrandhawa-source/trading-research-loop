@@ -34,7 +34,7 @@ the human decide about real money. Most ideas fail; failures are recorded, not h
 | `stocks/universe.py` | Point-in-time S&P 500 universe 2016+, dead companies included: `members_on(day)`, `prices(tickers)` (data/stocks/bars.db) |
 | `stocks/fundamentals.py` | SEC EDGAR fundamentals keyed to FILING date: `latest(conn, tickers, metric, as_of)`, `covered(...)`. Usable coverage 72% of members (2016) to 96% (2025); dead or re-registered companies are missing, so report coverage in every test |
 | `crypto/data.py` | Coinbase daily prices (BTC/ETH/SOL/XRP/DOGE) and perpetual funding rates, Coinbase Intl since 2023 + Kraken last 12 months (data/crypto/crypto.db) |
-| `brief/`, `desk/` | Morning brief facts; desk status and voice |
+| `brief/`, `desk/` | Morning brief facts; desk status and voice; `desk/OPEN_THREADS.md` = what's in progress |
 | `sleeve/`, `paper/claude_sleeve/` | Claude discretionary sleeve: context, decide (validator), execute (17:00 job), evaluate (score vs SPY) |
 | `agents/` | Prompts for research agents, Skeptic, strategy writer, backtester, critic |
 | `research/AREAS.md` | The human's standing research directions |
