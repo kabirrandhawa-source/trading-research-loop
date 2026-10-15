@@ -6,6 +6,13 @@
 3. If a decision dated today exists: work out the whole-share orders that move the sleeve to its
    targets (sells first, then buys within the cash the sells free up plus existing cash), skip
    changes under min_trade_dollars, and send each through broker.submit (kill switch + journal).
+
+More than one sleeve (sleeve.book.SLEEVES) may run; v1 is the default. Sleeves may share ETFs because
+each book comes only from its own orders' fills. Non-sleeve strategies still may not trade a sleeve's
+symbols. broker._reduces looks at the ACCOUNT position, not the sleeve's, so when `positions`
+(account shares per symbol) is given, a sell is capped at what the account holds minus what other
+sleeves already sold this run (`committed_sells`, shared across the run): one sleeve can never sell
+shares that would leave the account short.
 """
 import json
 import math
@@ -64,33 +71,59 @@ def plan(book, targets, prices, cfg):
     return orders
 
 
-def run(client, today, prices, spy_close, decisions_dir=None, book_path=None, cfg=None, conflicts=()):
-    cfg = cfg or sleeve_book.config()
+def conflicting_symbols(conflicts):
+    """Symbols traded by NON-sleeve strategies. `conflicts` is either a list of symbols (all treated as
+    non-sleeve) or {strategy name: [symbols]}, in which case sibling sleeves are ignored."""
+    if isinstance(conflicts, dict):
+        return {s for owner, syms in conflicts.items() if owner not in sleeve_book.NAMES for s in syms}
+    return set(conflicts)
+
+
+def run(client, today, prices, spy_close, decisions_dir=None, book_path=None, cfg=None, conflicts=(),
+        sleeve=None, positions=None, committed_sells=None):
+    me = sleeve_book.info(sleeve)
+    name, version = (NAME, VERSION) if me["name"] == NAME else (me["name"], me["version"])
+    tag = {} if name == NAME else {"strategy": name}
+    cfg = cfg or sleeve_book.config(sleeve=sleeve)
+    book_path = book_path or me["dir"] / "book.json"
     book = reconcile(sleeve_book.load(book_path, cfg), client)
-    clash = set(cfg["universe"]) & set(conflicts)
+    clash = set(cfg["universe"]) & conflicting_symbols(conflicts)
     if clash:
-        alerts.send("Claude sleeve paused", f"Another strategy trades {', '.join(sorted(clash))}; the sleeve can't share symbols.", "high", ["warning"])
+        alerts.send(f"{me['label']} paused", f"Another strategy trades {', '.join(sorted(clash))}; the sleeve can't share symbols.", "high", ["warning"])
         sleeve_book.save(book, book_path)
         return {"status": "paused", "reason": f"symbol clash {sorted(clash)}"}
     val = sleeve_book.value(book, prices)
     if val is not None and not any(h["day"] == today for h in book["history"]):
         book["history"].append({"day": today, "value": val, "spy_close": spy_close})
-    f = Path(decisions_dir or sleeve_book.DIR / "decisions") / f"{today}.json"
+    f = Path(decisions_dir or me["dir"] / "decisions") / f"{today}.json"
     if not f.exists():
         sleeve_book.save(book, book_path)
-        journal.log({"event": "sleeve", "note": "no decision for today; holding", "value": val})
+        journal.log({"event": "sleeve", **tag, "note": "no decision for today; holding", "value": val})
         return {"status": "no decision", "value": val}
     d = json.loads(f.read_text())
     waiting = {p["symbol"] for p in book["pending"]}
+    sold = committed_sells if committed_sells is not None else {}
     sent = []
     for s, side, qty in plan(book, d["targets"], prices, cfg):
         if s in waiting:
             continue
-        rec = broker.submit(NAME, VERSION, s, side, qty, {"sleeve_value": val, "targets": d["targets"]},
+        if side == "sell" and positions is not None:
+            room = max(0.0, float(positions.get(s, 0.0)) - sold.get(s, 0.0))
+            if qty > room:
+                alerts.send(f"{me['label']}: sell capped", f"Book says sell {qty:g} {s} but the account has only {room:g} "
+                            "not already being sold. Books and account disagree; check by hand.", "high", ["warning"])
+                journal.log({"event": "sleeve_sell_capped", "strategy": name, "symbol": s, "wanted": qty, "room": room})
+                qty = math.floor(room)
+                if qty <= 0:
+                    sent.append((s, side, 0, "skipped: account has no shares to sell"))
+                    continue
+        rec = broker.submit(name, version, s, side, qty, {"sleeve_value": val, "targets": d["targets"]},
                             d.get("per_symbol", {}).get(s) or d["reasoning"], client=client,
                             extra={"action": "rebalance", "decision_file": f.name})
         if rec.get("decision") == "submitted":
             book["pending"].append({"order_id": rec["order_id"], "symbol": s, "side": side, "qty": qty})
+            if side == "sell":
+                sold[s] = sold.get(s, 0.0) + qty
         sent.append((s, side, qty, rec.get("decision")))
     sleeve_book.save(book, book_path)
     return {"status": "executed", "orders": sent, "value": val}

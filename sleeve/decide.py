@@ -1,7 +1,8 @@
 """Validate and save the Claude sleeve's daily decision. Claude writes a draft JSON; only a decision
 that passes every check here is saved for the 17:00 trading job to execute.
 
-    .venv/bin/python -m sleeve.decide path/to/draft.json
+    .venv/bin/python -m sleeve.decide path/to/draft.json                 # sleeve v1 (hypothesis 7)
+    .venv/bin/python -m sleeve.decide path/to/draft.json --sleeve v2     # sleeve v2
 
 Draft format:
 {
@@ -66,8 +67,8 @@ def validate(d, cfg, today=None):
     return {"date": today, "targets": clean, "reasoning": reasoning[:2000], "per_symbol": per}
 
 
-def save(decision, decisions_dir=None):
-    out = Path(decisions_dir or sleeve_book.DIR / "decisions") / f"{decision['date']}.json"
+def save(decision, decisions_dir=None, sleeve=None):
+    out = Path(decisions_dir or sleeve_book.folder(sleeve) / "decisions") / f"{decision['date']}.json"
     out.parent.mkdir(parents=True, exist_ok=True)
     if out.exists():
         raise Invalid(f"a decision for {decision['date']} already exists; one decision per day")
@@ -75,11 +76,26 @@ def save(decision, decisions_dir=None):
     return out
 
 
-def main():
-    draft = json.loads(Path(sys.argv[1]).read_text())
+def sleeve_for_draft(path, sleeve=None):
+    """The sleeve a draft belongs to: its folder decides; an explicit --sleeve must agree with it."""
+    here = Path(path).resolve()
+    owner = next((k for k, v in sleeve_book.SLEEVES.items() if v["dir"].resolve() in here.parents), None)
+    if sleeve and owner and sleeve != owner:
+        raise Invalid(f"draft is in sleeve {owner}'s folder but --sleeve {sleeve} was given")
+    return sleeve or owner or sleeve_book.DEFAULT
+
+
+def main(argv=None):
+    import argparse
+    p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    p.add_argument("draft")
+    p.add_argument("--sleeve", choices=sorted(sleeve_book.SLEEVES), help="default: the sleeve whose folder holds the draft, else v1")
+    a = p.parse_args(argv)
+    draft = json.loads(Path(a.draft).read_text())
     try:
-        d = validate(draft, sleeve_book.config())
-        print(f"saved {save(d)}: {d['targets'] or 'all cash'}")
+        a.sleeve = sleeve_for_draft(a.draft, a.sleeve)
+        d = validate(draft, sleeve_book.config(sleeve=a.sleeve))
+        print(f"saved {save(d, sleeve=a.sleeve)}: {d['targets'] or 'all cash'}")
     except Invalid as e:
         print(f"REJECTED: {e}")
         sys.exit(1)

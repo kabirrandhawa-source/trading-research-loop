@@ -201,16 +201,28 @@ def run(a):
         print(sym, action, order_side, n, rec["decision"], rec.get("risk_check"))
         summary["orders"].append(rec["decision"])
         order_alert(rec)
-    summary["sleeve"] = run_sleeve(client, a, [s for _, s in strategies], summary)
+    # Claude sleeves, v1 first. Only NON-sleeve strategies count as symbol clashes; sibling sleeves may
+    # share ETFs (each book is built from its own fills). Account positions + sells already sent this
+    # run cap every sleeve sell, because broker._reduces only sees the account-wide position.
+    taken = {}
+    for h, s in strategies:
+        taken.setdefault(h.get("benchmark") or f"hypothesis {h['id']}", []).append(s)
+    held = {sym: float(p.qty) for sym, p in positions.items()}
+    sold = {}
+    summary["sleeve"] = run_sleeve(client, a, taken, summary, sleeve="v1", positions=held, committed_sells=sold)
+    summary["sleeve_v2"] = run_sleeve(client, a, taken, summary, sleeve="v2", positions=held, committed_sells=sold)
     return summary
 
 
-def run_sleeve(client, a, taken_symbols, summary):
-    """The Claude discretionary sleeve (hypothesis 7): code executes Claude's validated decision."""
+def run_sleeve(client, a, taken_symbols, summary, sleeve="v1", positions=None, committed_sells=None):
+    """A Claude discretionary sleeve (v1 = hypothesis 7, v2 = hypothesis 10): code executes Claude's
+    validated decision. `taken_symbols`: {non-sleeve strategy: [symbols]} (or a plain list)."""
     from sleeve import book as sleeve_book
     from sleeve import execute as sleeve_exec
+    label = sleeve_book.info(sleeve)["label"]
+    tag = {} if sleeve == "v1" else {"strategy": sleeve_book.info(sleeve)["name"]}
     try:
-        cfg = sleeve_book.config()
+        cfg = sleeve_book.config(sleeve=sleeve)
     except FileNotFoundError:
         return None
     try:
@@ -220,17 +232,18 @@ def run_sleeve(client, a, taken_symbols, summary):
             prices[s] = float(bars["close"].iloc[-1])
             fresh = fresh and is_fresh(bars, a.today)
         if not fresh:
-            journal.log({"event": "sleeve", "note": f"no bar for {a.today}; sleeve not traded today"})
+            journal.log({"event": "sleeve", **tag, "note": f"no bar for {a.today}; sleeve not traded today"})
             return {"status": "stale prices"}
         if a.dry_run:
             return {"status": "dry run"}
-        res = sleeve_exec.run(client, a.today, prices, prices[cfg["benchmark"]], conflicts=taken_symbols)
+        res = sleeve_exec.run(client, a.today, prices, prices[cfg["benchmark"]], conflicts=taken_symbols,
+                              sleeve=sleeve, positions=positions, committed_sells=committed_sells)
         for _, _, _, decision in res.get("orders", []):
             summary["orders"].append(decision)
         return res
     except Exception as e:
-        journal.log({"event": "sleeve_failed", "error": f"{type(e).__name__}: {e}"})
-        alerts.send("Claude sleeve failed", f"{type(e).__name__}: {e}"[:300], "high", ["warning"])
+        journal.log({"event": "sleeve_failed", **tag, "error": f"{type(e).__name__}: {e}"})
+        alerts.send(f"{label} failed", f"{type(e).__name__}: {e}"[:300], "high", ["warning"])
         return {"status": "failed"}
 
 
@@ -244,6 +257,9 @@ def heartbeat(summary):
     sl = summary.get("sleeve")
     if sl:
         parts.append(f"Claude sleeve: {sl.get('status')}" + (f", value ${sl['value']:,.2f}" if sl.get("value") else ""))
+    sl2 = summary.get("sleeve_v2")
+    if sl2:
+        parts.append(f"Claude sleeve v2: {sl2.get('status')}" + (f", value ${sl2['value']:,.2f}" if sl2.get("value") else ""))
     if risk.HALT_PATH.exists():
         parts.append("HALT file is ON: new positions are blocked")
     msg = ", ".join(parts)

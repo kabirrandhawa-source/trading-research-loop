@@ -1,0 +1,27 @@
+{
+  "name": "Claude discretionary sleeve v2 (full research)",
+  "approved_by": "Kabir, in chat, 2026-10-15",
+  "budget": 10000,
+  "universe": [
+    "QQQ",
+    "IWM",
+    "DIA",
+    "TLT",
+    "IEF",
+    "GLD",
+    "XLK",
+    "XLF",
+    "XLE",
+    "XLV",
+    "XLY",
+    "XLP",
+    "XLU",
+    "XLI"
+  ],
+  "long_only": true,
+  "max_positions": 4,
+  "max_position_pct_of_sleeve": 40,
+  "min_trade_dollars": 200,
+  "evaluation_weeks": 12,
+  "benchmark": "SPY"
+}

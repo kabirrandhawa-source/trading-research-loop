@@ -1,7 +1,8 @@
 """Everything Claude sees before deciding: recent prices for the sleeve's universe (and SPY for
 reference), recent headlines, and the sleeve's current book. Read-only.
 
-    .venv/bin/python -m sleeve.context      # prints JSON
+    .venv/bin/python -m sleeve.context                 # prints JSON (sleeve v1)
+    .venv/bin/python -m sleeve.context --sleeve v2     # same facts for another sleeve's book
 """
 import json
 import sys
@@ -44,8 +45,9 @@ def headlines(hours=24, limit=25):
             for n in keep[:limit]]
 
 
-def build():
-    cfg, book = sleeve_book.config(), sleeve_book.load()
+def build(sleeve=None):
+    cfg = sleeve_book.config(sleeve=sleeve)
+    book = sleeve_book.load(cfg=cfg, sleeve=sleeve)
     px = bars(cfg["universe"] + [cfg["benchmark"]])
     prices = {s: v["close"] for s, v in px.items()}
     held_value = sleeve_book.value(book, prices)
@@ -63,4 +65,7 @@ def build():
 
 
 if __name__ == "__main__":
-    print(json.dumps(build(), indent=1))
+    import argparse
+    p = argparse.ArgumentParser()
+    p.add_argument("--sleeve", default=sleeve_book.DEFAULT, choices=sorted(sleeve_book.SLEEVES))
+    print(json.dumps(build(p.parse_args().sleeve), indent=1))
