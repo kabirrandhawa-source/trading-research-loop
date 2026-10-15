@@ -8,6 +8,10 @@ newest first within each section. Results live in the ledger and journal, not he
 - Nothing right now.
 
 ## Scheduled / in progress
+- 2026-10-15: Learning loop added (Kabir yes): daily summary carries a v1/v2/SPY SCOREBOARD line and stages
+  paper/claude_sleeve_v2/; Sunday critic scores both sleeves, reviews each decision (right for the reason /
+  luck / wrong) and writes one ledger lesson per sleeve (h7, h10). Improvements go to a future v3, never
+  mid-test. ~2027-01-06: Friday brings Kabir a model recommendation with evidence.
 - 2026-10-15: Claude sleeve v2 BUILT (hypothesis 10, forward_test, prediction locked; commit 99ed27f). Scheduled
   (Kabir yes 2026-10-15): task trading-loop-claude-sleeve-v2, weekdays 16:25 ET; first decision Oct 15.
   Score after 12 weeks with sleeve.evaluate --hypothesis 10. Caveats: sector holdings typed from
