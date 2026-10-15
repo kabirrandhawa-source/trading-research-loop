@@ -1,0 +1,9 @@
+{"date": "2026-10-15",
+ "targets": {"DIA": 35, "XLF": 25, "XLE": 20, "QQQ": 20},
+ "reasoning": "First v2 decision, fully invested so cash drag doesn't hand SPY an easy win, but tilted away from AI/chip risk (hot CPI, PPI +1.3% m/m, 10-year near 5.06%, chip index in correction on AI-debt worries) toward cheap sectors with strong filed earnings. The SEC sector fundamentals drove the tilt: XLF (P/E ~8, net income +47% y/y, 93% coverage) and XLE (P/E ~10, net income +168%, an inflation hedge, uptrend) over XLV, whose rally isn't backed by earnings (net income -41%, P/E ~57). The desk ledger says calendar and timing tricks (pre-FOMC, bank-earnings window, IBS) failed or were dropped, so this is a medium-term allocation with no timing rule; crypto funding is mildly positive and BTC is flat on the week, so risk appetite looks neutral, not panicked. Missing: TradingView (macro came from 2 web searches), TimesFM (no current file, and it failed its test anyway), and there's no own track record yet.",
+ "per_symbol": {
+  "DIA": "Broad low-volatility core with less AI concentration than SPY; Dow led today's rebound.",
+  "XLF": "Cheapest sector by P/E with strong earnings growth; bank Q3 reports are beating.",
+  "XLE": "Best fundamentals and 60-day trend (+13%), and a hedge if inflation keeps running hot.",
+  "QQQ": "Keeps about 20% growth exposure (XLK fundamentals strong: revenue +42%) so a tech rebound doesn't leave the sleeve far behind SPY."
+ }}
