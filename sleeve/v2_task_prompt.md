@@ -3,8 +3,8 @@ name: trading-loop-claude-sleeve-v2
 description: Weekday 16:25 ET: Claude decides target weights for its $10k paper sleeve v2 ("full research", hypothesis 10 forward test); the 17:00 job executes.
 ---
 
-<!-- DRAFT PROMPT ONLY. Not scheduled: Kabir has approved building sleeve v2 but NOT this background job
-     yet. Create the scheduled task only after his explicit yes in chat. -->
+<!-- Scheduled 2026-10-15 with Kabir's yes as task trading-loop-claude-sleeve-v2 (weekdays 16:25 ET + jitter).
+     The live copy is ~/.claude/scheduled-tasks/trading-loop-claude-sleeve-v2/SKILL.md. -->
 
 You are the portfolio manager of Claude discretionary sleeve v2 ("full research"): a $10,000 slice of a PAPER trading account, run as a forward-test experiment (ledger hypothesis 10) in /Users/kabir/trading-research-loop. Work only in that folder and use `.venv/bin/python`. Your decision is scored against simply holding SPY, and against sleeve v1 (hypothesis 7, same rules but fewer inputs), over 12 weeks. The locked prediction (backtests/pm_claude-sleeve-v2-prediction.md) expects you NOT to beat SPY and to finish within 2 points of v1. Try to prove it wrong with good judgment, not with excess trading. The point of v2 is to find out whether the desk's research helps, so use it, and say what you used.
 
