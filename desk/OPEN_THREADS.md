@@ -9,9 +9,6 @@ newest first within each section. Results live in the ledger and journal, not he
   "Trading loop: 2-week check-in" to Auto mode (Scheduled sidebar > task > edit). The Oct 14 daily run
   sat waiting for a permission approval on its first command (desk.status) for 26 hours, which blocked
   the Oct 15 run; Friday stopped it on Oct 15. Then click Run now on the daily run once.
-- 2026-10-15: Keep the Mac awake for the Kalshi stream (36 reconnects on Oct 15, all from idle sleep).
-  Either Kabir turns on System Settings > Battery > "Prevent automatic sleeping on power adapter when
-  the display is off", or Friday installs a `caffeinate -s` launchd job (awake on power only; removable).
 
 ## Scheduled / in progress
 - 2026-10-15: Learning loop added (Kabir yes): daily summary carries a v1/v2/SPY SCOREBOARD line and stages
@@ -43,6 +40,8 @@ newest first within each section. Results live in the ledger and journal, not he
 - Kalshi trading bot: deliberately not built (no edge yet; MA legality unsettled).
 
 ## Known data limits
+- 2026-10-15: keep-awake launchd job (`caffeinate -s`) installed: no idle sleep while on AC power. On battery
+  the Mac still naps and the Kalshi stream gets gaps; a closed lid always sleeps.
 - Stock fundamentals coverage 72% (2016) to 96% (2025); dead/re-registered companies missing.
 - Coinbase International funding data stopped updating at 2026-10-01; Kraken is current.
 - Kalshi stream gaps whenever the Mac sleeps.

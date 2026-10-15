@@ -39,7 +39,7 @@ the human decide about real money. Most ideas fail; failures are recorded, not h
 | `agents/` | Prompts for research agents, Skeptic, strategy writer, backtester, critic |
 | `research/AREAS.md` | The human's standing research directions |
 | `journal/` | Decisions (`*.jsonl`), daily summaries, weekly reviews, morning briefs |
-| `launchd/` | Background jobs: daily (17:00), pm-stream, pm-recorder, pm-archive (01:15) |
+| `launchd/` | Background jobs: daily (17:00), pm-stream, pm-recorder, pm-archive (01:15), keep-awake (caffeinate -s, AC power only) |
 
 ## Commands
 - Desk status: `.venv/bin/python -m desk.status` (add `--json` for agents)

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.kabirrandhawa.trading-loop.keep-awake</string>
+
+    <!-- Keeps the Mac from SYSTEM sleep while it is plugged in, so the Kalshi stream and recorders
+         don't drop. `caffeinate -s` only holds while on AC power; the display can still turn off,
+         a closed lid still sleeps, and no setting is changed. Remove with ./launchd/uninstall.sh
+         or: launchctl bootout gui/$(id -u)/com.kabirrandhawa.trading-loop.keep-awake -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/bin/caffeinate</string>
+        <string>-s</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>ProcessType</key>
+    <string>Background</string>
+</dict>
+</plist>
