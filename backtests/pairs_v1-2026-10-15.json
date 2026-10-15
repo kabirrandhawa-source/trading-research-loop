@@ -1,0 +1,107 @@
+{
+  "version": "v1",
+  "params": {
+    "formation": 252,
+    "trading": 126,
+    "n_pairs": 20,
+    "open_sd": 2.0,
+    "same_company_corr": 0.98,
+    "cost_bps": 5.0,
+    "borrow_pa": 0.005,
+    "first_trading_month": "2017-01"
+  },
+  "sealed_start": "2024-01-30",
+  "net": {
+    "days": 1779,
+    "first_day": "2017-01-03",
+    "last_day": "2024-01-29",
+    "annual_return": -0.002670790014025926,
+    "annual_vol": 0.028919700779475668,
+    "sharpe": -0.09235192419146286,
+    "sharpe_per_period": -0.00581762439306906,
+    "months": 85,
+    "monthly_t_stat": -0.28535635935743464,
+    "max_drawdown": -0.09937731204555252,
+    "skew": 3.155846324654153,
+    "kurtosis": 84.95386549204338,
+    "by_year": {
+      "2017": -0.0405,
+      "2018": 0.0086,
+      "2019": -0.0203,
+      "2020": 0.0403,
+      "2021": -0.0309,
+      "2022": 0.02,
+      "2023": 0.0035,
+      "2024": 0.0005
+    },
+    "corr_with_spy": 0.009610059886756043,
+    "pair_trades": 2248,
+    "mean_trade_pnl": -0.0008092964800028563,
+    "trade_win_rate": 0.574288256227758,
+    "median_days_held": 42.0,
+    "exits": {
+      "period_end": 1305,
+      "converged": 936,
+      "data_end": 7
+    },
+    "deflated_sharpe": {
+      "dsr": 0.404,
+      "sr0": 0.0,
+      "n_trials": 1
+    }
+  },
+  "gross_no_costs": {
+    "annual_return": 0.005390198165830551,
+    "sharpe": 0.18642137036107792,
+    "monthly_t_stat": 0.5720418257787258,
+    "by_year": {
+      "2017": -0.0342,
+      "2018": 0.0162,
+      "2019": -0.0126,
+      "2020": 0.0511,
+      "2021": -0.0232,
+      "2022": 0.0275,
+      "2023": 0.0118,
+      "2024": 0.0015
+    }
+  },
+  "famous_pairs_descriptive": {
+    "KO/PEP": {
+      "selected": 0,
+      "pnl": 0.2119084253126551,
+      "trades": 58
+    },
+    "HD/LOW": {
+      "selected": 0,
+      "pnl": 0.18674944788631026,
+      "trades": 53
+    }
+  },
+  "most_picked_pairs": {
+    "NWS/NWSA": 45,
+    "AEP/XEL": 37,
+    "AVB/UDR": 33,
+    "WEC/XEL": 33,
+    "CMS/LNT": 30,
+    "CMS/DTE": 25,
+    "CMS/XEL": 23,
+    "AVB/EQR": 22,
+    "AEP/ED": 20,
+    "AEP/CMS": 20,
+    "CMS/WEC": 20,
+    "CMS/DUK": 18,
+    "AEE/LNT": 18,
+    "EQR/UDR": 18,
+    "AEP/WEC": 17
+  },
+  "candidates_per_formation": [
+    494,
+    495,
+    502,
+    501,
+    500,
+    503,
+    501,
+    501
+  ]
+}
