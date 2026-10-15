@@ -5,14 +5,14 @@ current: add a line when something is started or promised, remove it when it's d
 newest first within each section. Results live in the ledger and journal, not here.
 
 ## Waiting on Kabir
-- 2026-10-15: Sleeve v2: OK for it to read recent (sealed-period) crypto/fundamentals as live inputs, or trim
-  to the last 90 days like v1? Running as built until Kabir says otherwise.
+- Nothing right now.
 
 ## Scheduled / in progress
 - 2026-10-15: Claude sleeve v2 BUILT (hypothesis 10, forward_test, prediction locked; commit 99ed27f). Scheduled
   (Kabir yes 2026-10-15): task trading-loop-claude-sleeve-v2, weekdays 16:25 ET; first decision Oct 15.
   Score after 12 weeks with sleeve.evaluate --hypothesis 10. Caveats: sector holdings typed from
-  memory (approximate); context_v2 reads post-2024-01-30 crypto/fundamentals as live inputs (Kabir to confirm OK).
+  memory (approximate); context_v2 reads post-2024-01-30 crypto/fundamentals as live inputs: Kabir OK'd this 2026-10-15
+  (live decision inputs only; research and backtests still never use sealed data).
 - 2026-10-14: Market-making simulator built (pm/maker.py, hypothesis 8, prediction locked: expects a loss
   from one-sided fills). Run around 2026-10-27 on development windows only:
   `.venv/bin/python -m pm.maker run --hypothesis 8 --version maker-v1`. Needs ~300+ windows; had 30 dev on Oct 14.
