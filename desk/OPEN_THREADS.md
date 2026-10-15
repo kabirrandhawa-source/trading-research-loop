@@ -5,10 +5,12 @@ current: add a line when something is started or promised, remove it when it's d
 newest first within each section. Results live in the ledger and journal, not here.
 
 ## Waiting on Kabir
-- 2026-10-15: Claude sleeve v2 "full research" proposal drafted (research/claude-sleeve-v2-proposal-2026-10-15.md).
-  Needs yes on: build it ($10k paper, same rules as v1, richer inputs) and add its 16:25 scheduled task.
+- 2026-10-15: Sleeve v2: still needs a yes on adding its 16:25 scheduled task (background job). Build approved.
 
 ## Scheduled / in progress
+- 2026-10-15: Kabir said YES to building Claude sleeve v2 (research/claude-sleeve-v2-proposal-2026-10-15.md).
+  desk-quant is building it: multi-sleeve support (v1 must stay byte-identical), context_v2, ledger entry
+  with locked prediction, task prompt file. Scheduled task NOT created until Kabir approves it.
 - 2026-10-14: Market-making simulator built (pm/maker.py, hypothesis 8, prediction locked: expects a loss
   from one-sided fills). Run around 2026-10-27 on development windows only:
   `.venv/bin/python -m pm.maker run --hypothesis 8 --version maker-v1`. Needs ~300+ windows; had 30 dev on Oct 14.
