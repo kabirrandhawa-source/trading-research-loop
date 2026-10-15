@@ -5,7 +5,8 @@ current: add a line when something is started or promised, remove it when it's d
 newest first within each section. Results live in the ledger and journal, not here.
 
 ## Waiting on Kabir
-- Nothing right now.
+- 2026-10-15: Claude sleeve v2 "full research" proposal drafted (research/claude-sleeve-v2-proposal-2026-10-15.md).
+  Needs yes on: build it ($10k paper, same rules as v1, richer inputs) and add its 16:25 scheduled task.
 
 ## Scheduled / in progress
 - 2026-10-14: Market-making simulator built (pm/maker.py, hypothesis 8, prediction locked: expects a loss
