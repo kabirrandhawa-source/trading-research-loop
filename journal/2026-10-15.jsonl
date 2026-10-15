@@ -1,0 +1,2 @@
+{"timestamp": "2026-10-15T14:29:31.083999+00:00", "event": "alert", "title": "Morning brief Oct 15", "priority": "default", "channels": {"mac": "ok", "ntfy": "ok"}}
+{"timestamp": "2026-10-15T14:29:59.289635+00:00", "event": "alert", "title": "Morning brief Oct 15: Kalshi stream stalled", "priority": "high", "channels": {"mac": "ok", "ntfy": "ok"}}
