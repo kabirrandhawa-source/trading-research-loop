@@ -5,7 +5,13 @@ current: add a line when something is started or promised, remove it when it's d
 newest first within each section. Results live in the ledger and journal, not here.
 
 ## Waiting on Kabir
-- Nothing right now.
+- 2026-10-15: Switch the scheduled tasks "Trading loop: daily run", "Trading loop: Sunday critic" and
+  "Trading loop: 2-week check-in" to Auto mode (Scheduled sidebar > task > edit). The Oct 14 daily run
+  sat waiting for a permission approval on its first command (desk.status) for 26 hours, which blocked
+  the Oct 15 run; Friday stopped it on Oct 15. Then click Run now on the daily run once.
+- 2026-10-15: Keep the Mac awake for the Kalshi stream (36 reconnects on Oct 15, all from idle sleep).
+  Either Kabir turns on System Settings > Battery > "Prevent automatic sleeping on power adapter when
+  the display is off", or Friday installs a `caffeinate -s` launchd job (awake on power only; removable).
 
 ## Scheduled / in progress
 - 2026-10-15: Learning loop added (Kabir yes): daily summary carries a v1/v2/SPY SCOREBOARD line and stages
