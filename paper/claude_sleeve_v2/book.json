@@ -1,0 +1,12 @@
+{
+ "cash": 10000.0,
+ "holdings": {},
+ "pending": [],
+ "history": [
+  {
+   "day": "2026-10-15",
+   "value": 10000.0,
+   "spy_close": 771.79
+  }
+ ]
+}
