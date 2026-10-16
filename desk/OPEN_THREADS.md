@@ -14,7 +14,11 @@ newest first within each section. Results live in the ledger and journal, not he
 - 2026-10-16 to 2026-10-30: ALPHA SPRINT (Kabir yes). Replaces random daily ideas; evening run's research is
   paused until Oct 30. Four leads: Kalshi market making (h8, Oct 27), crypto funding carry, S&P 500 momentum
   (+quality), post-earnings drift from filed EPS. Flow per lead: skeptic -> locked prediction -> ONE dev
-  backtest; a pass goes to Kabir for the sealed test. Researcher registering the 3 new hypotheses now.
+  backtest; a pass goes to Kabir for the sealed test. Registered: h14 funding carry, h15 momentum +
+  cash profitability, h16 filing-date PEAD. Skeptic (Oct 16): h15 TEST (first); h12, h14, h16 NOT YET (h14 needs
+  forward funding/basis recording + US venue; h16 needs EDGAR 8-K 2.02 dates). desk-quant running h15 v1 now.
+  Found: stocks.fundamentals.latest() can return a STALE fiscal year (10-Ks hold 3 years under one filed
+  date). Sleeve v2 context reads it: Kabir to decide whether to fix mid-test once quant reports how bad.
   Kabir has many ideas of his own: queue them in the ledger, test after the sprint unless one fits it.
 - 2026-10-16: Texts work: high/urgent alerts also go by iMessage to SMS_TO (config/.env), test text received.
   The 17:00 launchd job may trigger its own macOS "control Messages" prompt the first time; Kabir to allow it.
