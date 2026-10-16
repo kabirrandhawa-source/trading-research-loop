@@ -11,6 +11,8 @@ newest first within each section. Results live in the ledger and journal, not he
   the Oct 15 run; Friday stopped it on Oct 15. Then click Run now on the daily run once.
 
 ## Scheduled / in progress
+- 2026-10-16: Texts work: high/urgent alerts also go by iMessage to SMS_TO (config/.env), test text received.
+  The 17:00 launchd job may trigger its own macOS "control Messages" prompt the first time; Kabir to allow it.
 - 2026-10-16: Kabir raised max_open_positions 5 -> 14 in config/risk.json (verified: kill switch passes a
   6th position). Oct 15 v2 orders were blocked, so v2 starts trading with tonight's decision (fills Oct 19);
   note the lost day when scoring h10. Blocked orders now send a high alert (13f0764).
