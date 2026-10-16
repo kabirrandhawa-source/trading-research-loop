@@ -11,6 +11,11 @@ newest first within each section. Results live in the ledger and journal, not he
   the Oct 15 run; Friday stopped it on Oct 15. Then click Run now on the daily run once.
 
 ## Scheduled / in progress
+- 2026-10-16 to 2026-10-30: ALPHA SPRINT (Kabir yes). Replaces random daily ideas; evening run's research is
+  paused until Oct 30. Four leads: Kalshi market making (h8, Oct 27), crypto funding carry, S&P 500 momentum
+  (+quality), post-earnings drift from filed EPS. Flow per lead: skeptic -> locked prediction -> ONE dev
+  backtest; a pass goes to Kabir for the sealed test. Researcher registering the 3 new hypotheses now.
+  Kabir has many ideas of his own: queue them in the ledger, test after the sprint unless one fits it.
 - 2026-10-16: Texts work: high/urgent alerts also go by iMessage to SMS_TO (config/.env), test text received.
   The 17:00 launchd job may trigger its own macOS "control Messages" prompt the first time; Kabir to allow it.
 - 2026-10-16: Kabir raised max_open_positions 5 -> 14 in config/risk.json (verified: kill switch passes a
