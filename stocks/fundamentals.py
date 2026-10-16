@@ -149,6 +149,34 @@ def latest(conn, tickers, metric, as_of):
     return df.groupby("ticker").tail(1).set_index("ticker") if len(df) else df
 
 
+def latest_annual(conn, tickers, metric, as_of, max_age_months=None, min_days=350, max_days=380):
+    """The newest FISCAL YEAR of `metric` per ticker from 10-K filings FILED by `as_of`.
+
+    Unlike latest() (newest filed row), this picks the row with the newest period `end`: a 10-K holds
+    two or three fiscal years under one filed date, so "newest filed" can be a stale year. Duration
+    metrics (start set) must cover min_days..max_days (52/53-week years); instant metrics (assets,
+    equity: no start) are taken as of the fiscal year end. Ties on `end` go to the latest filing
+    (restatements), then to the preferred XBRL tag. max_age_months: only 10-Ks filed in the months
+    before as_of. Returns ticker-indexed rows: end, val, filed, accn, start, tag."""
+    as_of = str(pd.Timestamp(as_of).date())
+    q = (f"SELECT ticker, tag, start, end, val, filed, accn FROM facts WHERE metric = ? AND form = '10-K' "
+         f"AND filed <= ? AND ticker IN ({','.join('?' * len(tickers))})")
+    params = [metric, as_of, *tickers]
+    if max_age_months:
+        q += " AND filed > ?"
+        params.append(str((pd.Timestamp(as_of) - pd.DateOffset(months=max_age_months)).date()))
+    df = pd.read_sql(q, conn, params=params)
+    cols = ["end", "val", "filed", "accn", "start", "tag"]
+    if not len(df):
+        return pd.DataFrame(columns=cols, index=pd.Index([], name="ticker"))
+    dur = (pd.to_datetime(df["end"]) - pd.to_datetime(df["start"])).dt.days
+    df = df[df["start"].isna() | dur.between(min_days, max_days)]
+    pref = {tag: i for i, (_, tag) in enumerate(CONCEPTS.get(metric, []))}
+    df = df.assign(_pref=df["tag"].map(pref).fillna(99))
+    df = df.sort_values(["ticker", "end", "filed", "_pref"], ascending=[True, False, False, True])
+    return df.groupby("ticker").head(1).set_index("ticker")[cols]
+
+
 def covered(conn, tickers, as_of, metric="net_income", months=15):
     """Tickers with a `metric` figure filed in the `months` before `as_of`: usable on that date."""
     lo = (pd.Timestamp(as_of) - pd.DateOffset(months=months)).strftime("%Y-%m-%d")
