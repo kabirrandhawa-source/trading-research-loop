@@ -87,3 +87,15 @@ def test_benchmark_strategy_always_holds():
     s = BenchmarkSPY()
     assert s.entry(bars([100])) == 1 and s.exit(bars([100]), {"side": 1}) is False
     assert s.size(100_000, 500) == 19                       # 9.5% of $100k at $500 = 19 shares
+
+
+def test_heartbeat_alerts_loudly_when_orders_are_blocked(monkeypatch):
+    sent = []
+    monkeypatch.setattr(run_daily.alerts, "send", lambda *a, **k: sent.append(a))
+    base = {"date": "2026-10-15", "strategies": 0, "skipped": [], "no_action": 0}
+    run_daily.heartbeat({**base, "orders": ["blocked", "blocked"],
+                         "blocked": ["Claude sleeve v2: buy 6 DIA", "Claude sleeve v2: buy 45 XLF"]})
+    title, msg, priority = sent[-1][:3]
+    assert "2 order(s) BLOCKED" in title and priority == "high" and "buy 45 XLF" in msg
+    run_daily.heartbeat({**base, "orders": ["submitted"]})
+    assert sent[-1][0] == "Daily run OK 2026-10-15" and sent[-1][2] == "low"

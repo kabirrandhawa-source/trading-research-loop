@@ -272,8 +272,10 @@ def run_sleeve(client, a, taken_symbols, summary, sleeve="v1", positions=None, c
             return {"status": "dry run"}
         res = sleeve_exec.run(client, a.today, prices, prices[cfg["benchmark"]], conflicts=taken_symbols,
                               sleeve=sleeve, positions=positions, committed_sells=committed_sells)
-        for _, _, _, decision in res.get("orders", []):
+        for sym, side, qty, decision in res.get("orders", []):
             summary["orders"].append(decision)
+            if decision == "blocked":
+                summary.setdefault("blocked", []).append(f"{label}: {side} {qty:g} {sym}")
         return res
     except Exception as e:
         journal.log({"event": "sleeve_failed", **tag, "error": f"{type(e).__name__}: {e}"})
@@ -299,6 +301,13 @@ def heartbeat(summary):
     msg = ", ".join(parts)
     if summary["skipped"]:
         msg += "\nSkipped: " + "; ".join(summary["skipped"])
+    blocked = orders.count("blocked")
+    if blocked:
+        # A run with blocked orders is not "OK": say so loudly, whichever strategy or slice sent them.
+        msg = "; ".join(summary.get("blocked", [])) + "\n" + msg
+        alerts.send(f"Daily run {summary['date']}: {blocked} order(s) BLOCKED by kill switch", msg, "high",
+                    ["no_entry"])
+        return
     alerts.send(f"Daily run OK {summary['date']}", msg, "low", ["white_check_mark"])
 
 

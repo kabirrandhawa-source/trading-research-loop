@@ -71,7 +71,7 @@ def test_heartbeat_mentions_blocks_and_halt(captured, monkeypatch, tmp_path):
     run_daily.heartbeat({"date": "2026-10-13", "strategies": 2, "orders": ["submitted", "blocked"],
                          "skipped": ["QQQ: order still open"], "no_action": 0})
     (title, prio), = captured
-    assert prio == "low" and "2026-10-13" in title
+    assert prio == "high" and "2026-10-13" in title and "BLOCKED" in title   # a blocked order is never "OK"
 
 
 def test_second_run_exits_while_first_holds_lock(captured, monkeypatch, tmp_path):
