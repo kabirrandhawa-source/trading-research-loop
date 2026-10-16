@@ -5,17 +5,15 @@ current: add a line when something is started or promised, remove it when it's d
 newest first within each section. Results live in the ledger and journal, not here.
 
 ## Waiting on Kabir
-- 2026-10-16: Kill switch blocked ALL 4 sleeve-v2 orders on Oct 15 ("Too many open positions": limit 5 in
-  config/risk.json; SPY + v1's 4 = 5). Any non-reducing buy is blocked, so v1 can't add either. Kabir said fix it (Oct 16).
-  He edits config/risk.json himself (agents can't): max_open_positions 5 -> 14 (SPY 1 + v1 4 + v2 4 + Moby 5). The Oct 15
-  summary wrongly said "no blocks"/"sent 4 buys" (not edited; past journal). Block alert DONE (13f0764):
-  any blocked order now sends a high "BLOCKED" alert instead of "Daily run OK".
 - 2026-10-15: Switch the scheduled tasks "Trading loop: daily run", "Trading loop: Sunday critic" and
   "Trading loop: 2-week check-in" to Auto mode (Scheduled sidebar > task > edit). The Oct 14 daily run
   sat waiting for a permission approval on its first command (desk.status) for 26 hours, which blocked
   the Oct 15 run; Friday stopped it on Oct 15. Then click Run now on the daily run once.
 
 ## Scheduled / in progress
+- 2026-10-16: Kabir raised max_open_positions 5 -> 14 in config/risk.json (verified: kill switch passes a
+  6th position). Oct 15 v2 orders were blocked, so v2 starts trading with tonight's decision (fills Oct 19);
+  note the lost day when scoring h10. Blocked orders now send a high alert (13f0764).
 - 2026-10-15 onward: Moby picks slice (hypothesis 13, forward_test, prediction locked), $10k, 20% per pick,
   newest 5, held to Moby sell / target / 26 weeks; score ~2027-04-15. First pick CDE (Coeur Mining), buys at the
   Oct 16 17:00 run, fills Oct 19 open. When Kabir forwards a new Moby pick or sell, record it:
