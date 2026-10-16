@@ -144,7 +144,7 @@ def order_alert(rec):
 def run(a):
     """One daily pass. Returns a summary dict."""
     summary = {"date": a.today, "strategies": 0, "orders": [], "skipped": [], "no_action": 0}
-    refresh_data(universe())
+    refresh_data(universe() + sleeve_symbols())
     conn = ledger.connect()
     strategies = promoted(conn)
     summary["strategies"] = len(strategies)
@@ -211,7 +211,41 @@ def run(a):
     sold = {}
     summary["sleeve"] = run_sleeve(client, a, taken, summary, sleeve="v1", positions=held, committed_sells=sold)
     summary["sleeve_v2"] = run_sleeve(client, a, taken, summary, sleeve="v2", positions=held, committed_sells=sold)
+    summary["sleeve_moby"] = run_moby(client, a, taken, summary, held, sold)
     return summary
+
+
+def sleeve_symbols():
+    """Stocks a slice holds that aren't in universe.txt (e.g. Moby picks), so their prices refresh too."""
+    from sleeve import book as sleeve_book
+    out = set()
+    for k in sleeve_book.SLEEVES:
+        try:
+            out |= set(sleeve_book.config(sleeve=k)["universe"])
+        except FileNotFoundError:
+            pass
+    return sorted(out - set(universe()))
+
+
+def run_moby(client, a, taken, summary, held, sold):
+    """Moby picks slice (hypothesis 13): code writes today's decision from the picks list, then executes it."""
+    from sleeve import book as sleeve_book
+    from sleeve import picks as moby
+    try:
+        cfg = sleeve_book.config(sleeve="moby")
+    except FileNotFoundError:
+        return None
+    if not cfg["universe"]:
+        return {"status": "no picks yet"}
+    try:
+        prices = {s: float(backtest.load_prices(DATA / f"{s}.csv")["close"].iloc[-1]) for s in cfg["universe"]}
+        if not a.dry_run:
+            moby.write_today_decision(a.today, prices, cfg)
+    except Exception as e:
+        journal.log({"event": "sleeve_failed", "strategy": "moby_sleeve", "error": f"{type(e).__name__}: {e}"})
+        alerts.send("Moby picks slice failed", f"{type(e).__name__}: {e}"[:300], "high", ["warning"])
+        return {"status": "failed"}
+    return run_sleeve(client, a, taken, summary, sleeve="moby", positions=held, committed_sells=sold)
 
 
 def run_sleeve(client, a, taken_symbols, summary, sleeve="v1", positions=None, committed_sells=None):

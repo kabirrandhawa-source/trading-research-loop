@@ -8,6 +8,7 @@ must not trade a sleeve's symbols (execute.run pauses the sleeve if one does).
 Sleeves (v1 is the default everywhere; its folder, name and version never change):
     v1: paper/claude_sleeve,    strategy "claude_sleeve" v1    (hypothesis 7)
     v2: paper/claude_sleeve_v2, strategy "claude_sleeve_v2" v1 (hypothesis 10)
+    moby: paper/moby_sleeve,    strategy "moby_sleeve" v1      (hypothesis 13; picks rule in sleeve.picks, no Claude judgment)
 """
 import json
 from pathlib import Path
@@ -20,6 +21,8 @@ SLEEVES = {
            "prediction_version": "claude-sleeve-v1", "label": "Claude sleeve"},
     "v2": {"dir": ROOT / "paper" / "claude_sleeve_v2", "name": "claude_sleeve_v2", "version": "1", "hypothesis": 10,
            "prediction_version": "claude-sleeve-v2", "label": "Claude sleeve v2"},
+    "moby": {"dir": ROOT / "paper" / "moby_sleeve", "name": "moby_sleeve", "version": "1", "hypothesis": 13,
+             "prediction_version": "moby-sleeve-v1", "label": "Moby picks"},
 }
 DEFAULT = "v1"
 NAMES = {s["name"] for s in SLEEVES.values()}

@@ -1,0 +1,14 @@
+{
+  "name": "Moby picks slice",
+  "approved_by": "Kabir, in chat, 2026-10-15",
+  "budget": 10000,
+  "universe": [
+    "CDE"
+  ],
+  "long_only": true,
+  "max_positions": 5,
+  "max_position_pct_of_sleeve": 20,
+  "min_trade_dollars": 200,
+  "evaluation_weeks": 26,
+  "benchmark": "SPY"
+}

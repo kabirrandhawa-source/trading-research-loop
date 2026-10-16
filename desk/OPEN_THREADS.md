@@ -11,6 +11,10 @@ newest first within each section. Results live in the ledger and journal, not he
   the Oct 15 run; Friday stopped it on Oct 15. Then click Run now on the daily run once.
 
 ## Scheduled / in progress
+- 2026-10-15 onward: Moby picks slice (hypothesis 13, forward_test, prediction locked), $10k, 20% per pick,
+  newest 5, held to Moby sell / target / 26 weeks; score ~2027-04-15. First pick CDE (Coeur Mining), buys at the
+  Oct 16 17:00 run, fills Oct 19 open. When Kabir forwards a new Moby pick or sell, record it:
+  `.venv/bin/python -m sleeve.picks add <SYM> --date <pick date> [--target <price>] --note "..."` (or `close`).
 - 2026-10-15: Learning loop added (Kabir yes): daily summary carries a v1/v2/SPY SCOREBOARD line and stages
   paper/claude_sleeve_v2/; Sunday critic scores both sleeves, reviews each decision (right for the reason /
   luck / wrong) and writes one ledger lesson per sleeve (h7, h10). Improvements go to a future v3, never
