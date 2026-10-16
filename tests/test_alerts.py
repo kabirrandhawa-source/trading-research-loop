@@ -99,3 +99,17 @@ def test_repeats_are_suppressed_but_urgent_always_sent(tmp_path, monkeypatch):
     alerts.send("Daily run FAILED", "y", "urgent", journal_dir=tmp_path, state_path=st)
     assert sent == ["Recorder stalled", "Daily run FAILED", "Daily run FAILED"]
     assert "suppressed" in r
+
+
+@pytest.mark.real_imessage
+def test_imessage_only_for_high_and_urgent(monkeypatch):
+    calls = []
+    monkeypatch.setattr(alerts.subprocess, "run",
+                        lambda args, **k: calls.append(args) or SimpleNamespace(returncode=0, stderr=""))
+    monkeypatch.setattr(alerts.sys, "platform", "darwin")
+    monkeypatch.delenv("SMS_TO", raising=False)
+    assert "skipped" in alerts._imessage("t", "m", "urgent")
+    monkeypatch.setenv("SMS_TO", "+15550000000")
+    assert "skipped" in alerts._imessage("t", "m", "default")
+    assert alerts._imessage("Daily run FAILED", "boom", "urgent") == "ok"
+    assert len(calls) == 1 and calls[0][-2] == "+15550000000" and "Daily run FAILED" in calls[0][-1]
