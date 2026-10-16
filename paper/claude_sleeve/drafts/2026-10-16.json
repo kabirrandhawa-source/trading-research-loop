@@ -1,0 +1,16 @@
+{
+ "date": "2026-10-16",
+ "targets": {
+  "QQQ": 35.6,
+  "DIA": 26.1,
+  "XLV": 19.5,
+  "XLE": 9.6
+ },
+ "reasoning": "Hold the positions exactly as they filled, with no rebalancing trades. Tech had a rough week (QQQ -5.5%, XLK -7.7%, both now below their 20- and 50-day averages), so I am deliberately not topping QQQ back up to 40%, but two days in is too early to sell a core holding after a pullback. Health care and energy, the two trend picks, are both still above their averages and outperformed SPY this week. Leaving about 9% in cash costs little and avoids paying to trade on one week of noise.",
+ "per_symbol": {
+  "QQQ": "Core growth holding; weak week and below both averages, so hold but don't add.",
+  "DIA": "Low-volatility blue-chip core (9.4% vol), held up well (+0.6% this week vs SPY -2.0%).",
+  "XLV": "Still the steadiest trend: +9.9% over 60 days, above both averages.",
+  "XLE": "Strongest momentum in the universe (+15.6% over 60 days, +2.5% today); stays small given 22% volatility."
+ }
+}
