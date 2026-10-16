@@ -1,0 +1,246 @@
+{
+  "version": "v1",
+  "params": {
+    "asia": [
+      "00:00",
+      "07:00"
+    ],
+    "watch": [
+      "08:00",
+      "10:00"
+    ],
+    "signal_tf": "15min",
+    "min_body": 0.5,
+    "target_r": 2.0,
+    "flat_at": "16:30",
+    "min_coverage": 0.8
+  },
+  "slippage_pts": {
+    "DAX": 0.5,
+    "UK100": 0.5
+  },
+  "sealed_start": "2024-01-30",
+  "symbols": {
+    "DAX": {
+      "summary": {
+        "trades": 1371,
+        "mean_r": -0.05682296878399783,
+        "t_stat": -1.6002840956241802,
+        "win_rate": 0.3486506199854121,
+        "total_r": -77.90429020286103,
+        "max_drawdown_r": -115.14139615814614,
+        "longest_losing_streak": 11,
+        "exits": {
+          "stop": 839,
+          "target": 357,
+          "time": 175
+        },
+        "sharpe_per_trade": -0.043219363001158334
+      },
+      "by_year": {
+        "2013": {
+          "trades": 33,
+          "mean_r": -0.1,
+          "total_r": -3.3
+        },
+        "2014": {
+          "trades": 185,
+          "mean_r": 0.153,
+          "total_r": 28.2
+        },
+        "2015": {
+          "trades": 27,
+          "mean_r": 0.176,
+          "total_r": 4.8
+        },
+        "2018": {
+          "trades": 142,
+          "mean_r": -0.102,
+          "total_r": -14.4
+        },
+        "2019": {
+          "trades": 184,
+          "mean_r": -0.188,
+          "total_r": -34.7
+        },
+        "2020": {
+          "trades": 177,
+          "mean_r": 0.059,
+          "total_r": 10.5
+        },
+        "2021": {
+          "trades": 193,
+          "mean_r": -0.144,
+          "total_r": -27.7
+        },
+        "2022": {
+          "trades": 200,
+          "mean_r": -0.003,
+          "total_r": -0.5
+        },
+        "2023": {
+          "trades": 213,
+          "mean_r": -0.165,
+          "total_r": -35.1
+        },
+        "2024": {
+          "trades": 17,
+          "mean_r": -0.327,
+          "total_r": -5.6
+        }
+      },
+      "skipped_days": {
+        "asia_gaps": 881,
+        "no_signal": 406
+      },
+      "first_day": "2013-09-30",
+      "last_day": "2024-01-29",
+      "median_spread_at_entry": 1.0060000000012224
+    },
+    "UK100": {
+      "summary": {
+        "trades": 1481,
+        "mean_r": -0.1255470057930373,
+        "t_stat": -3.7691993144712628,
+        "win_rate": 0.3416610398379473,
+        "total_r": -185.9351155794882,
+        "max_drawdown_r": -198.18261294247486,
+        "longest_losing_streak": 13,
+        "exits": {
+          "stop": 923,
+          "target": 344,
+          "time": 214
+        },
+        "sharpe_per_trade": -0.0979425877116317
+      },
+      "by_year": {
+        "2013": {
+          "trades": 101,
+          "mean_r": -0.017,
+          "total_r": -1.8
+        },
+        "2014": {
+          "trades": 198,
+          "mean_r": -0.117,
+          "total_r": -23.2
+        },
+        "2015": {
+          "trades": 36,
+          "mean_r": -0.18,
+          "total_r": -6.5
+        },
+        "2018": {
+          "trades": 145,
+          "mean_r": -0.002,
+          "total_r": -0.3
+        },
+        "2019": {
+          "trades": 214,
+          "mean_r": -0.025,
+          "total_r": -5.3
+        },
+        "2020": {
+          "trades": 187,
+          "mean_r": 0.005,
+          "total_r": 0.9
+        },
+        "2021": {
+          "trades": 181,
+          "mean_r": -0.256,
+          "total_r": -46.4
+        },
+        "2022": {
+          "trades": 200,
+          "mean_r": -0.23,
+          "total_r": -46.0
+        },
+        "2023": {
+          "trades": 202,
+          "mean_r": -0.273,
+          "total_r": -55.2
+        },
+        "2024": {
+          "trades": 17,
+          "mean_r": -0.134,
+          "total_r": -2.3
+        }
+      },
+      "skipped_days": {
+        "asia_gaps": 915,
+        "no_signal": 390
+      },
+      "first_day": "2013-01-01",
+      "last_day": "2024-01-29",
+      "median_spread_at_entry": 1.0039999999999054
+    }
+  },
+  "pooled": {
+    "summary": {
+      "trades": 2852,
+      "mean_r": -0.09251031058287139,
+      "t_stat": -3.8062000301896086,
+      "win_rate": 0.3450210378681627,
+      "total_r": -263.8394057823492,
+      "max_drawdown_r": -304.988203850637,
+      "longest_losing_streak": 13,
+      "exits": {
+        "stop": 1762,
+        "target": 701,
+        "time": 389
+      },
+      "sharpe_per_trade": -0.07127165567362533
+    },
+    "by_year": {
+      "2013": {
+        "trades": 134,
+        "mean_r": -0.038,
+        "total_r": -5.1
+      },
+      "2014": {
+        "trades": 383,
+        "mean_r": 0.013,
+        "total_r": 5.0
+      },
+      "2015": {
+        "trades": 63,
+        "mean_r": -0.027,
+        "total_r": -1.7
+      },
+      "2018": {
+        "trades": 287,
+        "mean_r": -0.051,
+        "total_r": -14.7
+      },
+      "2019": {
+        "trades": 398,
+        "mean_r": -0.1,
+        "total_r": -39.9
+      },
+      "2020": {
+        "trades": 364,
+        "mean_r": 0.031,
+        "total_r": 11.4
+      },
+      "2021": {
+        "trades": 374,
+        "mean_r": -0.198,
+        "total_r": -74.1
+      },
+      "2022": {
+        "trades": 400,
+        "mean_r": -0.116,
+        "total_r": -46.5
+      },
+      "2023": {
+        "trades": 415,
+        "mean_r": -0.218,
+        "total_r": -90.4
+      },
+      "2024": {
+        "trades": 34,
+        "mean_r": -0.23,
+        "total_r": -7.8
+      }
+    }
+  }
+}
