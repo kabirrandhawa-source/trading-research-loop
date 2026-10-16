@@ -1,0 +1,5 @@
+{"timestamp": "2026-10-16T01:07:37.702266+00:00", "event": "alert", "title": "Kalshi stream down", "priority": "high", "channels": {"mac": "ok", "ntfy": "ok"}}
+{"timestamp": "2026-10-16T01:18:21.278290+00:00", "event": "alert", "title": "Kalshi stream recovered", "priority": "default", "channels": {"mac": "ok", "ntfy": "ok"}}
+{"timestamp": "2026-10-16T05:26:23.945051+00:00", "event": "alert", "title": "Kalshi stream down", "priority": "high", "channels": {"mac": "ok", "ntfy": "ok"}}
+{"timestamp": "2026-10-16T05:41:02.041124+00:00", "event": "alert", "title": "Kalshi stream recovered", "priority": "default", "channels": {"mac": "ok", "ntfy": "ok"}}
+{"timestamp": "2026-10-16T12:20:52.605333+00:00", "event": "alert", "title": "Morning brief Oct 16", "priority": "default", "channels": {"mac": "ok", "ntfy": "ok"}}
