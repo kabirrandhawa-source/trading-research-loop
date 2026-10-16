@@ -1,0 +1,11 @@
+{
+ "date": "2026-10-16",
+ "targets": {"DIA": 35.0, "XLF": 25.0, "XLE": 20.0, "QQQ": 20.0},
+ "reasoning": "Holding yesterday's targets: nothing changed the thesis, and a day-two reversal would just pay trading costs. Today backed the tilt: tech fell again (XLK -3.0%, QQQ -2.5%, SPY -1.1%) while XLE rose 2.5%, and inflation data stayed hot (September import prices +1.1% vs +0.8% expected; CPI +0.6% m/m last week), with a hike still possible at the Oct 27-28 FOMC. The SEC sector fundamentals still drove the tilt (XLF P/E ~8 with net income +47%, 93% coverage; XLE P/E ~10 with net income +168%; XLV's rally isn't backed by earnings, net income -41%, P/E ~57), and the desk ledger still says timing rules failed, so this stays a medium-term allocation. TradingView calendar, the morning brief and crypto (BTC flat on the week, funding mildly positive, so risk appetite is neutral) were used; TimesFM has no current file and failed its test, and the context shows v2 with no holdings yet even though yesterday's 4 buys were sent, so the 17:00 job's book is the source of truth.",
+ "per_symbol": {
+  "DIA": "Low-volatility broad core with less AI concentration than SPY; still above its 20-day average.",
+  "XLF": "Cheapest sector by P/E with strong filed earnings growth; held up today (+0.45%).",
+  "XLE": "Strongest fundamentals and trend (+15.6% over 60 days); hedges hot inflation and high fuel prices.",
+  "QQQ": "Keeps 20% growth exposure (XLK revenue +42%) so a tech rebound after a -5.5% week doesn't leave the sleeve far behind SPY."
+ }
+}
