@@ -1,0 +1,16 @@
+{
+ "date": "2026-10-19",
+ "targets": {
+  "DIA": 35.0,
+  "XLF": 25.0,
+  "XLE": 20.0,
+  "QQQ": 20.0
+ },
+ "reasoning": "Holding the same targets for a third day: the thesis hasn't changed and the first fills only arrived at today's open, so switching now would just pay costs. The SEC sector fundamentals still drive the tilt (XLF P/E ~8 with net income +47%, 93% coverage; XLE P/E ~10 with net income +168%; XLV's net income is -41% at P/E ~57), and the desk ledger still shows that short-term timing rules failed, so this stays a medium-term allocation. Today tech bounced (QQQ +1.2%, XLK +1.4%) while XLE and XLF gave back under 1%; the 20% QQQ stake is there for exactly that kind of rebound. TradingView shows a light macro week (housing data, with NAHB at 29 vs 32 expected; claims Thursday; flash PMIs Friday) and big earnings from NFLX, TSLA and META, none of which is a reason to rotate before the Oct 27-28 FOMC. I used the morning brief and crypto (BTC flat on the week, funding mildly positive, so risk appetite is neutral); TimesFM has no current file and failed its test. The book still shows cash with DIA/XLE/XLF orders pending and no QQQ order, so the 17:00 job's reconciliation is the source of truth.",
+ "per_symbol": {
+  "DIA": "Low-volatility broad core with less AI concentration than SPY; still above its 20-day average.",
+  "XLF": "Cheapest sector by P/E with strong filed earnings growth; bank earnings season so far hasn't broken the case.",
+  "XLE": "Best fundamentals and trend (+14% over 60 days, above its 20- and 50-day averages); hedges hot inflation.",
+  "QQQ": "Keeps 20% in growth (XLK revenue +42%) so a tech rebound like today's doesn't leave the sleeve far behind SPY."
+ }
+}
