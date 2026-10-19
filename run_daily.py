@@ -201,17 +201,21 @@ def run(a):
         print(sym, action, order_side, n, rec["decision"], rec.get("risk_check"))
         summary["orders"].append(rec["decision"])
         order_alert(rec)
-    # Claude sleeves, v1 first. Only NON-sleeve strategies count as symbol clashes; sibling sleeves may
-    # share ETFs (each book is built from its own fills). Account positions + sells already sent this
-    # run cap every sleeve sell, because broker._reduces only sees the account-wide position.
+    # Paper slices (v1, v2, moby), two phases. 1: each slice plans its orders (v1 first). Only NON-sleeve
+    # strategies count as symbol clashes; sibling slices may share ETFs (each book is built from its own
+    # fills). Account positions + sells already planned this run cap every slice sell, because
+    # broker._reduces only sees the account-wide position. 2: send; a symbol several slices trade gets
+    # one net order (sleeve.execute.execute_plans), so opposite slice orders can't trip Alpaca's
+    # wash-trade rejection.
     taken = {}
     for h, s in strategies:
         taken.setdefault(h.get("benchmark") or f"hypothesis {h['id']}", []).append(s)
     held = {sym: float(p.qty) for sym, p in positions.items()}
-    sold = {}
-    summary["sleeve"] = run_sleeve(client, a, taken, summary, sleeve="v1", positions=held, committed_sells=sold)
-    summary["sleeve_v2"] = run_sleeve(client, a, taken, summary, sleeve="v2", positions=held, committed_sells=sold)
-    summary["sleeve_moby"] = run_moby(client, a, taken, summary, held, sold)
+    sold, cache = {}, {}
+    plans = {"sleeve": plan_sleeve(client, a, taken, "v1", held, sold, cache),
+             "sleeve_v2": plan_sleeve(client, a, taken, "v2", held, sold, cache),
+             "sleeve_moby": plan_moby(client, a, taken, held, sold, cache)}
+    summary.update(finish_slices(client, summary, plans))
     return summary
 
 
@@ -227,8 +231,8 @@ def sleeve_symbols():
     return sorted(out - set(universe()))
 
 
-def run_moby(client, a, taken, summary, held, sold):
-    """Moby picks slice (hypothesis 13): code writes today's decision from the picks list, then executes it."""
+def plan_moby(client, a, taken, held, sold, cache=None):
+    """Moby picks slice (hypothesis 13): code writes today's decision from the picks list, then plans it."""
     from sleeve import book as sleeve_book
     from sleeve import picks as moby
     try:
@@ -245,12 +249,17 @@ def run_moby(client, a, taken, summary, held, sold):
         journal.log({"event": "sleeve_failed", "strategy": "moby_sleeve", "error": f"{type(e).__name__}: {e}"})
         alerts.send("Moby picks slice failed", f"{type(e).__name__}: {e}"[:300], "high", ["warning"])
         return {"status": "failed"}
-    return run_sleeve(client, a, taken, summary, sleeve="moby", positions=held, committed_sells=sold)
+    return plan_sleeve(client, a, taken, "moby", held, sold, cache)
 
 
-def run_sleeve(client, a, taken_symbols, summary, sleeve="v1", positions=None, committed_sells=None):
-    """A Claude discretionary sleeve (v1 = hypothesis 7, v2 = hypothesis 10): code executes Claude's
-    validated decision. `taken_symbols`: {non-sleeve strategy: [symbols]} (or a plain list)."""
+def run_moby(client, a, taken, summary, held, sold):
+    return finish_slices(client, summary, {"moby": plan_moby(client, a, taken, held, sold)})["moby"]
+
+
+def plan_sleeve(client, a, taken_symbols, sleeve="v1", positions=None, committed_sells=None, cache=None):
+    """Phase 1 for a Claude sleeve (v1 = hypothesis 7, v2 = hypothesis 10) or the Moby slice: reconcile and
+    plan Claude's validated decision without sending anything. `taken_symbols`: {non-sleeve strategy:
+    [symbols]} (or a plain list). Returns None (no config), a final result, or a plan for finish_slices."""
     from sleeve import book as sleeve_book
     from sleeve import execute as sleeve_exec
     label = sleeve_book.info(sleeve)["label"]
@@ -270,17 +279,54 @@ def run_sleeve(client, a, taken_symbols, summary, sleeve="v1", positions=None, c
             return {"status": "stale prices"}
         if a.dry_run:
             return {"status": "dry run"}
-        res = sleeve_exec.run(client, a.today, prices, prices[cfg["benchmark"]], conflicts=taken_symbols,
-                              sleeve=sleeve, positions=positions, committed_sells=committed_sells)
-        for sym, side, qty, decision in res.get("orders", []):
-            summary["orders"].append(decision)
-            if decision == "blocked":
-                summary.setdefault("blocked", []).append(f"{label}: {side} {qty:g} {sym}")
-        return res
+        return sleeve_exec.prepare(client, a.today, prices, prices[cfg["benchmark"]], conflicts=taken_symbols,
+                                   sleeve=sleeve, positions=positions, committed_sells=committed_sells,
+                                   order_cache=cache)
     except Exception as e:
         journal.log({"event": "sleeve_failed", **tag, "error": f"{type(e).__name__}: {e}"})
         alerts.send(f"{label} failed", f"{type(e).__name__}: {e}"[:300], "high", ["warning"])
         return {"status": "failed"}
+
+
+def finish_slices(client, summary, plans):
+    """Phase 2: send every planned slice's orders together (netting shared symbols) and fill in the summary.
+    `plans`: {key: plan_sleeve result}. Returns {key: result} in the shape run_sleeve always returned."""
+    from sleeve import execute as sleeve_exec
+    ready = [p for p in plans.values() if p and p.get("status") == "planned"]
+    nets = []
+    try:
+        nets = sleeve_exec.execute_plans(client, ready) if ready else []
+    except Exception as e:
+        journal.log({"event": "sleeve_failed", "strategy": sleeve_exec.NET_NAME, "error": f"{type(e).__name__}: {e}"})
+        alerts.send("Paper slices failed while sending orders", f"{type(e).__name__}: {e}"[:300], "high", ["warning"])
+    out = {}
+    for k, p in plans.items():
+        if not (p and p.get("status") == "planned"):
+            out[k] = p
+            continue
+        res = p.get("result") or {"status": "failed"}
+        for sym, side, qty, decision in res.get("orders", []):
+            if str(decision).startswith("netted"):
+                continue                       # counted once, as the net order below
+            summary["orders"].append(decision)
+            if decision == "blocked":
+                summary.setdefault("blocked", []).append(f"{p['label']}: {side} {qty:g} {sym}")
+        out[k] = res
+    for n in nets:
+        if n["decision"] == "offset":
+            continue                           # slices' orders cancelled out: nothing sent
+        summary["orders"].append(n["decision"])
+        if n["decision"] == "blocked":
+            summary.setdefault("blocked", []).append(f"Slices net: {n['side']} {n['qty']:g} {n['symbol']} ({n['slices']})")
+    if nets:
+        summary["slices_net"] = nets
+    return out
+
+
+def run_sleeve(client, a, taken_symbols, summary, sleeve="v1", positions=None, committed_sells=None):
+    """One slice planned and sent on its own (no netting partner)."""
+    return finish_slices(client, summary, {sleeve: plan_sleeve(client, a, taken_symbols, sleeve, positions,
+                                                               committed_sells)})[sleeve]
 
 
 def heartbeat(summary):
