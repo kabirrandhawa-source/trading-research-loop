@@ -13,9 +13,13 @@ newest first within each section. Results live in the ledger and journal, not he
   the Oct 15 run; Friday stopped it on Oct 15. Then click Run now on the daily run once.
 
 ## Scheduled / in progress
+- 2026-10-19: Crypto forward recorder LIVE (Kabir yes): launchd crypto-forward, hourly, data/crypto/forward.db
+  (Kraken funding/mark/index for 5 coins + Coinbase spot; Coinbase Intl frozen since Oct 1, kept as a check).
+  h14 re-test needs ~3+ months of forward data (earliest ~2027-01); not sealed (recorded after the split).
 - 2026-10-19: Same-symbol slice orders now netted into one "slices_net" order per symbol (eaf9f33, 179 tests).
   Crossed shares booked for both sides at the net fill price (decision close if no fill). First live use
-  Oct 19 17:00 run: Friday to check that night's journal (slice_intent + slices_net) and books.
+  Oct 19 17:00: v1 +1 QQQ and v2 +2 QQQ sent as ONE "slices_net" buy of 3 (worked). Watch: v1 sold 1 QQQ Oct 16
+  and bought it back Oct 19 (1-share rebalancing churn; flag to the Sunday critic, no mid-test change).
 - 2026-10-16 to 2026-10-30: ALPHA SPRINT (Kabir yes). Replaces random daily ideas; evening run's research is
   paused until Oct 30. Four leads: Kalshi market making (h8, Oct 27), crypto funding carry, S&P 500 momentum
   (+quality), post-earnings drift from filed EPS. Flow per lead: skeptic -> locked prediction -> ONE dev
@@ -25,7 +29,7 @@ newest first within each section. Results live in the ledger and journal, not he
   -0.2%/yr t -0.05, sector-neutral alpha -2.7%/yr. Screen dropped 23% of picks for missing fundamentals
   (dead firms unmatched to SEC, GOOGL/META stored as GOOG/FB, AAPL OCF gaps) = survivor bias. Next sprint
   steps (proposed to Kabir): fix stock-fundamentals ticker mapping + gaps; fetch free EDGAR 8-K 2.02 dates
-  (unblocks h16); forward-record crypto funding/basis (h14, new background job = his call); h8 on Oct 27.
+  (unblocks h16); forward-record crypto funding/basis (h14: LIVE since Oct 19); h8 on Oct 27.
   latest() stale-year bug is minor (0.1-0.5%) and v2 doesn't call it: no decision needed.
   Kabir has many ideas of his own: queue them in the ledger, test after the sprint unless one fits it.
 - 2026-10-16: Texts work: high/urgent alerts also go by iMessage to SMS_TO (config/.env), test text received.
