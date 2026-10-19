@@ -1,0 +1,19 @@
+{
+ "cash": 10000.0,
+ "holdings": {},
+ "pending": [
+  {
+   "order_id": "da274d4c-f621-4438-a17e-55943e52415c",
+   "symbol": "CDE",
+   "side": "buy",
+   "qty": 129
+  }
+ ],
+ "history": [
+  {
+   "day": "2026-10-16",
+   "value": 10000.0,
+   "spy_close": 763.25
+  }
+ ]
+}

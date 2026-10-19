@@ -1,12 +1,36 @@
 {
  "cash": 10000.0,
  "holdings": {},
- "pending": [],
+ "pending": [
+  {
+   "order_id": "5122ec36-2237-4571-a776-94514f9a077e",
+   "symbol": "DIA",
+   "side": "buy",
+   "qty": 6
+  },
+  {
+   "order_id": "9c56a0c9-5c0c-42d7-8f78-bf4690488dcd",
+   "symbol": "XLE",
+   "side": "buy",
+   "qty": 29
+  },
+  {
+   "order_id": "6a1c25d6-5c27-4ec8-bc6c-bcddc4a408a9",
+   "symbol": "XLF",
+   "side": "buy",
+   "qty": 45
+  }
+ ],
  "history": [
   {
    "day": "2026-10-15",
    "value": 10000.0,
    "spy_close": 771.79
+  },
+  {
+   "day": "2026-10-16",
+   "value": 10000.0,
+   "spy_close": 763.25
   }
  ]
 }

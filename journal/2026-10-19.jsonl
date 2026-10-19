@@ -1,0 +1,3 @@
+{"timestamp": "2026-10-19T04:18:59.474465+00:00", "event": "alert", "title": "Kalshi stream down", "priority": "high", "channels": {"mac": "ok", "ntfy": "ok"}}
+{"timestamp": "2026-10-19T05:50:15.064399+00:00", "event": "alert", "title": "Kalshi stream recovered", "priority": "default", "channels": {"mac": "ok", "ntfy": "ok"}}
+{"timestamp": "2026-10-19T12:30:28.680644+00:00", "event": "alert", "title": "Morning brief Oct 19", "priority": "default", "channels": {"mac": "ok", "ntfy": "ok", "text": "skipped (priority below high)"}}

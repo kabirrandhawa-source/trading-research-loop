@@ -1,0 +1,10 @@
+{
+ "date": "2026-10-16",
+ "targets": {
+  "CDE": 20.0
+ },
+ "reasoning": "Moby picks rule (code, not judgment): 20% of the slice in each active pick; active: CDE since 2026-10-15.",
+ "per_symbol": {
+  "CDE": "Moby's #1 stock pick (Coeur Mining), per Kabir 2026-10-15"
+ }
+}

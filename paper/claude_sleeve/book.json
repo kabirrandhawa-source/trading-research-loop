@@ -6,7 +6,14 @@
   "XLE": 14.0,
   "XLV": 11.0
  },
- "pending": [],
+ "pending": [
+  {
+   "order_id": "9a073d04-9d32-4f99-b6dd-eada1e6a05e6",
+   "symbol": "QQQ",
+   "side": "sell",
+   "qty": 1.0
+  }
+ ],
  "history": [
   {
    "day": "2026-10-14",
@@ -17,6 +24,11 @@
    "day": "2026-10-15",
    "value": 10046.55,
    "spy_close": 771.79
+  },
+  {
+   "day": "2026-10-16",
+   "value": 9963.39,
+   "spy_close": 763.25
   }
  ]
 }
