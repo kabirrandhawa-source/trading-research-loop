@@ -1,0 +1,16 @@
+{
+ "date": "2026-10-19",
+ "targets": {
+  "QQQ": 36.0,
+  "DIA": 26.0,
+  "XLV": 19.3,
+  "XLE": 9.5
+ },
+ "reasoning": "Hold exactly what I own; no trades. QQQ bounced 1.2% today after a weak week but is still below its 20- and 50-day averages, so I hold it without adding. The two trend picks, XLV and XLE, remain above both averages with strong 20- and 60-day gains, and DIA keeps the sleeve's volatility close to SPY's. Nothing in today's headlines changes the picture, and churning after three days would mostly add costs against a buy-and-hold benchmark.",
+ "per_symbol": {
+  "QQQ": "Core growth holding; bounced today but still below both averages, so hold, don't add.",
+  "DIA": "Low-volatility blue-chip core (9% vol), flat over 20 days while SPY slipped.",
+  "XLV": "Steady trend: +8.5% over 60 days, above both averages.",
+  "XLE": "Strongest momentum in the universe (+14.4% over 60 days); kept small given 20% volatility."
+ }
+}
