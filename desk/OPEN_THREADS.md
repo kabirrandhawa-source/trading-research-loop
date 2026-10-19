@@ -7,7 +7,8 @@ newest first within each section. Results live in the ledger and journal, not he
 ## Waiting on Kabir
 - 2026-10-19: STILL BLOCKING: Fri Oct 16 evening run and Sun Oct 18 critic both froze ~10s in (permission
   prompts), so no summary since Oct 15 and no weekly review. Kabir to stop both runs and set Auto mode (below).
-- 2026-10-19: Proposed fix, needs yes: net same-symbol sleeve orders within one 17:00 run. On Oct 16 v1 sold
+- 2026-10-19: Kabir YES (Oct 19): desk-quant building same-symbol order netting across slices for the 17:00 run
+  (deadline before 16:00 ET; Friday verifies before the run). On Oct 16 v1 sold
   1 QQQ and v2's buy of 2 QQQ was rejected by Alpaca ("potential wash trade", opposite-side order open).
 - 2026-10-15: Switch the scheduled tasks "Trading loop: daily run", "Trading loop: Sunday critic" and
   "Trading loop: 2-week check-in" to Auto mode (Scheduled sidebar > task > edit). The Oct 14 daily run
