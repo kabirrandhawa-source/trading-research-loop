@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.kabirrandhawa.trading-loop.crypto-forward</string>
+
+    <!-- Hourly: snapshot perp funding, mark/index and Coinbase spot for hypothesis 14 (crypto funding carry).
+         Approved by Kabir 2026-10-19. Read-only public APIs. Missed hours while asleep run once on wake. -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/kabir/trading-research-loop/.venv/bin/python</string>
+        <string>-W</string>
+        <string>ignore</string>
+        <string>-m</string>
+        <string>crypto.forward</string>
+        <string>record</string>
+    </array>
+    <key>WorkingDirectory</key>
+    <string>/Users/kabir/trading-research-loop</string>
+    <key>StartInterval</key>
+    <integer>3600</integer>
+    <key>StandardOutPath</key>
+    <string>/Users/kabir/trading-research-loop/logs/crypto_forward.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/kabir/trading-research-loop/logs/crypto_forward.log</string>
+    <key>ProcessType</key>
+    <string>Background</string>
+    <key>LowPriorityIO</key>
+    <true/>
+</dict>
+</plist>

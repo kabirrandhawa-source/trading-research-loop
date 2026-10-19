@@ -40,7 +40,8 @@ the human decide about real money. Most ideas fail; failures are recorded, not h
 | `agents/` | Prompts for research agents, Skeptic, strategy writer, backtester, critic |
 | `research/AREAS.md` | The human's standing research directions |
 | `journal/` | Decisions (`*.jsonl`), daily summaries, weekly reviews, morning briefs |
-| `launchd/` | Background jobs: daily (17:00), pm-stream, pm-recorder, pm-archive (01:15), keep-awake (caffeinate -s, AC power only) |
+| `crypto/forward.py` | Hourly forward snapshots (Kraken perp funding, mark/index, Coinbase spot) for h14, from 2026-10-19 (data/crypto/forward.db; not sealed) |
+| `launchd/` | Background jobs: daily (17:00), pm-stream, pm-recorder, pm-archive (01:15), keep-awake (caffeinate -s, AC power only), crypto-forward (hourly) |
 
 ## Commands
 - Desk status: `.venv/bin/python -m desk.status` (add `--json` for agents)
