@@ -1,0 +1,6 @@
+{"date": "2026-10-20", "targets": {"DIA": 35.0, "XLF": 25.0, "XLE": 20.0, "QQQ": 20.0},
+ "reasoning": "Holding the same targets for a fourth day: the thesis is intact and the QQQ buy (2 shares) is still waiting to fill, so changing course now would only add costs. The SEC sector fundamentals still drive the tilt (XLF P/E ~8 with net income +47% at 93% coverage; XLE P/E ~10 with net income +168%), and the tilt is working so far (+0.45 pts vs SPY over 3 days, smaller drawdown). This week's calendar is light (today: housing starts 1.221M vs 1.30M expected, mortgage rates ~7.5%, GDPNow 3.5%; Thursday claims, Friday flash PMIs), Brent near $110 still supports XLE, and chips stay weak, so I keep QQQ at a modest 20% rather than adding to tech. TimesFM had no current file (and failed its test anyway); crypto data stops at Oct 14 and was not used.",
+ "per_symbol": {"DIA": "Lower-volatility value-tilted core (vol 9.6%), above its 20- and 50-day averages.",
+   "XLF": "Cheapest sector by filed earnings (P/E ~8, net income +47%); bank earnings season so far supportive.",
+   "XLE": "Net income +168% y/y, P/E ~10, Brent near $110 and up 10% over 20 days.",
+   "QQQ": "Keeps some growth exposure so the sleeve does not drift too far from SPY; capped at 20% while chips stay weak."}}
