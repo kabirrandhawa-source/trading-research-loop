@@ -1,0 +1,11 @@
+{
+ "date": "2026-10-20",
+ "targets": {"QQQ": 36.0, "DIA": 26.0, "XLV": 19.7, "XLE": 9.5},
+ "reasoning": "Hold what I own; no new trades beyond the QQQ share still waiting to fill. Tech is the weak spot this week (QQQ -3.5%, XLK -5.5% over 5 days, both below their averages), but one bad week is not a reason to abandon the core growth holding against a SPY benchmark. XLV (+6% this week) and XLE remain above both averages, and DIA kept rising today, so the sleeve is up while SPY is roughly flat since inception. Today's headlines are company earnings with no market-wide signal.",
+ "per_symbol": {
+  "QQQ": "Core growth holding; weak week and below averages, so hold at target, don't add more.",
+  "DIA": "Low-volatility blue-chip core, +1% today and above both averages.",
+  "XLV": "Strongest steady trend: +10.5% over 60 days, above both averages.",
+  "XLE": "Momentum leader (+17% over 60 days); kept small given 19% volatility."
+ }
+}
