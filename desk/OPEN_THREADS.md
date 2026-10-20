@@ -5,13 +5,13 @@ current: add a line when something is started or promised, remove it when it's d
 newest first within each section. Results live in the ledger and journal, not here.
 
 ## Waiting on Kabir
-- 2026-10-20: The hand-started Oct 19 daily run ALSO stalled ~20s in (on a Bash call) despite Auto mode.
-  Kabir to open that session (local_83065da2...) and see what it is asking; approve with "always allow".
+- Nothing right now.
 
 ## Scheduled / in progress
 - 2026-10-19: Kabir set daily run, Sunday critic and 2-week check-in to Auto mode. Friday stopped the two frozen
   runs (Oct 16 daily, Oct 18 critic) and re-ran the Oct 19 daily run by hand (it ran without stalling).
-  Still to do: run the missed Sunday critic once the daily run has finished (avoid two git writers at once).
+  Oct 19 re-run stalled because the Mac slept (lid closed, unplugged). Oct 20: critic re-run by hand (Mac awake);
+  critic prompt now scores Moby (h13) too and may never pause h7/h10/h13. Lesson: runs need the Mac awake + plugged in.
 - 2026-10-19: Crypto forward recorder LIVE (Kabir yes): launchd crypto-forward, hourly, data/crypto/forward.db
   (Kraken funding/mark/index for 5 coins + Coinbase spot; Coinbase Intl frozen since Oct 1, kept as a check).
   h14 re-test needs ~3+ months of forward data (earliest ~2027-01); not sealed (recorded after the split).
