@@ -1,24 +1,34 @@
 {
- "cash": 10000.0,
- "holdings": {},
+ "cash": 2418.56,
+ "holdings": {
+  "DIA": 6.0,
+  "XLE": 29.0,
+  "XLF": 45.0
+ },
  "pending": [
   {
-   "order_id": "5122ec36-2237-4571-a776-94514f9a077e",
-   "symbol": "DIA",
+   "order_id": "faf76d9b-f466-4933-87c2-5ff98c3e57b8",
+   "symbol": "QQQ",
    "side": "buy",
-   "qty": 6
-  },
-  {
-   "order_id": "9c56a0c9-5c0c-42d7-8f78-bf4690488dcd",
-   "symbol": "XLE",
-   "side": "buy",
-   "qty": 29
-  },
-  {
-   "order_id": "6a1c25d6-5c27-4ec8-bc6c-bcddc4a408a9",
-   "symbol": "XLF",
-   "side": "buy",
-   "qty": 45
+   "qty": 2,
+   "net": {
+    "slice": "claude_sleeve_v2",
+    "crossed": 0,
+    "crossed_done": true,
+    "fallback_price": 718.36,
+    "alloc": [
+     [
+      "claude_sleeve",
+      1.0
+     ],
+     [
+      "claude_sleeve_v2",
+      2
+     ]
+    ],
+    "booked": 0,
+    "net_qty": 3.0
+   }
   }
  ],
  "history": [
@@ -31,6 +41,11 @@
    "day": "2026-10-16",
    "value": 10000.0,
    "spy_close": 763.25
+  },
+  {
+   "day": "2026-10-19",
+   "value": 9975.98,
+   "spy_close": 766.48
   }
  ]
 }

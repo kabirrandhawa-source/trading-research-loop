@@ -1,17 +1,35 @@
 {
- "cash": 919.72,
+ "cash": 1638.97,
  "holdings": {
   "DIA": 5.0,
-  "QQQ": 5.0,
+  "QQQ": 4.0,
   "XLE": 14.0,
   "XLV": 11.0
  },
  "pending": [
   {
-   "order_id": "9a073d04-9d32-4f99-b6dd-eada1e6a05e6",
+   "order_id": "faf76d9b-f466-4933-87c2-5ff98c3e57b8",
    "symbol": "QQQ",
-   "side": "sell",
-   "qty": 1.0
+   "side": "buy",
+   "qty": 1.0,
+   "net": {
+    "slice": "claude_sleeve",
+    "crossed": 0,
+    "crossed_done": true,
+    "fallback_price": 718.36,
+    "alloc": [
+     [
+      "claude_sleeve",
+      1.0
+     ],
+     [
+      "claude_sleeve_v2",
+      2
+     ]
+    ],
+    "booked": 0,
+    "net_qty": 3.0
+   }
   }
  ],
  "history": [
@@ -29,6 +47,11 @@
    "day": "2026-10-16",
    "value": 9963.39,
    "spy_close": 763.25
+  },
+  {
+   "day": "2026-10-19",
+   "value": 9988.36,
+   "spy_close": 766.48
   }
  ]
 }

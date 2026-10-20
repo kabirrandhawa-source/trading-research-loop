@@ -5,14 +5,13 @@ current: add a line when something is started or promised, remove it when it's d
 newest first within each section. Results live in the ledger and journal, not here.
 
 ## Waiting on Kabir
-- 2026-10-19: STILL BLOCKING: Fri Oct 16 evening run and Sun Oct 18 critic both froze ~10s in (permission
-  prompts), so no summary since Oct 15 and no weekly review. Kabir to stop both runs and set Auto mode (below).
-- 2026-10-15: Switch the scheduled tasks "Trading loop: daily run", "Trading loop: Sunday critic" and
-  "Trading loop: 2-week check-in" to Auto mode (Scheduled sidebar > task > edit). The Oct 14 daily run
-  sat waiting for a permission approval on its first command (desk.status) for 26 hours, which blocked
-  the Oct 15 run; Friday stopped it on Oct 15. Then click Run now on the daily run once.
+- 2026-10-20: The hand-started Oct 19 daily run ALSO stalled ~20s in (on a Bash call) despite Auto mode.
+  Kabir to open that session (local_83065da2...) and see what it is asking; approve with "always allow".
 
 ## Scheduled / in progress
+- 2026-10-19: Kabir set daily run, Sunday critic and 2-week check-in to Auto mode. Friday stopped the two frozen
+  runs (Oct 16 daily, Oct 18 critic) and re-ran the Oct 19 daily run by hand (it ran without stalling).
+  Still to do: run the missed Sunday critic once the daily run has finished (avoid two git writers at once).
 - 2026-10-19: Crypto forward recorder LIVE (Kabir yes): launchd crypto-forward, hourly, data/crypto/forward.db
   (Kraken funding/mark/index for 5 coins + Coinbase spot; Coinbase Intl frozen since Oct 1, kept as a check).
   h14 re-test needs ~3+ months of forward data (earliest ~2027-01); not sealed (recorded after the split).
@@ -63,6 +62,9 @@ newest first within each section. Results live in the ledger and journal, not he
 - 2026-10-14 onward: SPY benchmark (paper/benchmarks.json), 9.5% of equity, first fill at the Oct 14 open.
 - Research run is slim since 2026-10-14: one rotating agent per weekday (Mon price, Tue fundamentals,
   Wed macro, Thu literature, Fri test the week's untested idea).
+
+## Kabir's go-live plan (his decision, not before a strategy passes sealed + paper tests)
+- 2026-10-20: First real-money allocation: $1,000 total. Size limits to that when the time comes.
 
 ## Built but not yet used
 - Portfolio paper trading (many stocks, rebalancing) is NOT built: build it when the first cross-sectional
