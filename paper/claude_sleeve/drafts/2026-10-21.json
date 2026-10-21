@@ -1,0 +1,11 @@
+{
+ "date": "2026-10-21",
+ "targets": {"QQQ": 36.0, "DIA": 26.0, "XLV": 19.5, "XLE": 9.5},
+ "reasoning": "Hold what I own; current weights are already at target, so no new trades. Tech bounced today (QQQ +1.1%) but is still below its 20- and 50-day averages, which is a reason not to add, not a reason to sell the core growth holding against a SPY benchmark. DIA, XLV and XLE all remain above both averages, and the sleeve is ahead of SPY since inception. Today's headlines are company earnings (Tesla, Meta, Texas Instruments) with no market-wide signal.",
+ "per_symbol": {
+  "QQQ": "Core growth holding; bounced today but still below averages, so hold, don't add.",
+  "DIA": "Low-volatility blue-chip core, +2.4% over 5 days and above both averages.",
+  "XLV": "Steady trend: +6% over 20 days and +7% over 60, above both averages.",
+  "XLE": "Momentum leader (+19% over 60 days); kept small given 19% volatility."
+ }
+}
