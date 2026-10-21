@@ -5,7 +5,10 @@ current: add a line when something is started or promised, remove it when it's d
 newest first within each section. Results live in the ledger and journal, not here.
 
 ## Waiting on Kabir
-- Nothing right now.
+- 2026-10-21: Critic (re-run Oct 20 11:05, Mac awake) and Oct 20 daily run BOTH froze ~20s in on a Bash call with
+  inline python (python -c / heredoc) = unanswered permission prompt. Sleeve tasks (Auto) never stall, so the
+  daily run + critic tasks are likely NOT in Auto mode. Kabir to check each task's permission mode (Scheduled >
+  task > edit), then Friday re-runs the critic while he watches. No weekly review or summary since Oct 15.
 
 ## Scheduled / in progress
 - 2026-10-19: Kabir set daily run, Sunday critic and 2-week check-in to Auto mode. Friday stopped the two frozen
