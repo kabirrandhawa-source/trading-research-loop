@@ -24,7 +24,9 @@
       "mcp__ccd_session_mgmt__get_session",
       "mcp__97b85089-4c48-4d0a-8c26-d89a724b6d7a__mcp-tv-get-economic-calendar",
       "mcp__97b85089-4c48-4d0a-8c26-d89a724b6d7a__mcp-tv-get-symbol-data-batch",
-      "mcp__97b85089-4c48-4d0a-8c26-d89a724b6d7a__mcp-watchlist-list-watchlists"
+      "mcp__97b85089-4c48-4d0a-8c26-d89a724b6d7a__mcp-watchlist-list-watchlists",
+      "Bash(.venv/bin/python -W ignore -m desk.today *)",
+      "Bash(.venv/bin/python -m desk.today *)"
     ]
   }
 }
