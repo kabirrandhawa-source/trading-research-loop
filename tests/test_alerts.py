@@ -113,3 +113,13 @@ def test_imessage_only_for_high_and_urgent(monkeypatch):
     assert "skipped" in alerts._imessage("t", "m", "default")
     assert alerts._imessage("Daily run FAILED", "boom", "urgent") == "ok"
     assert len(calls) == 1 and calls[0][-2] == "+15550000000" and "Daily run FAILED" in calls[0][-1]
+
+
+def test_cli_send_routes_priority(monkeypatch, tmp_path):
+    import runpy
+    got = []
+    monkeypatch.setattr(alerts, "send", lambda t, m, p="default", tags=(), **k: got.append((t, m, p)) or {})
+    monkeypatch.setattr(sys, "argv", ["alerts.py", "send", "urgent", "Trading desk problem", "pm-stream down"])
+    src = open(alerts.__file__).read().split('if __name__ == "__main__":')[1]
+    exec("if True:" + src, {**vars(alerts), "sys": sys})
+    assert got == [("Trading desk problem", "pm-stream down", "urgent")]

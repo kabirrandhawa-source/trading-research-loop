@@ -5,12 +5,13 @@ current: add a line when something is started or promised, remove it when it's d
 newest first within each section. Results live in the ledger and journal, not here.
 
 ## Waiting on Kabir
-- 2026-10-21: Critic (re-run Oct 20 11:05, Mac awake) and Oct 20 daily run BOTH froze ~20s in on a Bash call with
-  inline python (python -c / heredoc) = unanswered permission prompt. Sleeve tasks (Auto) never stall, so the
-  daily run + critic tasks are likely NOT in Auto mode. Kabir to check each task's permission mode (Scheduled >
-  task > edit), then Friday re-runs the critic while he watches. No weekly review or summary since Oct 15.
+- Nothing right now (if the Oct 21 critic run is waiting on an approval, Kabir approves it once).
 
 ## Scheduled / in progress
+- 2026-10-21: Unattended runs stalled on inline-python permission prompts. Fix: desk.today (orders/decisions/
+  summaries) + `alerts.py send` CLI, both allowlisted; daily run + critic prompts now forbid inline code.
+  Kabir confirmed all three tasks are in Auto. Critic re-run Oct 21 got ~20 steps in, then hit one inline
+  python call (pre-fix prompt). Check tonight's 17:33 daily run finishes unattended.
 - 2026-10-19: Kabir set daily run, Sunday critic and 2-week check-in to Auto mode. Friday stopped the two frozen
   runs (Oct 16 daily, Oct 18 critic) and re-ran the Oct 19 daily run by hand (it ran without stalling).
   Oct 19 re-run stalled because the Mac slept (lid closed, unplugged). Oct 20: critic re-run by hand (Mac awake);

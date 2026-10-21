@@ -7,6 +7,7 @@ failures are written to the journal instead.
 
     python alerts.py test        # send a test alert through every channel (no text: priority default)
     python alerts.py test-text   # send one test iMessage to SMS_TO
+    python alerts.py send <low|default|high|urgent> "<title>" "<message>"   # for unattended runs
 """
 import os
 import subprocess
@@ -119,7 +120,10 @@ def send(title, message, priority="default", tags=(), journal_dir=None, state_pa
 
 
 if __name__ == "__main__":
-    if sys.argv[1:] == ["test-text"]:
+    if len(sys.argv) >= 5 and sys.argv[1] == "send" and sys.argv[2] in PRIORITIES:
+        # For unattended runs: alerts.py send <low|default|high|urgent> "<title>" "<message>"
+        print(send(sys.argv[3], sys.argv[4], sys.argv[2], ["rotating_light"] if sys.argv[2] == "urgent" else []))
+    elif sys.argv[1:] == ["test-text"]:
         print({"text": _imessage("test text", "If you got this, high and urgent alerts will text you.", "high")})
     elif sys.argv[1:] == ["test"]:
         print(send("Trading loop: test alert", "If you can read this, alerts work.", "default",

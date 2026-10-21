@@ -26,7 +26,11 @@
       "mcp__97b85089-4c48-4d0a-8c26-d89a724b6d7a__mcp-tv-get-symbol-data-batch",
       "mcp__97b85089-4c48-4d0a-8c26-d89a724b6d7a__mcp-watchlist-list-watchlists",
       "Bash(.venv/bin/python -W ignore -m desk.today *)",
-      "Bash(.venv/bin/python -m desk.today *)"
+      "Bash(.venv/bin/python -m desk.today *)",
+      "Bash(.venv/bin/python alerts.py send *)",
+      "Bash(.venv/bin/python -W ignore alerts.py send *)",
+      "Bash(.venv/bin/python -W ignore -m desk.snapshot)",
+      "Bash(.venv/bin/python ledger.py lesson *)"
     ]
   }
 }
