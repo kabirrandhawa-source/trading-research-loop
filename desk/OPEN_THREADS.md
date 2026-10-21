@@ -5,7 +5,11 @@ current: add a line when something is started or promised, remove it when it's d
 newest first within each section. Results live in the ledger and journal, not here.
 
 ## Waiting on Kabir
-- Nothing right now (if the Oct 21 critic run is waiting on an approval, Kabir approves it once).
+- 2026-10-21: Old daily-run + critic tasks PAUSED (renamed "(old, paused)"; they ran in default mode and stalled
+  on every unlisted command). Replacements created: trading-loop-evening-run (weekdays 17:30) and
+  trading-loop-sunday-critic (Sun 10:00), same prompts. Their permission mode did NOT save (created in a turn
+  triggered by a monitor event). Fix: in a turn Kabir types, Friday deletes + recreates both (mode saves), or
+  Kabir sets Auto on each. Then run the critic once.
 
 ## Scheduled / in progress
 - 2026-10-21: Unattended runs stalled on inline-python permission prompts. Fix: desk.today (orders/decisions/
