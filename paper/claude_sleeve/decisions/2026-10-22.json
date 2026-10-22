@@ -1,0 +1,16 @@
+{
+ "date": "2026-10-22",
+ "targets": {
+  "QQQ": 36.0,
+  "DIA": 26.0,
+  "XLV": 19.5,
+  "XLE": 9.5
+ },
+ "reasoning": "Hold; no trades. Tech sold off hard today (QQQ -2.9%, XLK -3.3%) while staples, utilities and bonds rallied, but one bad day is not a reason to dump the core growth holding into weakness and pay trading costs against a buy-and-hold benchmark. The rest of the book (DIA, XLV, XLE) is above its 20- and 50-day averages and cushioned the drop: the sleeve is about +0.2% since inception vs SPY about -0.7%. If QQQ keeps breaking lower over the next several days I will consider trimming it toward DIA or XLV.",
+ "per_symbol": {
+  "QQQ": "Core growth holding; -3.2% over 5 days and below averages, so hold but don't add; watch for further breakdown.",
+  "DIA": "Low-volatility blue-chip core, flat today and above both averages.",
+  "XLV": "Defensive with momentum: +1.3% today, +6.7% over 20 days, above both averages.",
+  "XLE": "Momentum leader (+16% over 60 days); kept small given ~20% volatility."
+ }
+}
