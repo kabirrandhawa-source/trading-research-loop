@@ -1,0 +1,16 @@
+{
+ "date": "2026-10-22",
+ "targets": {
+  "DIA": 35.0,
+  "XLF": 25.0,
+  "XLE": 20.0,
+  "QQQ": 20.0
+ },
+ "reasoning": "Holding the same targets for a sixth day: today proved why the sleeve is tilted away from AI and chips. QQQ fell 2.9% and XLK 3.3% while XLF rose 1.1% and DIA was flat, so the sleeve lost far less than SPY (-1.2%), and through yesterday it was +0.89 points ahead. The SEC sector fundamentals still drive the tilt (XLF P/E ~8 with net income +47% at 93% coverage; XLE P/E ~10 with net income +168%), and the ledger has no tested timing edge that would justify trading around the Oct 28 FOMC (expected hold at 4%) or the Oct 29 PCE release. Today's defensive rally (XLP +3.3%, XLU +2.1%, TLT +1.9%) is a one-day move, not a reason to chase it. Missing inputs: TimesFM has no current forecast (and failed its test anyway), crypto data stops at Oct 14, and the newest daily summary is from Oct 15.",
+ "per_symbol": {
+  "DIA": "Broad, value-leaning blue chips with low volatility (9% annualised) and above both moving averages; the core holding.",
+  "XLF": "Cheapest sector on filed earnings (P/E ~8, net income +47%) and strong bank results; up 2.5% this week.",
+  "XLE": "P/E ~10 with net income +168% and a 60-day trend of +16%; also a hedge against hot inflation.",
+  "QQQ": "A small tech stake so the sleeve does not fall too far behind SPY if AI stocks rebound; kept below SPY's tech weight."
+ }
+}
