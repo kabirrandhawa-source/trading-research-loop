@@ -1,0 +1,16 @@
+{
+ "date": "2026-10-23",
+ "targets": {
+  "DIA": 35.0,
+  "XLF": 25.0,
+  "XLE": 20.0,
+  "QQQ": 20.0
+ },
+ "reasoning": "Holding the same targets for a seventh day: the tilt away from AI and chips keeps working (through yesterday the sleeve was +0.75% vs SPY -1.01%), and today it again lost less than SPY (about -0.2% vs -0.5%) as XLE rose 2.6% with oil above $100. The SEC sector fundamentals still drive the tilt (XLF P/E ~8, net income +47% at 93% coverage; XLE P/E ~10, net income +168%), and the morning brief confirmed the AI-spending worry behind Thursday's chip selloff. Next week has the Fed decision (Wed, hold at 4% expected) plus Q3 GDP and core PCE (Thu); none of that is a reason to trade ahead of it. The crypto section is stale (last day 10-14) and TimesFM has no current forecasts (it failed hypothesis 6 anyway), so I used neither.",
+ "per_symbol": {
+  "DIA": "Broad, less tech-heavy core that holds up on AI-led selloffs.",
+  "XLF": "Cheapest sector on filed earnings (P/E ~8, net income +47%); higher rates help bank margins.",
+  "XLE": "Oil above $100 and net income +168% at P/E ~10; also hedges the sticky inflation story.",
+  "QQQ": "Smaller growth stake so a tech rebound doesn't leave the sleeve far behind SPY."
+ }
+}
