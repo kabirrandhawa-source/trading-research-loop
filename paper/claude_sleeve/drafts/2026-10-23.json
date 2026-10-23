@@ -1,0 +1,11 @@
+{
+ "date": "2026-10-23",
+ "targets": {"QQQ": 36.0, "DIA": 26.0, "XLV": 19.5, "XLE": 9.5},
+ "reasoning": "Hold; same targets as yesterday. QQQ was flat today after Thursday's drop, so there is no follow-through breakdown that would justify trimming it. XLE (+2.6% today, +18% over 60 days) and XLV (above both averages) keep cushioning the book; the sleeve is roughly flat since inception while SPY is about -1.3%. No new macro information in today's headlines changes the view, and trading would only add cost against buy-and-hold.",
+ "per_symbol": {
+  "QQQ": "Core growth holding; flat today after the selloff, still below averages, so hold but don't add.",
+  "DIA": "Low-volatility blue-chip core, above its 20-day average; down 1.2% today but nothing structural.",
+  "XLV": "Defensive with momentum: +5% over 20 days and above both averages.",
+  "XLE": "Momentum leader (+11.8% over 20 days, +18% over 60); kept small given ~20% volatility."
+ }
+}
