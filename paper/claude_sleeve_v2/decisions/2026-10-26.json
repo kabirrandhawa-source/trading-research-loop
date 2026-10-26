@@ -1,0 +1,16 @@
+{
+ "date": "2026-10-26",
+ "targets": {
+  "DIA": 35.0,
+  "XLF": 25.0,
+  "XLE": 20.0,
+  "QQQ": 20.0
+ },
+ "reasoning": "Holding the same targets for an eighth day: through Friday the sleeve was +0.53% vs SPY -1.53% (+2.07 points, smaller drawdown), and nothing today breaks the thesis, so trading would only add costs. The SEC sector fundamentals still drive the tilt (XLF P/E ~8, net income +47%, 93% coverage; XLE P/E ~10, net income +168%; XLK P/E ~27 with QQQ/XLK below their 20- and 50-day averages). This week is event-heavy (Fed decision Wed, expected hold at 4%; Q3 GDP and core PCE Thu; Alphabet, Microsoft, Amazon earnings), which argues for staying diversified with QQQ at 20% rather than chasing or abandoning tech before the prints; oil's Iran risk (WTI ~$101) supports keeping XLE. Missing or stale: crypto data ends 2026-10-14, the daily summary is from 2026-10-15, and TimesFM has no current forecast (it failed its test anyway).",
+ "per_symbol": {
+  "DIA": "Core equity exposure with less AI/chip concentration than SPY; above its 20/50-day averages with low volatility.",
+  "XLF": "Cheapest sector by filed earnings (P/E ~8, net income +47%), above its 20/50-day averages.",
+  "XLE": "Strong filed earnings (net income +168%, P/E ~10) and up 12% in 20 days with oil above $100 on Iran risk.",
+  "QQQ": "Keeps some tech exposure into Alphabet/Microsoft/Amazon earnings so the sleeve doesn't bet everything against SPY's biggest names."
+ }
+}
