@@ -1,0 +1,16 @@
+{
+ "date": "2026-10-26",
+ "targets": {
+  "QQQ": 36.0,
+  "DIA": 26.0,
+  "XLV": 19.5,
+  "XLE": 9.5
+ },
+ "reasoning": "Hold; same targets as Friday. Today was a broad up day (SPY +0.7%, QQQ +1.1%) and the sleeve is slightly ahead of SPY since inception (about +0.5% vs about -0.5%). Nothing in today's data or headlines is a real reason to trade: QQQ is still below its averages but bounced, and XLE and XLV keep their momentum. Trading would only add cost against a buy-and-hold benchmark.",
+ "per_symbol": {
+  "QQQ": "Core growth holding; bounced 1.1% today but still below its 20/50-day averages, so hold without adding.",
+  "DIA": "Low-volatility blue-chip core (9.7% vol), above both averages.",
+  "XLV": "Defensive with momentum: +4.7% over 20 days, +10.7% over 60, above both averages.",
+  "XLE": "Momentum leader (+12% over 20 days, +18% over 60); kept small given ~20% volatility."
+ }
+}
