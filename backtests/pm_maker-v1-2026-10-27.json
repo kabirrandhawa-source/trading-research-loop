@@ -1,0 +1,92 @@
+{
+  "series": "KXBTC15M",
+  "part": "dev",
+  "data": {
+    "settled_windows_since_2026-10-13": 1101,
+    "dev_windows_analyze_windows_70pct": 770,
+    "dev_last_close_utc": "2026-10-23 19:15",
+    "coverage": {
+      "full": 345,
+      "no_stream": 256,
+      "late_start_after_open+60s": 115,
+      "quote_gap_over_120s": 54
+    },
+    "full_coverage_rule": "ws_tob row by open+60s and no ws_tob gap >120s from open to close-180s (fixed before P&L was computed)",
+    "loader_note": "pm.maker.load_windows globs live-*.db and misses the .db.xz daily archives (would see only Oct 13 + today and split those, mixing sealed windows into dev). Run used pm.maker.simulate_window/summarize unchanged on the analyze.windows dev split instead; maker.py not edited.",
+    "quotable_windows": "only 11 of 345 had yes_bid+no_bid<=0.98 at any decision time (spread 1c ~80% of snapshots, 0c ~20%)"
+  },
+  "zero_maker_fee": {
+    "windows": 345,
+    "windows_with_fills": 11,
+    "fully_matched": 9,
+    "one_sided": 2,
+    "avg_pair_margin_c": 2.11,
+    "one_sided_avg_pnl_dollars": -1.25,
+    "total_pnl_dollars": -0.6,
+    "pnl_per_window_dollars": -0.0017,
+    "t_stat": -0.14,
+    "contracts_per_side": 10,
+    "matched_share_of_filled": 0.818,
+    "matched_pair_avg_pnl_dollars": 0.211,
+    "partial_two_sided": 0,
+    "partial_avg_pnl_dollars": null,
+    "win_rate_filled": 0.909,
+    "max_drawdown_dollars": 4.0
+  },
+  "pessimistic_maker_fee": {
+    "windows": 345,
+    "windows_with_fills": 11,
+    "fully_matched": 9,
+    "one_sided": 2,
+    "avg_pair_margin_c": 2.11,
+    "one_sided_avg_pnl_dollars": -1.282,
+    "total_pnl_dollars": -1.29,
+    "pnl_per_window_dollars": -0.0037,
+    "t_stat": -0.3,
+    "contracts_per_side": 10,
+    "matched_share_of_filled": 0.818,
+    "matched_pair_avg_pnl_dollars": 0.142,
+    "partial_two_sided": 0,
+    "partial_avg_pnl_dollars": null,
+    "win_rate_filled": 0.909,
+    "max_drawdown_dollars": 4.04
+  },
+  "sensitivity_399_windows_start_check_only": {
+    "zero_maker_fee": {
+      "windows": 399,
+      "windows_with_fills": 11,
+      "fully_matched": 9,
+      "one_sided": 2,
+      "avg_pair_margin_c": 2.11,
+      "one_sided_avg_pnl_dollars": -1.25,
+      "total_pnl_dollars": -0.6,
+      "pnl_per_window_dollars": -0.0015,
+      "t_stat": -0.14,
+      "contracts_per_side": 10,
+      "matched_share_of_filled": 0.818,
+      "matched_pair_avg_pnl_dollars": 0.211,
+      "partial_two_sided": 0,
+      "partial_avg_pnl_dollars": null,
+      "win_rate_filled": 0.909,
+      "max_drawdown_dollars": 4.0
+    },
+    "pessimistic_maker_fee": {
+      "windows": 399,
+      "windows_with_fills": 11,
+      "fully_matched": 9,
+      "one_sided": 2,
+      "avg_pair_margin_c": 2.11,
+      "one_sided_avg_pnl_dollars": -1.282,
+      "total_pnl_dollars": -1.29,
+      "pnl_per_window_dollars": -0.0032,
+      "t_stat": -0.3,
+      "contracts_per_side": 10,
+      "matched_share_of_filled": 0.818,
+      "matched_pair_avg_pnl_dollars": 0.142,
+      "partial_two_sided": 0,
+      "partial_avg_pnl_dollars": null,
+      "win_rate_filled": 0.909,
+      "max_drawdown_dollars": 4.04
+    }
+  }
+}
