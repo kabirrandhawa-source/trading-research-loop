@@ -1,0 +1,9 @@
+{"date": "2026-10-27",
+ "targets": {"DIA": 35.0, "XLF": 25.0, "XLE": 20.0, "QQQ": 20.0},
+ "reasoning": "Holding the same targets for a ninth day: through yesterday the sleeve was +0.93% vs SPY -0.83% (+1.76 points, drawdown -0.5% vs -1.7%), and nothing today breaks the thesis, so trading would only add costs. The SEC sector fundamentals still drive the tilt (XLF P/E ~8, net income +47%, 93% coverage; XLE P/E ~10, net income +168%; XLV net income -41% so still avoided), and the TradingView calendar shows a heavy week (Fed decision Wed, expected hold at 4.00%; GDP and core PCE Thu; payrolls Nov 6; midterms Nov 3) where changing positions right before the Fed would be guessing. Durable goods beat (+1.8% vs +1.5%), which supports cyclicals like DIA and XLF; XLE's -2.1% today is noise inside a +10.8% 20-day run. Missing or unused: crypto data is stale (last day Oct 14), TimesFM has no current forecasts (and failed hypothesis 6), the daily summary is 12 days old, and the ledger has no tested result that bears on sector allocation.",
+ "per_symbol": {
+  "DIA": "Steady core (20d vol 9.6%), above its 20- and 50-day averages; value-leaning blue chips fit a firm-economy, high-rate backdrop.",
+  "XLF": "Cheapest sector on filed earnings (P/E ~8, net income +47%); higher-for-longer rates help bank margins.",
+  "XLE": "Strongest earnings growth (net income +168%) and trend (+16.7% over 60 days); today's dip doesn't change that.",
+  "QQQ": "Kept at 20% so the sleeve isn't fully out of tech if AI names rally after the Fed and Anthropic IPO news; XLK's P/E ~27 keeps it from being larger."
+ }}
