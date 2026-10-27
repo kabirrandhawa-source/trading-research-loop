@@ -1,0 +1,5 @@
+{"timestamp": "2026-10-26T02:02:08.912824+00:00", "event": "alert", "title": "Kalshi stream down", "priority": "high", "channels": {"mac": "ok", "ntfy": "ok"}}
+{"timestamp": "2026-10-26T02:06:08.119695+00:00", "event": "alert", "title": "Kalshi stream recovered", "priority": "default", "channels": {"mac": "ok", "ntfy": "ok"}}
+{"timestamp": "2026-10-26T13:03:02.865807+00:00", "event": "alert", "title": "Morning brief Oct 26", "priority": "default", "channels": {"mac": "ok", "ntfy": "ok", "text": "skipped (priority below high)"}}
+{"timestamp": "2026-10-26T21:00:10.165332+00:00", "event": "no_action", "strategy": "benchmark_spy", "version": "1", "symbol": "SPY", "market_conditions": {"close": 765.37, "ret_1d_pct": 0.711, "ret_20d_pct": -0.031, "vol_20d_ann_pct": 9.79, "regime_63d": "trending_up", "bar_date": "2026-10-26 04:00:00+00:00"}, "reasoning": "holding, move -1.21%"}
+{"timestamp": "2026-10-26T21:00:11.708456+00:00", "event": "alert", "title": "Daily run OK 2026-10-26", "priority": "low", "channels": {"mac": "ok", "ntfy": "ok", "text": "skipped (priority below high)"}}

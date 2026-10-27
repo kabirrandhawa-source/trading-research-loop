@@ -1,0 +1,7 @@
+{"timestamp": "2026-10-25T00:55:57.899034+00:00", "event": "alert", "title": "Kalshi stream recovered", "priority": "default", "channels": {"mac": "ok", "ntfy": "ok"}}
+{"timestamp": "2026-10-25T08:32:42.535368+00:00", "event": "alert", "title": "Kalshi stream down", "priority": "high", "channels": {"mac": "ok", "ntfy": "ok"}}
+{"timestamp": "2026-10-25T09:30:26.430981+00:00", "event": "alert", "title": "Kalshi stream recovered", "priority": "default", "channels": {"mac": "ok", "ntfy": "ok"}}
+{"timestamp": "2026-10-25T14:26:11.867290+00:00", "event": "alert", "title": "Kalshi stream down", "priority": "high", "channels": {"mac": "ok", "ntfy": "ok"}}
+{"timestamp": "2026-10-25T14:44:21.272664+00:00", "event": "alert", "title": "Kalshi stream recovered", "priority": "default", "channels": {"mac": "ok", "ntfy": "error: ConnectionResetError: [Errno 54] Connection reset by peer"}}
+{"timestamp": "2026-10-25T22:14:02.135387+00:00", "event": "alert", "title": "Kalshi stream down", "priority": "high", "channels": {"mac": "ok", "ntfy": "ok"}}
+{"timestamp": "2026-10-25T22:26:44.016833+00:00", "event": "alert", "title": "Kalshi stream recovered", "priority": "default", "channels": {"mac": "ok", "ntfy": "ok"}}

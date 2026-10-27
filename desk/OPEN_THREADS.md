@@ -5,13 +5,13 @@ current: add a line when something is started or promised, remove it when it's d
 newest first within each section. Results live in the ledger and journal, not here.
 
 ## Waiting on Kabir
-- 2026-10-21: Old daily-run + critic tasks PAUSED (renamed "(old, paused)"; they ran in default mode and stalled
-  on every unlisted command). Replacements created: trading-loop-evening-run (weekdays 17:30) and
-  trading-loop-sunday-critic (Sun 10:00), same prompts. Their permission mode did NOT save (created in a turn
-  triggered by a monitor event). Fix: in a turn Kabir types, Friday deletes + recreates both (mode saves), or
-  Kabir sets Auto on each. Then run the critic once.
+- Nothing right now.
 
 ## Scheduled / in progress
+- 2026-10-27: Evening run + critic recreated from a Kabir-typed turn and CONFIRMED saved in Auto mode:
+  trading-loop-evening (weekdays 17:30) and trading-loop-sunday-review (Sun 10:00). Old ones paused, the Oct 21
+  replacements deleted. Oct 22-26 runs (evening, critic, 2-week check-in) all froze in default mode: no
+  summaries Oct 16-26, no weekly review since Oct 12. Critic re-run by hand Oct 27; h8 maker test next.
 - 2026-10-21: Unattended runs stalled on inline-python permission prompts. Fix: desk.today (orders/decisions/
   summaries) + `alerts.py send` CLI, both allowlisted; daily run + critic prompts now forbid inline code.
   Kabir confirmed all three tasks are in Auto. Critic re-run Oct 21 got ~20 steps in, then hit one inline

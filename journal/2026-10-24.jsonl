@@ -1,0 +1,1 @@
+{"timestamp": "2026-10-24T14:24:16.985414+00:00", "event": "alert", "title": "Kalshi stream down", "priority": "high", "channels": {"mac": "ok", "ntfy": "error: URLError: <urlopen error [Errno 8] nodename nor servname provided, or not known>"}}

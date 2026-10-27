@@ -1,0 +1,13 @@
+{"timestamp": "2026-10-21T04:19:22.119927+00:00", "event": "alert", "title": "Kalshi stream down", "priority": "high", "channels": {"mac": "ok", "ntfy": "ok"}}
+{"timestamp": "2026-10-21T04:20:40.160878+00:00", "event": "alert", "title": "Kalshi stream recovered", "priority": "default", "channels": {"mac": "ok", "ntfy": "ok"}}
+{"timestamp": "2026-10-21T10:25:19.653432+00:00", "event": "alert", "title": "Kalshi stream down", "priority": "high", "channels": {"mac": "ok", "ntfy": "ok"}}
+{"timestamp": "2026-10-21T12:06:02.684883+00:00", "event": "alert", "title": "Kalshi stream recovered", "priority": "default", "channels": {"mac": "ok", "ntfy": "ok"}}
+{"timestamp": "2026-10-21T12:48:11.842703+00:00", "event": "alert", "title": "Morning brief Oct 21", "priority": "default", "channels": {"mac": "ok", "ntfy": "ok", "text": "skipped (priority below high)"}}
+{"timestamp": "2026-10-21T20:00:00.403203+00:00", "event": "alert", "title": "Kalshi stream down", "priority": "high", "channels": {"mac": "ok", "ntfy": "ok"}}
+{"timestamp": "2026-10-21T20:00:12.025335+00:00", "event": "alert", "title": "Kalshi stream recovered", "priority": "default", "channels": {"mac": "ok", "ntfy": "ok"}}
+{"timestamp": "2026-10-21T20:47:41.082319+00:00", "event": "alert", "title": "Kalshi stream down", "priority": "high", "channels": {"mac": "ok", "ntfy": "ok"}}
+{"timestamp": "2026-10-21T20:47:50.022444+00:00", "event": "alert", "title": "Kalshi stream recovered", "priority": "default", "channels": {"mac": "ok", "ntfy": "ok"}}
+{"timestamp": "2026-10-21T21:00:11.334272+00:00", "event": "no_action", "strategy": "benchmark_spy", "version": "1", "symbol": "SPY", "market_conditions": {"close": 773.09, "ret_1d_pct": 0.525, "ret_20d_pct": 0.688, "vol_20d_ann_pct": 8.83, "regime_63d": "trending_up", "bar_date": "2026-10-21 04:00:00+00:00"}, "reasoning": "holding, move -0.22%"}
+{"timestamp": "2026-10-21T21:00:11.688395+00:00", "event": "sleeve", "note": "no decision for today; holding", "value": 10108.18}
+{"timestamp": "2026-10-21T21:00:11.988291+00:00", "event": "sleeve", "strategy": "claude_sleeve_v2", "note": "no decision for today; holding", "value": 10105.44}
+{"timestamp": "2026-10-21T21:00:12.398418+00:00", "event": "alert", "title": "Daily run OK 2026-10-21", "priority": "low", "channels": {"mac": "ok", "ntfy": "ok", "text": "skipped (priority below high)"}}
