@@ -14,7 +14,10 @@ newest first within each section. Results live in the ledger and journal, not he
 - 2026-10-27: Evening run + critic recreated from a Kabir-typed turn and CONFIRMED saved in Auto mode:
   trading-loop-evening (weekdays 17:30) and trading-loop-sunday-review (Sun 10:00). Old ones paused, the Oct 21
   replacements deleted. Oct 22-26 runs (evening, critic, 2-week check-in) all froze in default mode: no
-  summaries Oct 16-26, no weekly review since Oct 12. Critic re-run Oct 27 in Auto: FINISHED, review-2026-10-27.md (1798c4c). h8 maker test running (desk-quant).
+  summaries Oct 16-26, no weekly review since Oct 12. Critic re-run Oct 27 in Auto: FINISHED, review-2026-10-27.md (1798c4c). h8 maker-v1 FAILED dev test (728968b): 345 full-coverage dev windows,
+  -$0.002/window t -0.14. Barely trades: spread was 1c in ~80% of quotes, 0c in ~20% (check recorder for
+  locked books), only 11 windows had the 2c+ spread. `pm.maker run` loader ignores .db.xz archives (bug; quant
+  ran the simulator on the right split instead). Prediction file garble also hits expectation 3.
 - 2026-10-21: Unattended runs stalled on inline-python permission prompts. Fix: desk.today (orders/decisions/
   summaries) + `alerts.py send` CLI, both allowlisted; daily run + critic prompts now forbid inline code.
   Kabir confirmed all three tasks are in Auto. Critic re-run Oct 21 got ~20 steps in, then hit one inline
