@@ -5,13 +5,16 @@ current: add a line when something is started or promised, remove it when it's d
 newest first within each section. Results live in the ledger and journal, not here.
 
 ## Waiting on Kabir
-- Nothing right now.
+- 2026-10-27 (from weekly review): (a) v2's crypto input is stale since Oct 14 (context_v2 reads crypto.db, which
+  nothing updates); proposed: point it at data/crypto/forward.db (live hourly) = a mid-test input fix, Kabir's
+  call. (b) Oct 21 sleeve decisions landed after the 17:00 job read them (v2 jitter + 20 min budget);
+  proposed: move both sleeve tasks from 16:25 to 16:10 ET.
 
 ## Scheduled / in progress
 - 2026-10-27: Evening run + critic recreated from a Kabir-typed turn and CONFIRMED saved in Auto mode:
   trading-loop-evening (weekdays 17:30) and trading-loop-sunday-review (Sun 10:00). Old ones paused, the Oct 21
   replacements deleted. Oct 22-26 runs (evening, critic, 2-week check-in) all froze in default mode: no
-  summaries Oct 16-26, no weekly review since Oct 12. Critic re-run by hand Oct 27; h8 maker test next.
+  summaries Oct 16-26, no weekly review since Oct 12. Critic re-run Oct 27 in Auto: FINISHED, review-2026-10-27.md (1798c4c). h8 maker test running (desk-quant).
 - 2026-10-21: Unattended runs stalled on inline-python permission prompts. Fix: desk.today (orders/decisions/
   summaries) + `alerts.py send` CLI, both allowlisted; daily run + critic prompts now forbid inline code.
   Kabir confirmed all three tasks are in Auto. Critic re-run Oct 21 got ~20 steps in, then hit one inline
