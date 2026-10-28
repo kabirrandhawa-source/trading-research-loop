@@ -1,0 +1,11 @@
+{
+ "date": "2026-10-28",
+ "targets": {"QQQ": 36.0, "DIA": 26.0, "XLV": 19.5, "XLE": 9.5},
+ "reasoning": "Hold; same targets as yesterday. The sleeve closed at about $10,111 (+1.1% since inception) against SPY at +0.35%, and today's moves were small and broad (SPY +0.3%). Headlines are routine earnings; Microsoft's after-hours beat is supportive for QQQ but not a reason to add. The one-share DIA buy still waiting will bring DIA up to its target, so no new trades are needed.",
+ "per_symbol": {
+  "QQQ": "Core growth holding; +0.6% today, still below its 20-day average, so hold without adding.",
+  "DIA": "Low-volatility blue-chip core (8.9% vol), above both averages; pending 1-share buy fills the target.",
+  "XLV": "Defensive with momentum: +6.7% over 20 days, +11.3% over 60, above both averages.",
+  "XLE": "Momentum leader (+11.3% over 20 days, +17.7% over 60); kept small given ~22% volatility."
+ }
+}
