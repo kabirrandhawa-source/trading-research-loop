@@ -1,0 +1,16 @@
+{
+ "date": "2026-10-28",
+ "targets": {
+  "DIA": 35.0,
+  "XLF": 25.0,
+  "XLE": 20.0,
+  "QQQ": 20.0
+ },
+ "reasoning": "Holding the same targets for a tenth day: the sleeve is about +1.0% since inception vs SPY about +0.1% (roughly +0.9 points), and today's Fed decision was a non-event (held at 4.00% as forecast), so nothing breaks the thesis and trading would only add costs. The SEC sector fundamentals still drive the tilt (XLF P/E ~8 with net income +47% at 93% coverage; XLE P/E ~10 with net income +168%; XLV still weak at net income -41%), and the morning brief's oil risk (Brent above $115 on reports of renewed Iran strikes after the midterms) keeps XLE as a hedge. Tomorrow's GDP and core PCE (+0.3% expected) and next Tuesday's midterms are the risks; a hot PCE would hurt QQQ more than DIA or XLF, which is why QQQ stays the smallest weight. Crypto data is stale (last day Oct 14) and TimesFM is unavailable and failed its test, so neither was used.",
+ "per_symbol": {
+  "DIA": "Broad, lower-volatility core (20-day vol 8.9%) above its 20- and 50-day averages.",
+  "XLF": "Cheapest sector by filed earnings (P/E ~8, net income +47%), benefits if rates stay higher for longer.",
+  "XLE": "Strongest earnings growth (+168%) and a hedge against an oil spike if the Iran conflict widens.",
+  "QQQ": "Small tech weight so the sleeve isn't left behind if the AI rebound continues, kept small against hot-inflation risk."
+ }
+}
