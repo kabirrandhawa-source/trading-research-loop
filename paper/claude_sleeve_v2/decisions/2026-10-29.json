@@ -1,0 +1,16 @@
+{
+ "date": "2026-10-29",
+ "targets": {
+  "DIA": 35.0,
+  "XLF": 25.0,
+  "XLE": 20.0,
+  "QQQ": 20.0
+ },
+ "reasoning": "Holding the same targets for an eleventh day: the sleeve was +0.94 points ahead of SPY through yesterday, and today it again beat SPY (roughly +0.1% vs -0.4%) as XLF rose 1.4% while QQQ fell 1.4% on Alphabet's AI-spending miss. Today's macro data (TradingView calendar) was benign: Q3 GDP 3.4% vs 3.2% expected and core PCE +0.3% as forecast, so nothing breaks the thesis. The SEC sector fundamentals still drive the tilt (XLF P/E ~8 with net income +47% at 93% coverage; XLE P/E ~10 with net income +168%; XLV net income -41%), and the morning brief's AI-spending worries support keeping QQQ the smallest weight. Next week's midterms (Tue) and payrolls (Fri) are the risks; crypto data is stale (last day Oct 14) and TimesFM is unavailable and failed its test, so neither was used.",
+ "per_symbol": {
+  "DIA": "Broad, lower-volatility core (20-day vol 9.1%) above its 20- and 50-day averages.",
+  "XLF": "Cheapest sector by filed earnings (P/E ~8, net income +47%); solid GDP and a Fed on hold support it.",
+  "XLE": "Strongest earnings growth (+168%) and a hedge against an oil spike if the Iran conflict widens.",
+  "QQQ": "Small tech weight so the sleeve isn't left behind if AI rebounds, kept small given AI-capex worries after Alphabet."
+ }
+}
