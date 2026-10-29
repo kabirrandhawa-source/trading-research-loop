@@ -1,0 +1,3 @@
+{"timestamp": "2026-10-29T12:20:31.133352+00:00", "event": "alert", "title": "Morning brief Oct 29", "priority": "default", "channels": {"mac": "ok", "ntfy": "ok", "text": "skipped (priority below high)"}}
+{"timestamp": "2026-10-29T21:00:10.620370+00:00", "event": "no_action", "strategy": "benchmark_spy", "version": "1", "symbol": "SPY", "market_conditions": {"close": 769.36, "ret_1d_pct": -0.382, "ret_20d_pct": 0.703, "vol_20d_ann_pct": 10.09, "regime_63d": "choppy", "bar_date": "2026-10-29 04:00:00+00:00"}, "reasoning": "holding, move -0.70%"}
+{"timestamp": "2026-10-29T21:00:11.983356+00:00", "event": "alert", "title": "Daily run OK 2026-10-29", "priority": "low", "channels": {"mac": "ok", "ntfy": "ok", "text": "skipped (priority below high)"}}
