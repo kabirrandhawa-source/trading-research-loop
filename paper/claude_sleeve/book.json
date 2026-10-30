@@ -6,7 +6,20 @@
   "XLE": 14.0,
   "XLV": 11.0
  },
- "pending": [],
+ "pending": [
+  {
+   "order_id": "294c4190-f330-4e29-90b3-144239f14997",
+   "symbol": "DIA",
+   "side": "sell",
+   "qty": 1.0
+  },
+  {
+   "order_id": "c8bfbd31-258b-412c-8288-2a7d092e3baa",
+   "symbol": "QQQ",
+   "side": "sell",
+   "qty": 1.0
+  }
+ ],
  "history": [
   {
    "day": "2026-10-14",
@@ -67,6 +80,11 @@
    "day": "2026-10-29",
    "value": 10102.08,
    "spy_close": 769.36
+  },
+  {
+   "day": "2026-10-30",
+   "value": 9977.3,
+   "spy_close": 755.72
   }
  ]
 }
