@@ -1,0 +1,11 @@
+{
+ "date": "2026-10-30",
+ "targets": {"QQQ": 34.6, "DIA": 25.9, "XLV": 20.4, "XLE": 9.8},
+ "reasoning": "Hold at today's actual weights so no trades are triggered. Tech sold off hard today (QQQ -3.5%, XLK -4.9%, SPY -1.8%) and the sleeve fell to about $9,977, roughly in line with SPY; selling QQQ after a sharp one-day drop risks locking in a short-term low, and buying more to get back to target would be adding into a falling trend, so I'm doing neither. The defensive and energy legs (XLV +11% over 20 days, XLE helped by renewed Strait of Hormuz tanker attacks) are doing their job. I'll revisit QQQ if its downtrend persists next week rather than reacting to one day.",
+ "per_symbol": {
+  "QQQ": "Down 7.9% over 20 days and below both averages; hold, no top-up, reassess if weakness continues next week.",
+  "DIA": "Low-volatility core (10% vol); -1.1% today, a modest dip, hold.",
+  "XLV": "Defensive momentum leader: +3.1% this week, +12.9% over 60 days, above both averages.",
+  "XLE": "Strongest 60-day trend (+21%) with a Hormuz supply-risk tailwind; kept small given ~22% volatility."
+ }
+}
