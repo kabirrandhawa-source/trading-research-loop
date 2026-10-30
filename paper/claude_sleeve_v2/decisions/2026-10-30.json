@@ -1,0 +1,16 @@
+{
+ "date": "2026-10-30",
+ "targets": {
+  "DIA": 35.0,
+  "XLF": 25.0,
+  "XLE": 20.0,
+  "QQQ": 20.0
+ },
+ "reasoning": "Holding the same targets for a twelfth day: through yesterday the sleeve was +1.44 points ahead of SPY, and today the tilt away from AI-heavy tech paid again (roughly -0.6% vs SPY -1.8%) as XLK fell 4.9% and QQQ 3.5% on Amazon and Intel AI-spending worries while XLE rose 1.9%. The SEC sector fundamentals still drive the tilt (XLF P/E ~8 with net income +47% at 93% coverage; XLE P/E ~10 with net income +168% at 100%), and the desk ledger has no tested signal that argues for chasing today's defensive rally (XLV/XLP/XLU) after the fact. Next week's TradingView calendar is busy (ISM Mon, midterm elections Tue, jobs report Fri, forecast +65k) but that is event risk, not a reason to trade ahead of it. Crypto data is stale (last day 2026-10-14) and TimesFM failed its test, so neither was used.",
+ "per_symbol": {
+  "DIA": "Lower-tech large-cap core; held up far better than QQQ in the AI-spending selloff.",
+  "XLF": "Cheapest sector on SEC filings (P/E ~8) with strong earnings growth; above its 20- and 50-day averages.",
+  "XLE": "Earnings up ~168% y/y at P/E ~10; +11% over 20 days and rose again today.",
+  "QQQ": "Kept at 20% target (13.7% actual after the drop, whole shares) so the sleeve is not fully out of growth; no new adds beyond target."
+ }
+}
