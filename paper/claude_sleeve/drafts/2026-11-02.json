@@ -1,0 +1,8 @@
+{"date": "2026-11-02", "targets": {"QQQ": 25.0, "DIA": 26.2, "XLV": 25.0, "XLE": 9.5},
+ "reasoning": "Last week I said I would revisit QQQ if its slide persisted, and it has: QQQ is down another 4.4% this week and 9.9% over 20 days (XLK -13%), below both averages, so this is a trend, not a one-day dip. I'm trimming QQQ from about 34% to 25% and moving part of that into XLV, the steadiest leader (+10% over 20 days, above both averages); the rest stays as cash (~14%) while SPY itself is below its averages. DIA and XLE are unchanged to keep trading small.",
+ "per_symbol": {
+  "QQQ": "Trim to 25%: tech downtrend has persisted for a second week (-9.9% over 20 days, below 20d and 50d averages).",
+  "DIA": "Hold: low-volatility core (10% vol), only a mild pullback.",
+  "XLV": "Add to 25%: defensive momentum leader, +10% over 20 days and +12% over 60 days, above both averages.",
+  "XLE": "Hold small at 9.5%: -4% today but the 60-day trend (+18%) is intact and it stays above its 50-day average."
+ }}
