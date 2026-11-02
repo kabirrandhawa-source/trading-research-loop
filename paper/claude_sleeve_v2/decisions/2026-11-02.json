@@ -1,0 +1,16 @@
+{
+ "date": "2026-11-02",
+ "targets": {
+  "DIA": 35.0,
+  "XLF": 25.0,
+  "XLE": 20.0,
+  "QQQ": 20.0
+ },
+ "reasoning": "Holding the same targets for a thirteenth day: through Friday the sleeve was +0.48% vs SPY -2.08% (+2.56 points, max drawdown -0.6% vs -2.3%), and today was about even with SPY (roughly -0.4% vs -0.5%) as XLF's +1.9% offset XLE's -4.0% on falling oil and XLK's -3.0%. The SEC sector fundamentals still drive the tilt (XLF P/E ~8, net income +48%, 79% coverage; XLE P/E ~10, net income +168%, 100% coverage), and the tech underweight keeps paying as AI-spending doubts persist (XLK -13% over 20 days). TradingView calendar: ISM manufacturing beat (55.5 vs 54.6); midterms Tuesday and payrolls Friday are event risks but not a reason to trade ahead of them. Crypto data is stale (ends Oct 14) and TimesFM has no current file (it failed its test anyway); no research memo bears on sector allocation.",
+ "per_symbol": {
+  "DIA": "Value-tilted large-cap core with low volatility (10% annualized); keeps the sleeve close to the market without the AI concentration.",
+  "XLF": "Cheapest sector on SEC filings (P/E ~8, net income +48%) and in an uptrend above its 20- and 50-day averages.",
+  "XLE": "Strong earnings (net income +168%, P/E ~10); today's 4% drop on oil is noise inside a +18% 60-day trend, still above its 50-day average.",
+  "QQQ": "Small growth sleeve kept at target rather than chasing the AI sell-off either way; below both averages, so no add."
+ }
+}
