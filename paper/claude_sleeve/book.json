@@ -1,23 +1,29 @@
 {
- "cash": 925.35,
+ "cash": 2141.3,
  "holdings": {
-  "DIA": 5.0,
-  "QQQ": 5.0,
+  "DIA": 4.0,
+  "QQQ": 4.0,
   "XLE": 14.0,
   "XLV": 11.0
  },
  "pending": [
   {
-   "order_id": "294c4190-f330-4e29-90b3-144239f14997",
-   "symbol": "DIA",
+   "order_id": "3e468be0-89df-49b7-a16f-bba772cd30c8",
+   "symbol": "QQQ",
    "side": "sell",
    "qty": 1.0
   },
   {
-   "order_id": "c8bfbd31-258b-412c-8288-2a7d092e3baa",
-   "symbol": "QQQ",
-   "side": "sell",
+   "order_id": "c76ef20f-a066-4e83-a94e-506e7ed1950c",
+   "symbol": "DIA",
+   "side": "buy",
    "qty": 1.0
+  },
+  {
+   "order_id": "f5a3dfaf-d855-4899-9a73-f9abe6e3cd80",
+   "symbol": "XLV",
+   "side": "buy",
+   "qty": 2.0
   }
  ],
  "history": [
@@ -85,6 +91,11 @@
    "day": "2026-10-30",
    "value": 9977.3,
    "spy_close": 755.72
+  },
+  {
+   "day": "2026-11-02",
+   "value": 9915.12,
+   "spy_close": 752.1
   }
  ]
 }
