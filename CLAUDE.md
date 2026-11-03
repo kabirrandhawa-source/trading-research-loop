@@ -1,5 +1,8 @@
 # Trading research loop: desk manual
 
+> **Stopped 2026-11-03 by Kabir.** No jobs or scheduled tasks run. Do not restart anything without his explicit yes;
+> see desk/OPEN_THREADS.md for the shutdown state.
+
 Paper-only AI trading research. The goal is to find a real edge, prove it honestly, and only then let
 the human decide about real money. Most ideas fail; failures are recorded, not hidden.
 

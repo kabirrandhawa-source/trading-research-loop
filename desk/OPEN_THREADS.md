@@ -1,5 +1,11 @@
 # Open threads
 
+**DESK STOPPED 2026-11-03 at Kabir's request.** All scheduled tasks disabled (sleeves v1/v2, morning brief,
+evening run, Sunday critic). All launchd jobs booted out and `launchctl disable`d (daily, pm-stream, pm-recorder,
+pm-archive, keep-awake, crypto-forward); plists kept. Nothing deleted: code, ledger, journal and data remain.
+Paper positions left open in Alpaca (paper money only). To restart: `launchctl enable gui/$(id -u)/<label>` +
+`launchd/install.sh`, and re-enable the tasks in the app. Everything below is the state at shutdown.
+
 What the desk is in the middle of. Friday reads this at the start of every /desk session and keeps it
 current: add a line when something is started or promised, remove it when it's done. Dated entries,
 newest first within each section. Results live in the ledger and journal, not here.
